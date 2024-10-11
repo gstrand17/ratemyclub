@@ -43,10 +43,10 @@ Follow the steps to install the project onto your system with your own branch.
      ```bash
      git checkout -b your-personal-branch
      ```
-3. **Install Vite Framework with React Library via npm**
+3. **Install React Framework using the create-react-app via npx**
    - Create your Vite Project using the following code:
      ```bash
-     npm create vite@latest
+     npx create-react-app front-end
      ```
    - You will be prompted to enter project name, which will be "front-end" and then you will select the option to replace all existing files. This is fine as it does not affect the Git history, and simply you are just creating the project personalized to your own machine.
    - The following options will be presented, in which you will choose React and JavaScript, respectively.
@@ -72,7 +72,7 @@ Follow the steps to install the project onto your system with your own branch.
      ```
    - The third step is to add the required packages which are Flask and MySQL connector to Flask, using the following command:
      ```bash
-     pip install Flask Flask-MySQL
+     pip install Flask Flask-SQLAlchemy
      ```
    - Then exit the environment using the following command, and you are done:
      ```bash
