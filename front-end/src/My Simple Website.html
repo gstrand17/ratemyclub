@@ -1,28 +1,47 @@
+<!--This is a comment-->
+
+<!--Defines the document type and version of HTMl-->
 <!DOCTYPE html>
+
+<!--root of HTML document and attributes the language for accessibility
+    and search engines-->
 <html lang="en">
+
+<!--Contains meta-information about document such as title and character set-->
 <head>
+
+    <!--Characterizes encoding for the document to support wide ranch of characters and symbols, ensuring proper text display-->
     <meta charset="UTF-8">
+
+    <!--Controls layout on mobile browsers to viewport width is to to device width and initial zoom is 1.0-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Includes an external CSS stylesheet that controls the styling and layout of HTML elements-->
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Creates the title of webpage that appears on browser tab used for search engines-->
     <title>My Simple Website</title>
-</head>
-<body>
-<header>
-    <h1>Welcome to My Website</h1>
-    <nav>
-        <ul>
+</head> <!-- Closes head container-->
+
+<body> <!--Contains content in body of webpage such as text, images, links, etc.-->
+<header> <!--introductory content of the page-->
+    <h1>Welcome to My Website</h1> <!--Top level heading that indicates main title of webpage-->
+    <nav> <!--For navigation links to navigate through different sections or pages of website-->
+        <ul> <!--Creates unordered list, in this case for navigation links-->
+
+            <!--<li> is a list item, and <a> is a hyperlink-->
             <li><a href="#about">About</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-</header>
+        </ul> <!--End of unordered list-->
+    </nav> <!--End of navigation links-->
+</header> <!--End of introductory content-->
 
-<main>
-    <section id="about">
-        <h2>About Us</h2>
-        <p>This is a simple website created using HTML and CSS.</p>
-    </section>
+<main> <!--Content of the document-->
+    <section id="about"> <!--Creates the about section-->
+        <h2>About Us</h2> <!--Lists the title of the section on webpage-->
+        <p>This is a simple website created using HTML and CSS.</p> <!--Paragraph about section-->
+    </section> <!--End of about section-->
 
     <section id="services">
         <h2>Our Services</h2>
@@ -35,8 +54,8 @@
     </section>
 </main>
 
-<footer>
-    <p>&copy; 2024 My Simple Website</p>
-</footer>
-</body>
-</html>
+<footer> <!--Represents the footer of document for copyright and legal information-->
+    <p>&copy; 2024 My Simple Website</p> <!--Paragraph in footer that includes a copyright notice-->
+</footer> <!--End of footer-->
+</body> <!--end of body-->
+</html> <!--Closes html document-->
