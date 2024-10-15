@@ -3,9 +3,9 @@
 
 ## Table of Contents
 
--[Installation](#installation)
--[Usage](#usage)
--[Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
 
 ## Installation
 
@@ -15,9 +15,9 @@ Before beginning with the Installtion steps, ensure that the following requireme
 
 - You have installed Python 3.x on your system. This is for backend development.
 - You have installed [Node.js](https://nodejs.org/). This is for frontend development.
-- You have installed MySQL.
-- You have installed the package managers 'pip' and 'npm'.
+- You have installed the package managers 'pip' and 'npm', which will be installed via Python or Node.js, respectively.
 - All of the previous requirements are updated to the latest versions.
+- Forked the repository "https://github.com/treeofjuly/ratemyclub.git"
 
 ### Installation
 
@@ -29,7 +29,22 @@ Follow the steps to install the project onto your system with your own branch.
      git clone https://github.com/treeofjuly/ratemyclub.git
      cd ratemyclub
      ```
-2. **Switching to Personal Branch**
+2. **Add your Github remote repository**
+   - Use the following command to see the available remote repository that Git is connected to:
+     ```bash
+     git remote -v
+     ```
+     - If done correctly, you should see a remote repository called origin or master, and its link is to the cloned Github.
+   - The next step is optional and only depends on your personal preference, change the name of the remote repository "origin/master" to "upstream" to avoid confusion between the roles of the repository. Use the following command:
+     ```bash
+     git remote rename 'repo-name' 'new-repo-name'
+     ```
+   - The next step is to change the URL of your GitHub forked repository to point to your own remote repository. You can do this using the following command:
+     ```bash
+     git remote set-url <remote_name> <new_url>
+     ```
+     - After running the command you will see two remote repositories configured, meaning you will have authorization to the both of them.
+3. **Creating and then switching to personal branch for contribution**
    - Use the following command to check to see if your branch exists in Github (meaning you made the branch in Github.com and not using Git in cmdline):
      ```bash
      git branch
@@ -43,53 +58,36 @@ Follow the steps to install the project onto your system with your own branch.
      ```bash
      git checkout -b your-personal-branch
      ```
-3. **Install React Framework using the create-react-app via npx**
-   - Create your Vite Project using the following code:
+4. **Recreating the necessary environment for both back-end and front-end**
+   - Use the following commands to set up your environment, specifically the .venv for back-end and the node_modules/ for front-end:
      ```bash
-     npx create-react-app front-end
-     ```
-   - You will be prompted to enter project name, which will be "front-end" and then you will select the option to replace all existing files. This is fine as it does not affect the Git history, and simply you are just creating the project personalized to your own machine.
-   - The following options will be presented, in which you will choose React and JavaScript, respectively.
-   - You will then be given the following commands to run and finalize the project (the third command is optional if you want to see how it works):
-      ```bash
-      cd front-end
-      npm install
-      npm run dev
-     ```
-4. **Install Flask Framework via pip**
-   - After finishing the installment of Vite + React, head back into the project folder using the command:
-   - Enter the back-end directory using the command:
-     ```bash
-     cd ..
-     ```
-   - The first step is to create a virtual environment (meant to isolate the installment of Python packages from the system) using the following command:
-     ```bash
-     py -3 -m venv .venv
-     ```
-   - The second step is to activate the environment (activate whenever you need to add more packages) using the following command:
-     ```bash
-     .venv\Scripts\activate
-     ```
-   - The third step is to add the required packages which are Flask and MySQL connector to Flask, using the following command:
-     ```bash
-     pip install Flask Flask-SQLAlchemy
-     ```
-   - Then exit the environment using the following command, and you are done:
-     ```bash
+     # For backend
+     cd back-end
+     python -m venv .venv
+     .venv/Scripts/activate
+     pip install -r requirements.txt
+     # After installment
      deactivate
+     # For frontend
+     cd .
+     cd front-end
+     npm install
+     # To run application
+     npm start
      ```
-6. **Push Your Files to Finalize your Personal Branch**
+   - You are done setting it up. Back-end users must activate the .venv if to run applications
+5. **Push Your Files to Finalize your Personal Branch**
    - It is time to finalize your branch by pushing your branch onto the remote repository! Use the following command:
      ```bash
-     git push -u origin your-personal-branch
+     git add .
+     git commit -m "Your message!"
+     git push -u forked-repo-name your-personal-branch
      ```
-
 ## Usage
 
 The following commands will be to run the front-end or back-end scripts:
 ```bash
 npm start
-npm run dev
 
 python app.py
 ```
