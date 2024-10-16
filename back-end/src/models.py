@@ -1,5 +1,3 @@
-from multiprocessing import Array
-
 from app import app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Float, Boolean
@@ -13,79 +11,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(db_dir, 'rat
 # Initialize the database with the app
 db = SQLAlchemy(app)  # Initializes the database with a constructor
 
-<<<<<<< HEAD
-# ORM's work by taking objects/classes and converting them to SQL behind the scenes
-#database models
-class User(db.Model): # there will be one instance of this class
-    __tablename__ = 'users'
-    email = Column(String, primary_key=True, unique=True)
-    username = Column(String, unique=True)
-    password = Column(String)
-    first_name = Column(String)
-    last_name = Column(String)
-    student = Column(Boolean)
-    admin = Column(Boolean)
-    club_exec = Column(Boolean)
-    clubs = Column(String) #for club exec
-    passkey = Column(Integer) #for admin
-
-
-class ClubDirectory(db.Model): # there will be one instance of this class
-    __tablename__ = 'club_directory'
-    ID = Column(Integer, primary_key=True) #this needs to be the hash value
-    club_name = Column(String)
-    tags = Column(Array(String))
-    avg_overall_rating = Column(Float)
-    avg_soc_rating = Column(Float)
-    avg_acad_rating = Column(Float)
-    avg_exec_rating = Column(Float)
-    avg_comlev = Column(Float)
-    active_mem = Column(Integer)
-    description = Column(String)
-    link = Column(String)
-
-
-class ClubReviews(db.Model): # there will be lots of instances of this class
-     # somehow the name of an instance needs to correspond with the hashed ID
-    __tablename__ = 'club_reviews'
-    user = Column(String, primary_key=True)
-    date = Column(String) # date format?
-    overall_rating = Column(Float)
-    soc_rating = Column(Float)
-    acad_rating = Column(Float)
-    exec_rating = Column(Float)
-    comlev = Column(Float)
-    current_mem = Column(Boolean)
-    time_mem = Column(String) # date format?
-    paid = Column(Boolean)
-
-@app.cli.command('db_create') #command line word to do something
-def db_create():
-    db.create_all()
-    print('Database created!')
-
-
-@app.cli.command('db_drop')
-def db_drop():
-    db.drop_all() #method from sqlalchemy
-    print('Database dropped!')
-
-
-@app.cli.command('db_seed') # starter data
-def db_seed():
-    test_user = User(email = 'gstrand@ufl.edu', username = 'gstrand17', password = 'coding123',
-                     first_name='Graciela', last_name='Strand', student=True, club_exec=False, admin=False,
-                     clubs='', passkey=0)
-    db.session.add(test_user)
-
-
-# ORM's work by taking objects/classes and converting them to SQL behind the scenes
-#database models
-class User(db.Model): # there will be one instance of this class
-=======
 # Define the User model
 class User(db.Model):
->>>>>>> cbb6f50c1071b04000c3e7c995f7c9ecd68137fd
     __tablename__ = 'users'
     email = Column(String, primary_key=True, unique=True)
     username = Column(String, unique=True)
@@ -98,21 +25,12 @@ class User(db.Model):
     clubs = Column(String)  # for club exec
     passkey = Column(Integer)  # for admin
 
-<<<<<<< HEAD
-
-class ClubDirectory(db.Model): # there will be one instance of this class
-    __tablename__ = 'club_directory'
-    ID = Column(Integer, primary_key=True) #this needs to be the hash value
-    club_name = Column(String)
-    tags = Column(Array(String))
-=======
 # Define the ClubDirectory model
 class ClubDirectory(db.Model):
     __tablename__ = 'club_directory'
     ID = Column(Integer, primary_key=True)  # This needs to be the hash value
     club_name = Column(String)
     tags = Column(String)  # Use a String or JSON type if needed
->>>>>>> cbb6f50c1071b04000c3e7c995f7c9ecd68137fd
     avg_overall_rating = Column(Float)
     avg_soc_rating = Column(Float)
     avg_acad_rating = Column(Float)
@@ -122,31 +40,17 @@ class ClubDirectory(db.Model):
     description = Column(String)
     link = Column(String)
 
-<<<<<<< HEAD
-
-class ClubReviews(db.Model): # there will be lots of instances of this class
-     # somehow the name of an instance needs to correspond with the hashed ID
-    __tablename__ = 'club_reviews'
-    user = Column(String, primary_key=True)
-    date = Column(String) # date format?
-=======
 # Define the ClubReviews model
 class ClubReviews(db.Model):  # There will be lots of instances of this class
     __tablename__ = 'club_reviews'
     user = Column(String, primary_key=True)
     date = Column(String)  # Date format?
->>>>>>> cbb6f50c1071b04000c3e7c995f7c9ecd68137fd
     overall_rating = Column(Float)
     soc_rating = Column(Float)
     acad_rating = Column(Float)
     exec_rating = Column(Float)
     comlev = Column(Float)
     current_mem = Column(Boolean)
-<<<<<<< HEAD
-    time_mem = Column(String) # date format?
-    paid = Column(Boolean)
-
-=======
     time_mem = Column(String)  # Date format?
     paid = Column(Boolean)
 
@@ -194,4 +98,3 @@ def db_show_users():
             print(f"- Email: {user.email}, Username: {user.username}, First Name: {user.first_name}, Last Name: {user.last_name}")
     else:
         print("No users found in the User table.")
->>>>>>> cbb6f50c1071b04000c3e7c995f7c9ecd68137fd
