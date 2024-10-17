@@ -1,15 +1,22 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Float, Boolean
+from flask_session import Session
 import os
 
 # Set up the path for the database
 basedir = os.path.abspath(os.path.dirname(__file__))  # Path for the application itself
 db_dir = os.path.join(basedir, '../Databases')
+app.config['SECRET_KEY'] = 'mysecretkey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(db_dir, 'ratemyclub-db.sqlite')  # Join is an os-specific library
+app.config['SESSION_TYPE'] = 'sqlalchemy'
 
 # Initialize the database with the app
 db = SQLAlchemy(app)  # Initializes the database with a constructor
+
+app.config['SESSION_SQLALCHEMY'] = db
+
+server_session = Session(app)
 
 # Define the User model
 class User(db.Model):
@@ -54,47 +61,3 @@ class ClubReviews(db.Model):  # There will be lots of instances of this class
     time_mem = Column(String)  # Date format?
     paid = Column(Boolean)
 
-# Define CLI commands
-@app.cli.command('db_create')  # Command line word to do something
-def db_create():
-    db.create_all()  # Create all tables in the database
-    print('Database created!')
-
-
-@app.cli.command('db_drop')
-def db_drop():
-    db.drop_all()  # Method from SQLAlchemy
-    print('Database dropped!')
-
-
-@app.cli.command('db_seed')  # Starter data
-def db_seed():
-    test_user = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
-                     first_name='Julio', last_name='Arboleda', student=True, club_exec=False, admin=False,
-                     clubs='', passkey=0)
-    db.session.add(test_user)
-    db.session.commit()  # Don't forget to commit to save the user
-
-
-@app.cli.command('db_show_tables')  # CLI command to show tables
-def db_show_tables():
-    """List all tables in the database."""
-    tables = db.metadata.tables.keys()  # Get the names of the tables
-    if tables:
-        print("Tables in the database:")
-        for table in tables:
-            print(f"- {table}")
-    else:
-        print("No tables found in the database.")
-
-
-@app.cli.command('db_show_users')  # CLI command to show users
-def db_show_users():
-    """List all users in the User table."""
-    users = User.query.all()  # Query all User records
-    if users:
-        print("Users in the User table:")
-        for user in users:
-            print(f"- Email: {user.email}, Username: {user.username}, First Name: {user.first_name}, Last Name: {user.last_name}")
-    else:
-        print("No users found in the User table.")
