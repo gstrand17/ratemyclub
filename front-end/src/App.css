@@ -1,4 +1,7 @@
 /* src/App.css */
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=DM+Serif+Text:ital@0;1&display=swap');
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -6,11 +9,22 @@ body {
   padding: 20px;
 }
 
-h1 {
-  text-align: center;
+.centered-container h1 {
+  font-family: 'Alfa Slab One', serif;
+  font-size: 6rem;
+  color: #333;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 form {
   display: flex;
   flex-direction: column;
 }
+
+/*.centered-container {*/
+/*  display: flex;*/
+/*  justify-content: center; !* Centers horizontally *!*/
+/*  align-items: center;     !* Centers vertically *!*/
+/*  height: 100vh;           !* 100% of the viewport height *!*/
+/*  text-align: center;       !* Optional, centers text inside the div *!*/
+/*}*/
