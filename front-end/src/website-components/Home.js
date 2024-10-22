@@ -24,9 +24,16 @@ const Home = () => {
             <p style={{fontSize: '1.5rem', fontFamily: "'Alfa Slab One', serif", color: '#1a1a1a'}}>
                 Your one-stop destination to rate and review clubs at the University of Florida.
             </p>
+
             <Link to="/login">
                 <button style={{padding: '10px 20px', fontSize: '16px', backgroundColor: '#59a7ff',}}>Login to Get
                     Started
+                </button>
+            </Link>
+
+            <Link to="/create-account">
+                <button style={{marginTop: '10px', padding: '10px 20px', fontSize: '16px', backgroundColor: '#59a7ff',}}>
+                    Create Account
                 </button>
             </Link>
         </div>
