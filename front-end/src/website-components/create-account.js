@@ -18,8 +18,9 @@ const CreateAccount = () => {
         setEmail('');
         setPassword('');
         setRole('student');
-        // Navigate to the home page after successful account creation
-        navigate('/');
+        // Navigate to the home page after successful account creation->change to front-page??
+        navigate('/'); //change to front-page
+        //navigate('front-page');
     };
 
     return (
@@ -87,7 +88,5 @@ const CreateAccount = () => {
         </div>
     );
 };
-
-//once login, direct back to home? make sure user can see "their reviews"
 
 export default CreateAccount;

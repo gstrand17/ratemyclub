@@ -8,7 +8,7 @@ const FrontPage = () => {
     return (
         // separates pages so link isn't added to bottom of previous link
         <div>
-            <h1>Welcome</h1>
+            <h1>Welcome _user_!</h1>
         </div>
     );
 };

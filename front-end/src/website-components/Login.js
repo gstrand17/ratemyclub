@@ -1,17 +1,19 @@
 // src/Login.js
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const navigate = useNavigate(); // Hook to programmatically navigate
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // Mock authentication
         if (username === 'user' && password === 'pass') {
             setMessage('Login successful!');
+            navigate('/'); // Redirect to the home page->change to front-page
         } else {
             setMessage('Invalid username or password.');
         }

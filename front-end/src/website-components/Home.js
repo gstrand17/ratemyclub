@@ -40,6 +40,7 @@ const Home = () => {
     );
 };
 
+//have the following options on home page or front-page?
 //ADD A SEARCH BAR TO SEARCH FOR CLUBS?
     //search bar routes to club search page
 
