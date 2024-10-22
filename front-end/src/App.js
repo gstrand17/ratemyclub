@@ -1,8 +1,10 @@
 // src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Home';
-import Login from './Login';
+import Home from './website-components/Home';
+import Login from './website-components/Login';
+import FrontPage from './website-components/front-page';
+import CreateAccount from './website-components/create-account';
 
 
 // const App = () => {
@@ -19,6 +21,8 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/create-account" element={<CreateAccount />} />
+                <Route path ="front-page" element={<FrontPage />} />
             </Routes>
         </Router>
     );

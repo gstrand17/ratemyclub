@@ -52,6 +52,13 @@ const Login = () => {
                     Back to Home
                 </button>
             </Link>
+
+            {/* Button to Create Account */}
+            <Link to="/create-account">
+                <button style={{marginTop: '10px', padding: '5px 10px', fontSize: '13px'}}>
+                    Create Account
+                </button>
+            </Link>
         </div>
     );
 };
