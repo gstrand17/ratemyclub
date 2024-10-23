@@ -5,7 +5,6 @@
 }
 
 .button-container button {
-    margin: 0 5px;
     padding: 5px 10px; /* Increased padding for a bigger button */
     font-size: 16px; /* Increased font size for better readability */
     border-radius: 5px; /* Rounded corners (optional) */
