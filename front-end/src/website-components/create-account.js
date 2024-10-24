@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import './create-account.css';
 
 const CreateAccount = () => {
     const [email, setEmail] = useState(''); //SEND TO BACKEND SOMEHOW

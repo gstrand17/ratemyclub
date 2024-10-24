@@ -1,4 +1,3 @@
-import './front-page.css';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 //import bannerImage from './uf_dupe.png';
