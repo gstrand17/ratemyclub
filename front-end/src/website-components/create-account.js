@@ -14,6 +14,12 @@ const CreateAccount = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const accountData = { email, password, role, firstName, lastName, adminPasscode };
+
+        // Store account data in local storage
+        localStorage.setItem('accountData', JSON.stringify(accountData));
+
         // Check if the admin passcode is required and validate it
         if (role === 'admin' && adminPasscode !== '1234') { // Replace '1234' with your actual admin passcode logic
             alert('Invalid admin passcode.');

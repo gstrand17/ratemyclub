@@ -11,6 +11,9 @@ const FrontPage = () => {
 //diff options shown depending on type of user?
     //get user role from login/create acct or backend?
 
+    const storedData = localStorage.getItem('accountData');
+    const accountData = storedData ? JSON.parse(storedData) : null;
+
     // website structure goes here
     const location = useLocation();
     const navigate = useNavigate();
@@ -45,7 +48,7 @@ const FrontPage = () => {
                 fontSize: '3rem',
                 marginTop: '20px',
             }}>
-                WELCOME {username}
+                WELCOME {accountData.firstName}
             </h1>
 
 

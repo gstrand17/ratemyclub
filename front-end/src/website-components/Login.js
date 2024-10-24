@@ -14,10 +14,15 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Mock authentication
-        if (role === 'student' && username === 'user' && password === 'pass') {
+
+        // Fetches stored data
+        const storedData = localStorage.getItem('accountData');
+        const accountData = storedData ? JSON.parse(storedData) : null;
+
+        if (accountData.email === username && accountData.password === password) {
             setMessage('Login successful!');
             navigate('/front-page', { state: { username } }); // Redirect to the front page with username
-        } else if (role === 'admin' && username === 'admin' && password === 'adminpass' && passcode === '1234') {
+        } else if (accountData.role === 'admin' && username === 'admin' && password === 'adminpass' && passcode === '1234') {
             setMessage('Admin login successful!'); //functionality for admin
             navigate('/front-page');
         } else {
