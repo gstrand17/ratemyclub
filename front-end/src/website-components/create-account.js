@@ -11,8 +11,14 @@ const CreateAccount = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const accountData = { email, password, role };
+
+        // Store account data in local storage
+        localStorage.setItem('accountData', JSON.stringify(accountData));
+
         // Mock account creation logic->replace this with real logic later!
-        console.log('Account Created:', { email, password, role });
+        // console.log('Account Created:', { email, password, role });
         alert(`Account created for ${role} with email: ${email}`);
         // Reset form, optional
         setEmail('');

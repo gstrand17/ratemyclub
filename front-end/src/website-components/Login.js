@@ -11,7 +11,12 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Mock authentication
-        if (username === 'user' && password === 'pass') {
+
+        // Fetches stored data
+        const storedData = localStorage.getItem('accountData');
+        const accountData = storedData ? JSON.parse(storedData) : null;
+
+        if (accountData.email === username && accountData.password === password) {
             setMessage('Login successful!');
             navigate('/'); // Redirect to the home page->change to front-page
         } else {
