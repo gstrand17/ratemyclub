@@ -5,6 +5,7 @@ import Home from './website-components/Home';
 import Login from './website-components/Login';
 import FrontPage from './website-components/front-page';
 import CreateAccount from './website-components/create-account';
+import UserProfile from './website-components/UserProfile';
 
 const App = () => {
     return (
@@ -13,7 +14,8 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/create-account" element={<CreateAccount />} />
-                <Route path ="front-page" element={<FrontPage />} />
+                <Route path ="/front-page" element={<FrontPage />} />
+                <Route path ="/profile" element={<UserProfile />} />
             </Routes>
         </Router>
     );

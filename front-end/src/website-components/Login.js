@@ -7,6 +7,9 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate(); // Hook to programmatically navigate
+    const [role, setRole] = useState('student'); // Default role is student
+    const [passcode, setPasscode] = useState(''); // State for admin passcode
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -18,14 +21,17 @@ const Login = () => {
 
         if (accountData.email === username && accountData.password === password) {
             setMessage('Login successful!');
-            navigate('/'); // Redirect to the home page->change to front-page
+            navigate('/front-page', { state: { username } }); // Redirect to the front page with username
+        } else if (accountData.role === 'admin' && username === 'admin' && password === 'adminpass' && passcode === '1234') {
+            setMessage('Admin login successful!'); //functionality for admin
+            navigate('/front-page');
         } else {
             setMessage('Invalid username or password.');
         }
     };
 
     return (
-        <div style={{ maxWidth: '300px', margin: 'auto', padding: '20px', border: '1px solid #ccc' }}>
+        <div style={{ maxWidth: '300px', margin: 'auto', padding: '20px', border: '3px solid #ccc' }}>
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -46,6 +52,47 @@ const Login = () => {
                         required
                     />
                 </div>
+
+                <div>
+                    <label>Role:</label>
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                value="student"
+                                checked={role === 'student'}
+                                onChange={(e) => {
+                                    setRole(e.target.value);
+                                    setPasscode(''); // Reset passcode if switching to student
+                                }}
+                            />
+                            Student
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                value="admin"
+                                checked={role === 'admin'}
+                                onChange={(e) => setRole(e.target.value)}
+                            />
+                            Admin
+                        </label>
+                    </div>
+                </div>
+                {role === 'admin' && (
+                    <div>
+                        <label>Admin Passcode:</label>
+                        <input
+                            type="text"
+                            value={passcode}
+                            onChange={(e) => setPasscode(e.target.value)}
+                            required
+                            maxLength="4"
+                            minLength="4"
+                        />
+                    </div>
+                )}
+
                 {/* Bigger Login Button */}
                 <button type="submit" style={{ padding: '5px 10px', fontSize: '18px', marginTop: '10px' }}>
                     Login

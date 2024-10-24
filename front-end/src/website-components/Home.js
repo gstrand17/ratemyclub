@@ -40,17 +40,4 @@ const Home = () => {
     );
 };
 
-//have the following options on home page or front-page?
-//ADD A SEARCH BAR TO SEARCH FOR CLUBS?
-    //search bar routes to club search page
-
-//diff options shown depending on type of user?
-
-//have buttons for:
-                    // 1. profile
-                    // 2. acct settings
-                    // 3. your reviews
-                    // 4. logout
-
-
 export default Home;
