@@ -13,7 +13,17 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Mock authentication
+
+        // Preparing the JSON data variables to be sent back to back-end route
+        const loginData = {
+            username: username,
+            password: password,
+            role: role,
+            passcode: role === 'admin' ? passcode : null
+        };
+
+        // Use fetch-command to send a POST request to Flask local machine server for /login API route
+        fetch('http://localhost:5000/login', {method: 'POST', body: JSON.stringify(loginData)})
 
         // Fetches stored data
         const storedData = localStorage.getItem('accountData');
