@@ -24,7 +24,10 @@ const Login = () => {
 
         // Use fetch-command to send a POST request to Flask local machine server for /login API route
         fetch('http://localhost:5000/login', {method: 'POST', body: JSON.stringify(loginData)})
-
+            .then(response => response.json())
+            .then(data => {
+                
+            })
         // Fetches stored data
         const storedData = localStorage.getItem('accountData');
         const accountData = storedData ? JSON.parse(storedData) : null;

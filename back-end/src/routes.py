@@ -55,12 +55,13 @@ def createUser():
 def login():
     data = request.get_json()
     if not data:
-        return jsonify(message='No input data provided'), 401
+        return jsonify(message='No input provided!'), 401
 
     # Could either input username or email
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
+    #role =
 
     existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
 
@@ -73,9 +74,9 @@ def login():
             session['club_exec'] = existing_user.club_exec
             session['student'] = existing_user.student
         else:
-            return jsonify(message='Incorrect password'), 401
+            return jsonify(message='Incorrect password!'), 401
 
-    return jsonify(message='Logged in!'), 200
+    return jsonify(message='Successful Login!'), 200
 
 
 @app.route('/logout')
