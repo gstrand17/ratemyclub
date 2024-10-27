@@ -19,9 +19,13 @@ def db_seed():
     test_user = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
                      first_name='Julio', last_name='Arboleda', student=True, club_exec=False, admin=False,
                      clubs='', passkey=0)
+    test_admin = User(email='admin@ufl.edu', username='admin', password='coding123',
+                     first_name='test', last_name='admin', student=False, club_exec=False, admin=True,
+                     clubs='', passkey=1234)
     club1 = ClubDirectory(club_name = '3D Printing Club', tags='engineering', avg_overall_rating=0, avg_soc_rating=0, avg_acad_rating=0, avg_exec_rating=0, avg_comlev=0, active_mem=0,
                           description='eieijdei', link='https://www.instagram.com/3dprintuf/')
     db.session.add(test_user)
+    db.session.add(test_admin)
     db.session.add(club1)
     db.session.commit()  # Don't forget to commit to save the user
 
