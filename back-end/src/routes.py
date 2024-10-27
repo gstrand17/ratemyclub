@@ -11,36 +11,35 @@ def hello_world():  # function
     return 'Hello World!!' # make sure there are two empty lines between functions
 
 
-@app.route('/sign-up', methods=['POST'])
+@app.route('/create-account', methods=['POST'])
 def createUser():
     data = request.get_json()
     if not data:
         return jsonify(message='No input data provided'), 401
 
-    username = data.get('username')
+    username = data.get('user_name')
     email = data.get('email')
     password = data.get('password')
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
-    student = data.get('student', False)  # Default to False if not provided
-    admin = data.get('admin', False)  # Default to False if not provided
-    club_exec = data.get('club_exec', False)  # Default to False if not provided
+    firstName = data.get('first_name')
+    lastName = data.get('last_name')
+    role = data.get('role')
     clubs = data.get('clubs', '')  # Default to empty string if not provided
-    passkey = data.get('passkey', 0)  # Default to 0 if not provided
 
     existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
     if existing_user:
-        return jsonify(message='User already exists'), 401
+        return jsonify(message='User already exists!'), 401
+
+    passkey = data.get('passkey') if role == 'admin' else None
 
     new_user = User(
         username=username,
         email=email,
-        password=password,  # Consider hashing the password before storing it
-        first_name=first_name,
-        last_name=last_name,
-        student=student,
-        admin=admin,
-        club_exec=club_exec,
+        password=password,
+        first_name=firstName,
+        last_name=lastName,
+        student=role == 'student',
+        admin=role == 'admin',
+        club_exec=role == 'club_exec',
         clubs=clubs,
         passkey=passkey
         )
@@ -48,35 +47,100 @@ def createUser():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify(message='User created'), 201
+    session['logged_in'] = True
+    session['username'] = new_user.username
+    session['email'] = new_user.email
+    if role == 'admin':
+        session['admin'] = True
+    # Checks if the role is club_exec then creates a cookie to provide club_exec privileges
+    if role == 'club_exec':
+        session['club_exec'] = True
+    # If the roles were not admin and club_execs from previous if conditions then it results to default student
+    session['student'] = True
+
+    return jsonify(message='User created!'), 201
 
 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     if not data:
-        return jsonify(message='No input provided!'), 401
+        return jsonify(message='No Input Provided!'), 401
 
     # Could either input username or email
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
-    #role =
+    role = data.get('role')
 
     existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
 
+    # Sees if user exists!
     if existing_user:
         if existing_user.password == password:
             session['logged_in'] = True
             session['username'] = existing_user.username
             session['email'] = existing_user.email
-            session['admin'] = existing_user.admin
-            session['club_exec'] = existing_user.club_exec
-            session['student'] = existing_user.student
+            # Checks if the role is admin then leads to a condition to check if they have proper passkey for admin privleges
+            if role == 'admin':
+                passkey = data.get('passkey')
+                if passkey == existing_user.passkey:
+                    session['admin'] = True
+                else:
+                    return jsonify(message='Passkey Incorrect!'), 401
+            # Checks if the role is club_exec then creates a cookie to provide club_exec privileges
+            if role == 'club_exec':
+                session['club_exec'] = True
+            # If the roles were not admin and club_execs from previous if conditions then it results to default student
+            session['student'] = True
         else:
-            return jsonify(message='Incorrect password!'), 401
-
+            # This means that the password is incorrect
+            return jsonify(message='Incorrect Password!'), 401
+    else:
+        # User does not exist!
+        return jsonify(message='User not found!'), 401
+    # Login is successful and cookies have been established
+    print("Session Variables Set:", session)
     return jsonify(message='Successful Login!'), 200
+
+
+@app.route('/front-page', methods=['GET'])
+def front_page():
+    if 'logged_in' in session:
+        existing_user = User.query.filter((User.username == session['username']) | (User.email == session['email'])).first()
+        return jsonify(
+            message="Data has been fetched!",
+            firstName=existing_user.first_name,
+            lastName=existing_user.last_name
+        ), 200
+    return jsonify(message='You are not logged in!'), 401
+
+
+# @app.route('profile', methods=['GET', 'PUT'])
+# def profile():
+#     if 'logged_in' in session:
+#         existing_user = User.query.filter((User.username == session['username']) | (User.email == session['email'])).first()
+#         if existing_user:
+#             role = None
+#             if existing_user.student:
+#                 role = 'student'
+#             if existing_user.club_exec:
+#                 role = 'club_exec'
+#             if existing_user.admin:
+#                 role = 'admin'
+#             return jsonify(
+#                 message="Data has been fetched!",
+#                 firstName= existing_user.first_name,
+#                 lastName= existing_user.last_name,
+#                 userName = existing_user.username,
+#                 email= existing_user.email,
+#                 password = existing_user.password,
+#                 role = role
+#             )
+#         else:
+#             return jsonify(message='User not found!'), 404
+#     else:
+#         return jsonify(message='You are not logged in!'), 401
 
 
 @app.route('/logout')
