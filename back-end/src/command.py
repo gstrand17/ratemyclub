@@ -16,10 +16,37 @@ def db_drop():
 
 @app.cli.command('db_seed')  # Starter data
 def db_seed():
-    test_user = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
-                     first_name='Julio', last_name='Arboleda', student=True, club_exec=False, admin=False,
-                     clubs='', passkey=0)
-   club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=0.0,
+    student_guest = User(email='guest@ufl.edu', username='guest', password='coding123',
+                       first_name='Guest', last_name='Guest', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_test_user = User(email='test_user@ufl.edu', username='test_user', password='coding123',
+                       first_name='Test', last_name='User', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_jhope = User(email='jhope@ufl.edu', username='J-Hope', password='coding123',
+                       first_name='Ho-seok', last_name='Jung', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_julio = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
+                       first_name='Julio', last_name='Arboleda', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=1277)
+    student_julio = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
+                       first_name='Julio', last_name='Arboleda', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=1277)
+    student_julio = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
+                       first_name='Julio', last_name='Arboleda', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=1277)
+    admin_julio = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
+                     first_name='Julio', last_name='Arboleda', student=False, club_exec=False, admin=True,
+                     clubs='', passkey=1277)
+    admin_graciela = User(email='gstrand@ufl.edu', username='graciela', password='coding123',
+                       first_name='Graciela', last_name='Strand', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=9237)
+    admin_natalie = User(email='n.poche@ufl.edu', username='natalie', password='coding123',
+                       first_name='Natalie', last_name='Poche', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=3629)
+    admin_erin = User(email='ehargrave@ufl.edu', username='erin', password='coding123',
+                       first_name='Erin', last_name='Hargrave', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=2509)
+    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=0.0,
                           avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, avg_comlev=0.0, active_mem=0,
                           description='A student organization at the University of Florida striving to educate students '
                                       'on the world of 3D printing',
@@ -484,7 +511,10 @@ def db_seed():
                                        'Tobago Guadeloupe Martinique Bahamas Barbados Saint Lucia Curaçao Aruba Saint Vincent and the Grenadines '
                                        'United States Virgin Islands Grenada Antigua and Barbuda Dominica Cayman Islands Saint Kitts and Nevis Sint Maarten Turks and Caicos Islands Saint Martin British Virgin Islands Caribbean Netherlands Anguilla Saint Barthélemy Montserrat',
                            link='https://ufcaribsadotorg.wordpress.com/')
-    db.session.add(test_user)
+    db.session.add(admin_julio)
+    db.session.add(admin_erin)
+    db.session.add(admin_graciela)
+    db.session.add(admin_natalie)
     db.session.add(club1)
     db.session.add(club2)
     db.session.add(club3)
