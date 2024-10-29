@@ -35,8 +35,8 @@ class User(db.Model):
 # Define the ClubDirectory model
 class ClubDirectory(db.Model):
     __tablename__ = 'club_directory'
-    ID = Column(Integer, primary_key=True)  # This needs to be the hash value
-    club_name = Column(String)
+    #ID = Column(Integer, primary_key=True)  # This needs to be the hash value
+    club_name = Column(String, primary_key=True, unique=True)
     tags = Column(String)  # Use a String or JSON type if needed
     avg_overall_rating = Column(Float)
     avg_soc_rating = Column(Float)

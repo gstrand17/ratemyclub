@@ -1,4 +1,4 @@
- a a# JENGa Stack
+# JENGa Stack
 # Project Title: ratemyclub
 
 ## Table of Contents

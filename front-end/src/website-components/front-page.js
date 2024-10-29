@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 //import bannerImage from './uf_dupe.png';
-import bannerImage from './banner.jpg';
+//import bannerImage from './banner.jpg';
 
 const FrontPage = () => {
 //ADD A SEARCH BAR TO SEARCH FOR CLUBS?
@@ -33,7 +33,7 @@ const FrontPage = () => {
         <div style={{position: 'relative'}}>
             {/* Banner Image */}
             <img
-                src={bannerImage}
+                src={`${process.env.PUBLIC_URL}/banner.jpg`} //Replaced it with img src to avoid using import
                 alt="Banner"
                 style={{
                     width: '100%', // Make the image full width
