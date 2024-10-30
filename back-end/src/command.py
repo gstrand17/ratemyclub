@@ -16,10 +16,61 @@ def db_drop():
 
 @app.cli.command('db_seed')  # Starter data
 def db_seed():
-    test_user = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
-                     first_name='Julio', last_name='Arboleda', student=True, club_exec=False, admin=False,
-                     clubs='', passkey=0)
-   club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=0.0,
+    student_guest = User(email='guest@ufl.edu', username='guest', password='coding123',
+                       first_name='Guest', last_name='Guest', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_test = User(email='test@ufl.edu', username='test', password='test',
+                          first_name='Test', last_name='User', student=True, club_exec=False, admin=False,
+                          clubs='', passkey=None)
+    student_jungkook = User(email='jungkook@ufl.edu', username='Jungkook', password='coding123',
+                       first_name='Jung-kook', last_name='Jeon', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_jhope = User(email='jhope@ufl.edu', username='J-Hope', password='coding123',
+                       first_name='Ho-seok', last_name='Jung', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_v = User(email='v@ufl.edu', username='V', password='coding123',
+                       first_name='Tae-hyung', last_name='Kim', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_jimin = User(email='jimin@ufl.edu', username='Jimin', password='coding123',
+                       first_name='Ji-min', last_name='Park', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_suga = User(email='suga@ufl.edu', username='Suga', password='coding123',
+                       first_name='Yoon-gi', last_name='Min', student=True, club_exec=False, admin=False,
+                       clubs='', passkey=None)
+    student_jin = User(email='jin@ufl.edu', username='Jin', password='coding123',
+                        first_name='Seok-joong', last_name='Kim', student=True, club_exec=False, admin=False,
+                        clubs='', passkey=None)
+    student_rm = User(email='rm@ufl.edu', username='RM', password='coding123',
+                        first_name='Nam-joon', last_name='Kim', student=True, club_exec=False, admin=False,
+                        clubs='', passkey=None)
+    student_lisa = User(email='lisa@ufl.edu', username='Lisa', password='coding123',
+                        first_name='Lalisa', last_name='Manoban', student=True, club_exec=False, admin=False,
+                        clubs='', passkey=None)
+    student_jennie = User(email='jennie@ufl.edu', username='Jennie', password='coding123',
+                        first_name='Jennie', last_name='Kim', student=True, club_exec=False, admin=False,
+                        clubs='', passkey=None)
+    student_rose = User(email='rose@ufl.edu', username='Rose', password='coding123',
+                          first_name='Roseanne', last_name='Park', student=True, club_exec=False, admin=False,
+                          clubs='', passkey=None)
+    student_jisoo = User(email='jisooe@ufl.edu', username='Jisoo', password='coding123',
+                          first_name='Ji-soo', last_name='Kim', student=True, club_exec=False, admin=False,
+                          clubs='', passkey=None)
+    clubExec_guestExec = User(email='guestExec@ufl.edu', username='guestExec', password='coding123',
+                          first_name='GuestExec', last_name='GuestExec', student=False, club_exec=True, admin=False,
+                          clubs='', passkey=None)
+    admin_julio = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
+                     first_name='Julio', last_name='Arboleda', student=False, club_exec=False, admin=True,
+                     clubs='', passkey=1277)
+    admin_graciela = User(email='gstrand@ufl.edu', username='graciela', password='coding123',
+                       first_name='Graciela', last_name='Strand', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=9237)
+    admin_natalie = User(email='n.poche@ufl.edu', username='natalie', password='coding123',
+                       first_name='Natalie', last_name='Poche', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=3629)
+    admin_erin = User(email='ehargrave@ufl.edu', username='erin', password='coding123',
+                       first_name='Erin', last_name='Hargrave', student=False, club_exec=False, admin=True,
+                       clubs='', passkey=2509)
+    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=0.0,
                           avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, avg_comlev=0.0, active_mem=0,
                           description='A student organization at the University of Florida striving to educate students '
                                       'on the world of 3D printing',
@@ -484,84 +535,25 @@ def db_seed():
                                        'Tobago Guadeloupe Martinique Bahamas Barbados Saint Lucia Curaçao Aruba Saint Vincent and the Grenadines '
                                        'United States Virgin Islands Grenada Antigua and Barbuda Dominica Cayman Islands Saint Kitts and Nevis Sint Maarten Turks and Caicos Islands Saint Martin British Virgin Islands Caribbean Netherlands Anguilla Saint Barthélemy Montserrat',
                            link='https://ufcaribsadotorg.wordpress.com/')
-    db.session.add(test_user)
-    db.session.add(club1)
-    db.session.add(club2)
-    db.session.add(club3)
-    db.session.add(club4)
-    db.session.add(club5)
-    db.session.add(club6)
-    db.session.add(club7)
-    db.session.add(club8)
-    db.session.add(club9)
-    db.session.add(club10)
-    db.session.add(club11)
-    db.session.add(club12)
-    db.session.add(club13)
-    db.session.add(club14)
-    db.session.add(club15)
-    db.session.add(club16)
-    db.session.add(club17)
-    db.session.add(club18)
-    db.session.add(club19)
-    db.session.add(club20)
-    db.session.add(club21)
-    db.session.add(club22)
-    db.session.add(club23)
-    db.session.add(club24)
-    db.session.add(club25)
-    db.session.add(club26)
-    db.session.add(club27)
-    db.session.add(club28)
-    db.session.add(club29)
-    db.session.add(club30)
-    db.session.add(club31)
-    db.session.add(club32)
-    db.session.add(club33)
-    db.session.add(club34)
-    db.session.add(club35)
-    db.session.add(club36)
-    db.session.add(club37)
-    db.session.add(club38)
-    db.session.add(club39)
-    db.session.add(club40)
-    db.session.add(club41)
-    db.session.add(club42)
-    db.session.add(club43)
-    db.session.add(club44)
-    db.session.add(club45)
-    db.session.add(club46)
-    db.session.add(club47)
-    db.session.add(club48)
-    db.session.add(club49)
-    db.session.add(club50)
-    db.session.add(club51)
-    db.session.add(club52)
-    db.session.add(club53)
-    db.session.add(club54)
-    db.session.add(club55)
-    db.session.add(club56)
-    db.session.add(club57)
-    db.session.add(club58)
-    db.session.add(club59)
-    db.session.add(club60)
-    db.session.add(club61)
-    db.session.add(club62)
-    db.session.add(club63)
-    db.session.add(club64)
-    db.session.add(club65)
-    db.session.add(club66)
-    db.session.add(club67)
-    db.session.add(club68)
-    db.session.add(club69)
-    db.session.add(club70)
-    db.session.add(club71)
-    db.session.add(club72)
-    db.session.add(club73)
-    db.session.add(club74)
-    db.session.add(club75)
-    db.session.add(club76)
-    db.session.commit()  # Don't forget to commit to save the user
+
+    entities = [
+        student_guest, student_test, student_jungkook, student_jhope, student_v,
+        student_jimin, student_suga, student_jin, student_rm, student_lisa,
+        student_jennie, student_rose, student_jisoo, clubExec_guestExec,
+        admin_julio, admin_erin, admin_graciela, admin_natalie, club1, club2,
+        club3, club4, club5, club6, club7, club8, club9, club10, club11, club12,
+        club13, club14, club15, club16, club17, club18, club19, club20, club21,
+        club22, club23, club24, club25, club26, club27, club28, club29, club30,
+        club31, club32, club33, club34, club35, club36, club37, club38, club39,
+        club40, club41, club42, club43, club44, club45, club46, club47, club48,
+        club49, club50, club51, club52, club53, club54, club55, club56, club57,
+        club58, club59, club60, club61, club62, club63, club64, club65, club66,
+        club67, club68, club69, club70, club71, club72, club73, club74, club75,
+        club76
+    ] # Used chatgpt to help condense this
+    db.session.add_all(entities)
+    db.session.commit()
+    print('Database Seeded!')
 
 
 @app.cli.command('db_show_tables')  # CLI command to show tables

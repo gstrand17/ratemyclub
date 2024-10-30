@@ -16,6 +16,9 @@ db = SQLAlchemy(app)  # Initializes the database with a constructor
 
 app.config['SESSION_SQLALCHEMY'] = db
 
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+
 server_session = Session(app)
 
 # Define the User model

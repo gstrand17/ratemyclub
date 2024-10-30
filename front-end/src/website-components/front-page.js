@@ -1,5 +1,5 @@
 import './front-page.css';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 //import bannerImage from './uf_dupe.png';
 //import bannerImage from './banner.jpg';
@@ -11,24 +11,62 @@ const FrontPage = () => {
 //diff options shown depending on type of user?
     //get user role from login/create acct or backend?
 
-    const storedData = localStorage.getItem('accountData');
-    const accountData = storedData ? JSON.parse(storedData) : null;
-
     // website structure goes here
     const location = useLocation();
     const navigate = useNavigate();
-    const { username } = location.state || { username: '' }; // Default to '' if no username is provided
-    //^Change this to retrieve from backend database
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+
+    useEffect(() => {
+        fetch('http://localhost:5000/front-page', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    return response.json();
+                } else if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message === "Data has been fetched!") {
+                    setFirstName(data.firstName);
+                    setLastName(data.lastName);
+                }
+                else {
+                    console.log('Error:', data.message);
+                }
+            })
+            .catch((error) => {
+                console.log('Problem with fetching data', error);
+            });
+    }, []);
 
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
         // Navigate back home
-        navigate('/');
+        fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(response => {
+            if (response.ok) {
+                navigate('/');
+            } else {
+                console.log('Error:', response.message);
+            }
+        });
     };
     const handleProfile = () => {
         // Navigate to user profile page
         navigate('/profile');
     };
+
 
     return (
         <div style={{position: 'relative'}}>
@@ -48,7 +86,7 @@ const FrontPage = () => {
                 fontSize: '3rem',
                 marginTop: '20px',
             }}>
-                WELCOME {accountData.firstName}
+                WELCOME {firstName} {lastName}
             </h1>
 
 
