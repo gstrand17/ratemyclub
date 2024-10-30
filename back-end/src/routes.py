@@ -82,19 +82,21 @@ def login():
             session['username'] = existing_user.username
             session['email'] = existing_user.email
             # Checks if the role is admin then leads to a condition to check if they have proper passkey for admin privleges
-            if role == 'admin' and existing_user.admin:
-                passkey = data.get('passkey')
-                if passkey == existing_user.passkey:
-                    session['admin'] = True
+            if role == 'admin':
+                if existing_user.admin:
+                    passkey = data.get('passkey')
+                    if passkey == existing_user.passkey:
+                        session['admin'] = True
+                    else:
+                        return jsonify(message='Passkey Incorrect!'), 401
                 else:
-                    return jsonify(message='Passkey Incorrect!'), 401
-            else:
-                return jsonify(message='Not an Admin!'), 401
+                    return jsonify(message='Not an Admin!'), 401
             # Checks if the role is club_exec then creates a cookie to provide club_exec privileges
-            if role == 'club_exec' and existing_user.club_exec:
-                session['club_exec'] = True
-            else:
-                return jsonify(message='Not an Club Executive!'), 401
+            if role == 'club_exec':
+                if existing_user.club_exec:
+                    session['club_exec'] = True
+                else:
+                    return jsonify(message='Not an Club Executive!'), 401
             # If the roles were not admin and club_execs from previous if conditions then it results to default student
             session['student'] = True
         else:
@@ -120,7 +122,7 @@ def front_page():
     return jsonify(message='You are not logged in!'), 401
 
 
-@app.route('profile', methods=['GET', 'PUT'])
+@app.route('/profile', methods=['GET', 'PUT'])
 def profile():
     if 'logged_in' in session:
         existing_user = User.query.filter((User.username == session['username']) | (User.email == session['email'])).first()
@@ -138,9 +140,9 @@ def profile():
             if existing_user:
                 return jsonify(
                     message = "Data has been fetched!",
-                    firstName = existing_user.first_name,
-                    lastName = existing_user.last_name,
-                    userName = existing_user.username,
+                    first_name = existing_user.first_name,
+                    last_name = existing_user.last_name,
+                    username = existing_user.username,
                     email = existing_user.email,
                     password = existing_user.password,
                     role = role
@@ -175,7 +177,7 @@ def profile():
         return jsonify(message='You are not logged in!'), 401
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     session.pop('logged_in', None)
     session.pop('username', None)
@@ -183,7 +185,8 @@ def logout():
     session.pop('admin', None)
     session.pop('club_exec', None)
     session.pop('student', None)
-    return redirect(url_for('login'))
+    session.clear()
+    return jsonify(message='Successful Logout!'), 200
 
 
 @app.route('/log-in/<string:username>/<string:password>') # var types comes before

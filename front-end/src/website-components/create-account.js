@@ -46,7 +46,7 @@ const CreateAccount = () => {
             })
             .then(data => {
                 if (data.message === 'User created!') {
-                    setMessage(data.message);
+                    console.log(data.message);
                     navigate('/front-page', { state: { username } });
                 }
                 setMessage(data.message);

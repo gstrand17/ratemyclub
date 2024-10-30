@@ -50,7 +50,17 @@ const FrontPage = () => {
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
         // Navigate back home
-        navigate('/');
+        fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(response => {
+            if (response.ok) {
+                navigate('/');
+            } else {
+                console.log('Error:', response.message);
+            }
+        });
     };
     const handleProfile = () => {
         // Navigate to user profile page

@@ -7,9 +7,9 @@ const UserProfile = () => {
     const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [user, setUser] = useState({
-        firstName: '',
-        lastName: '',
-        userName: '',
+        first_name: '',
+        last_name: '',
+        user_name: '',
         email: '',
         password: '',
         role: ''
@@ -43,7 +43,7 @@ const UserProfile = () => {
             .catch((error) => {
                 console.log('Problem with fetching data', error);
             });
-    })
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -75,11 +75,16 @@ const UserProfile = () => {
                 console.error('Error:', error);
                 setMessage('An error occurred. Please try again.');
             });
-    }
+    };
+
+    const updateProfile = (type, currValue) => {
+        setUser(prevValue => ({ ...prevValue, [type]: currValue }));
+    };
 
     const back = () => {
         navigate('/front-page');
     };
+
     return (
         <div style={{position: 'relative'}}>
             <h1 style={{
@@ -92,10 +97,69 @@ const UserProfile = () => {
                 Get info from backend: Name, email, role, hide pass(?)
                 Have an edit button
              */}
+            <div>
+                <label>
+                    First Name:
+                    <input
+                        type="text"
+                        value={user.first_name}
+                        onChange={(e) => {updateProfile('first_name', e.target.value)}}
+                        disabled={!edit}
+                        />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Last Name:
+                    <input
+                    type="text"
+                    value={user.last_name}
+                    onChange={(e) => {updateProfile('last_name', e.target.value)}}
+                    disabled={!edit}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Email:
+                    <input
+                        type="email"
+                        value={user.email}
+                        onChange={(e) => {updateProfile('email', e.target.value)}}
+                        disabled={!edit}
+                        />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Username:
+                    <input
+                    type="text"
+                    value={user.username}
+                    onChange={(e) => {updateProfile('username', e.target.value)}}
+                    disabled={!edit}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Password:
+                    <input
+                    type="text"
+                    value={user.password}
+                    onChange={(e) => {updateProfile('password', e.target.value)}}
+                    disabled={!edit}
+                    />
+                </label>
+            </div>
+            {edit ? (
+                <button onClick={handleSubmit}>Save</button>
+            ) : (
+                <button onClick={() => confirmEdit(true)}>Edit</button>
+            )}
                 <div className="button-container">
-                    <button onClick={back}>Back to Home</button>
+                    <button style={{marginTop: '10px'}} onClick={back}>Back to Home</button>
                 </div>
-
         </div>
 
     );
