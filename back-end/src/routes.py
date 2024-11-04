@@ -198,4 +198,16 @@ def url_variables(username: str, password: int): # var type comes after
 
     # basic idea of one way we can do login with routes, of course the database would need to be involved
 
-
+#fetches the list of clubs from the database to display on front page
+#display the rest of the info on specific club landing pages?
+@app.route('/api/clubs', methods=['GET'])
+def get_clubs():
+    clubs = ClubDirectory.query.all()
+    clubs_data = [
+        {
+            'name': club.club_name,
+            'tags': club.tags,
+            'avg_rating': club.avg_overall_rating
+        } for club in clubs
+    ]
+    return jsonify(clubs_data)
