@@ -206,8 +206,14 @@ def get_clubs():
     clubs_data = [
         {
             'name': club.club_name,
+            "description": club.description,
             'tags': club.tags,
-            'avg_rating': club.avg_overall_rating
+            'avg_rating': club.avg_overall_rating,
+            'social_rating': club.avg_soc_rating,
+            'academic_rating': club.avg_acad_rating,
+            'exec_rating': club.avg_exec_rating,
+            'active_mem_rating': club.active_mem,
+            'link': club.link,
         } for club in clubs
     ]
     return jsonify(clubs_data)

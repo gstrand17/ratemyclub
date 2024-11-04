@@ -6,6 +6,7 @@ import Login from './website-components/Login';
 import FrontPage from './website-components/front-page';
 import CreateAccount from './website-components/create-account';
 import UserProfile from './website-components/UserProfile';
+import ClubPage from './website-components/ClubPage';
 
 const App = () => {
     return (
@@ -16,6 +17,7 @@ const App = () => {
                 <Route path="/create-account" element={<CreateAccount />} />
                 <Route path ="/front-page" element={<FrontPage />} />
                 <Route path ="/profile" element={<UserProfile />} />
+                <Route path="/club-page/:club_name" element={<ClubPage />} />
             </Routes>
         </Router>
     );

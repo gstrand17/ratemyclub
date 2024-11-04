@@ -12,7 +12,7 @@ const FrontPage = () => {
     //get user role from login/create acct or backend?
 
     // website structure goes here
-    const location = useLocation();
+    //const location = useLocation();
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -128,7 +128,7 @@ const FrontPage = () => {
             <div style={{maxWidth: '600px', margin: 'auto', padding: '20px', border: '3px solid #ccc'}}>
                 {clubs.map((club, index) => (
                     <div key={index}
-                         onClick={() => navigate('/profile')}
+                         onClick={() => navigate(`/club-page/${club.name}`)}
                          style={{
                              border: '2px solid #c7c7c7',
                              padding: '1rem',
