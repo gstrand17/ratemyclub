@@ -84,7 +84,10 @@ def login():
             # Checks if the role is admin then leads to a condition to check if they have proper passkey for admin privleges
             if role == 'admin':
                 if existing_user.admin:
-                    passkey = data.get('passkey')
+                    try:
+                        passkey = int(data.get('passkey', ''))
+                    except ValueError:
+                        return jsonify(message= 'Invalid passkay format!'), 401
                     if passkey == existing_user.passkey:
                         session['admin'] = True
                     else:
