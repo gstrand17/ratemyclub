@@ -2,44 +2,59 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const CreateAccount = () => {
+    const [message, setMessage] = useState('');
     const [email, setEmail] = useState(''); //SEND TO BACKEND SOMEHOW
     const [password, setPassword] = useState(''); //SEND TO BACKEND
     const [role, setRole] = useState('student'); // Default role
     const [firstName, setFirstName] = useState(''); // State for first name
     const [lastName, setLastName] = useState('');
-    const [adminPasscode, setAdminPasscode] = useState(''); // State for admin passcode
+    const [username, setUsername] = useState('');
+    const [passkey, setPasskey] = useState(''); // State for admin passcode
     const navigate = useNavigate();
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const accountData = { email, password, role, firstName, lastName, adminPasscode };
+        // Preparing the JSON data variables to be sent back to back-end route
+        const createAccountData = {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            user_name: username,
+            password: password,
+            role: role,
+            passkey: role === 'admin' ? passkey : null
+        };
 
-        // Store account data in local storage
-        localStorage.setItem('accountData', JSON.stringify(accountData));
-
-        // Check if the admin passcode is required and validate it
-        if (role === 'admin' && adminPasscode !== '1234') { // Replace '1234' with your actual admin passcode logic
-            alert('Invalid admin passcode.');
-            return;
-        }
-
-
-        // Mock account creation logic->replace this with real logic later!
-        console.log('Account Created:', { firstName, lastName, email, password, role });
-        alert(`Account created for ${role} ${firstName} with email: ${email}`);
-        // Reset form, optional
-        setFirstName('');
-        setLastName('');
-        setEmail('');
-        setPassword('');
-        setRole('student');
-        setAdminPasscode('');
-
-        const username = `${firstName}`;
-        // Navigate to the front page after successful account creation
-        navigate('/front-page', { state: { username } });
+        // Use fetch-command to send a POST request to Flask local machine server for /login API route
+        fetch('http://localhost:5000/create-account', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(createAccountData),
+            credentials: "include",
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    return response.json();
+                } else if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message === 'User created!') {
+                    console.log(data.message);
+                    navigate('/front-page', { state: { username } });
+                }
+                setMessage(data.message);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setMessage('An error occurred. Please try again.');
+            });
     };
 
     return (
@@ -78,6 +93,15 @@ const CreateAccount = () => {
                     />
                 </div>
                 <div>
+                    <label>Username:</label>
+                    <input
+                        type="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
                     <label>Password:</label>
                     <input
                         type="password"
@@ -96,7 +120,7 @@ const CreateAccount = () => {
                                 checked={role === 'student'}
                                 onChange={(e) => {
                                     setRole(e.target.value);
-                                    setAdminPasscode(''); // Reset passcode when switching roles
+                                    setPasskey(''); // Reset passcode when switching roles
                                 }}
                             />
                             Student
@@ -108,7 +132,7 @@ const CreateAccount = () => {
                                 checked={role === 'clubMember'}
                                 onChange={(e) => {
                                     setRole(e.target.value);
-                                    setAdminPasscode(''); // Reset passcode when switching roles
+                                    setPasskey(''); // Reset passcode when switching roles
                                 }}
                             />
                             Club Member
@@ -120,7 +144,7 @@ const CreateAccount = () => {
                                 checked={role === 'clubOwner'}
                                 onChange={(e) => {
                                     setRole(e.target.value);
-                                    setAdminPasscode(''); // Reset passcode when switching roles
+                                    setPasskey(''); // Reset passcode when switching roles
                                 }}
                             />
                             Club Owner
@@ -142,12 +166,12 @@ const CreateAccount = () => {
                 {/* Admin passcode input */}
                 {role === 'admin' && (
                     <div>
-                        <label>Admin Passcode:</label>
+                        <label>Admin Passkey:</label>
                         <input
                             type="text"
-                            value={adminPasscode}
-                            onChange={(e) => setAdminPasscode(e.target.value)}
-                            maxLength={4} // Limit to 4 digits
+                            value={passkey}
+                            onChange={(e) => setPasskey(e.target.value)}
+                            maxLength={8} // Limit to 12 digits
                             required
                         />
                     </div>
@@ -157,7 +181,7 @@ const CreateAccount = () => {
                     Create Account
                 </button>
             </form>
-
+            {message && <p>{message}</p>}
         </div>
     );
 };
