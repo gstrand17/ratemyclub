@@ -1,4 +1,3 @@
-import './front-page.css';
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 //import bannerImage from './uf_dupe.png';
@@ -46,8 +45,15 @@ const FrontPage = () => {
                 console.log('Problem with fetching data', error);
             });
 
+
         // Fetch clubs data
-        fetch('http://localhost:5000/api/clubs')
+        fetch('http://localhost:5000/api/clubs', {
+            method: 'GET',
+                credentials: 'include',
+                headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then(response => response.json())
             .then(data => setClubs(data))
             .catch(error => console.log('Error fetching club data:', error));
@@ -168,7 +174,7 @@ const FrontPage = () => {
                         it didnt update on website :( */}
                         <div
                             style={{
-                                backgroundColor: getRatingColor(club.avg_rating),
+                                backgroundColor: getRatingColor(clubs.avg_rating),
                                 color: '#fff',
                                 padding: '5px',
                                 borderRadius: '8px',
@@ -178,7 +184,7 @@ const FrontPage = () => {
                                 marginTop: '10px',
                             }}
                         >
-                            Average Rating: {club.avg_rating}
+                            Average Rating: {clubs.avg_rating}
                         </div>
 
 
