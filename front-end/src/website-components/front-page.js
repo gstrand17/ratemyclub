@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-=======
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
->>>>>>> 4cdc42516adc2c384c5c0b0dfef58631af110f6d
+
 //import bannerImage from './uf_dupe.png';
 //import bannerImage from './banner.jpg';
 
