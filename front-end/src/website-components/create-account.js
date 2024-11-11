@@ -30,6 +30,7 @@ const CreateAccount = () => {
         // Use fetch-command to send a POST request to Flask local machine server for /login API route
         fetch('http://localhost:5000/create-account', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
