@@ -42,7 +42,7 @@ def createUser():
         club_exec=role == 'club_exec',
         clubs=clubs,
         passkey=passkey
-        )
+    )
 
     db.session.add(new_user)
     db.session.commit()
@@ -87,7 +87,7 @@ def login():
                     try:
                         passkey = int(data.get('passkey', ''))
                     except ValueError:
-                        return jsonify(message= 'Invalid passkay format!'), 401
+                        return jsonify(message='Invalid passkey format!'), 401
                     if passkey == existing_user.passkey:
                         session['admin'] = True
                     else:

@@ -2,7 +2,6 @@
 import React from 'react';
 =======
 import React, { useEffect, useState } from 'react';
->>>>>>> 4cdc42516adc2c384c5c0b0dfef58631af110f6d
 import {useNavigate} from "react-router-dom";
 
 const UserProfile = () => {
