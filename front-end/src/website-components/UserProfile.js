@@ -1,5 +1,7 @@
+<<<<<<< HEAD
+import React from 'react';
+=======
 import React, { useEffect, useState } from 'react';
-import './UserProfile.css';
 import {useNavigate} from "react-router-dom";
 
 const UserProfile = () => {

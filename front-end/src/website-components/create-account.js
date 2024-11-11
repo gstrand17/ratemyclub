@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import './create-account.css';
 
 const CreateAccount = () => {
     const [message, setMessage] = useState('');
@@ -35,7 +34,8 @@ const CreateAccount = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(createAccountData)
+            body: JSON.stringify(createAccountData),
+            credentials: "include",
         })
             .then(response => {
                 if (response.status === 401) {
