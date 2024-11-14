@@ -8,6 +8,7 @@ import CreateAccount from './website-components/create-account';
 import UserProfile from './website-components/UserProfile';
 import ClubPage from './website-components/ClubPage';
 import YourReviews from './website-components/YourReviews';
+import ReviewForm from './website-components/ReviewForm';
 
 const App = () => {
     return (
@@ -20,6 +21,7 @@ const App = () => {
                 <Route path ="/profile" element={<UserProfile />} />
                 <Route path="/club-page/:club_name" element={<ClubPage />} />
                 <Route path="/YourReviews" element={<YourReviews />} />
+                <Route path="ReviewForm" element={<ReviewForm />} />
             </Routes>
         </Router>
     );

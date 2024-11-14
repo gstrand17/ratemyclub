@@ -38,6 +38,10 @@ const ClubPage = () => {
         navigate('/profile');
     };
 
+    const handleReviewForm = () => {
+        navigate('/ReviewForm');
+    }
+
     const handleReviews = () => {
         navigate('/YourReviews')
     }
@@ -98,6 +102,7 @@ const ClubPage = () => {
             <p>Description: {club.description}</p>
             <p>Link: <a href={club.link}>{club.link}</a></p>
             <p>Average Rating: {club.avg_rating}</p>
+            <button onClick={handleReviewForm}>Submit a Review</button>
             {/*<div>*/}
             {/*    {reviews.map((review, index) => (*/}
             {/*        <div key={index}>*/}
