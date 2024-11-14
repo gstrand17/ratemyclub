@@ -1,7 +1,7 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Float, Boolean
-from flask_session import Session
+from flask_sqlalchemy.session import Session
 import os
 
 # Set up the path for the database
