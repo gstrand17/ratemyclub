@@ -220,3 +220,43 @@ def get_clubs():
         } for club in clubs
     ]
     return jsonify(clubs_data)
+
+@app.route('/api/club-page/<string:name>', methods=['GET'])
+def get_club(name: str):
+    #name = name.replace("%20", " ")
+    club = ClubDirectory.query.filter_by(club_name=name).first()
+    # reviews = ClubReviews.query.filter_by(club_name=name).all()
+    #
+    # reviews_data = [
+    #     {
+    #         'user_email': review.user_email,
+    #         'club_name': review.club_name,
+    #         'date': review.date,
+    #         'overall_rating': review.overall_rating,
+    #         'soc_rating':  review.soc_rating,
+    #         'acad_rating': review.acad_rating,
+    #         'exec_rating': review.exec_rating,
+    #         'comlev': review.comlev,
+    #         'current_mem': review.current_mem,
+    #         'time_mem': review.time_mem,
+    #         'paid': review.paid
+    #     } for review in reviews
+    # ]
+
+    if club:
+            return jsonify(
+                #reviews_data,
+                message="Data has been fetched!",
+                name= club.club_name,
+                description= club.description,
+                tags = club.tags,
+                avg_rating = club.avg_overall_rating,
+                social_rating = club.avg_soc_rating,
+                academic_rating = club.avg_acad_rating,
+                exec_rating = club.avg_exec_rating,
+                active_mem_rating =club.active_mem,
+                link = club.link
+            )
+    else:
+        return jsonify(message='Club not found'), 401
+

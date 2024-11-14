@@ -16,6 +16,12 @@ def db_drop():
 
 @app.cli.command('db_seed')  # Starter data
 def db_seed():
+    sample_review1 = ClubReviews(user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2022",
+                                 overall_rating=4, soc_rating = 5, acad_rating = 2, exec_rating = 5, comlev = 4,
+                                 current_mem = True, time_mem = "4 semesters", paid = False)
+    sample_review2 = ClubReviews(user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
+                                 overall_rating=5, soc_rating = 5, acad_rating = 2, exec_rating = 5, comlev = 6,
+                                 current_mem = True, time_mem = "1 semester", paid = False)
     student_guest = User(email='guest@ufl.edu', username='guest', password='coding123',
                        first_name='Guest', last_name='Guest', student=True, club_exec=False, admin=False,
                        clubs='', passkey=None)
@@ -104,7 +110,7 @@ def db_seed():
                           avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                           description='Founded to support and unite African students and to promote awareness of African issues to all students and the Gainesville community',
                           link='https://www.instagram.com/uf_asu/')
-    club9 = ClubDirectory(club_name='Agricultural and Life Sciences College Council ', tags='agriculture|',
+    club9 = ClubDirectory(club_name='Agricultural and Life Sciences College Council', tags='agriculture|',
                           avg_overall_rating=0.0,
                           avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                           description='The CALS Council provides leadership for CALS students and student organizations. '
@@ -150,7 +156,7 @@ def db_seed():
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='Alpha Zeta is an honorary, professional society for students and industry professionals in the agriculture and natural resources fields. ',
                            link='https://cals.ufl.edu/getinvolved/alphazeta/')
-    club17 = ClubDirectory(club_name='American Cancer Society on Campus ', tags='medicine|', avg_overall_rating=0.0,
+    club17 = ClubDirectory(club_name='American Cancer Society on Campus', tags='medicine|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='A UF student-led organization that aims to spread awareness about cancer, its prevention, & support service options',
                            link='https://www.instagram.com/acsocuf/')
@@ -173,7 +179,7 @@ def db_seed():
                                        'We aim to provide students with exposure to professors, student interns, and professionals from all facets of the aerospace industry – '
                                        'and to connect students with research, scholarship, and internship opportunities to advance their careers to new levels. ',
                            link='https://mae.ufl.edu/students/organizations/aiaa/')
-    club20 = ClubDirectory(club_name='American Institute of Architecture Students ',
+    club20 = ClubDirectory(club_name='American Institute of Architecture Students',
                            tags='architecture|professional dev|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The purpose of AIAS is to promote excellence in architecture education, training, '
@@ -181,7 +187,7 @@ def db_seed():
                                        'to enrich communities in a spirit of collaboration, and to organize students and '
                                        'combine their efforts to advance the art and science of architecture.',
                            link='https://www.instagram.com/aiasuf/?hl=en')
-    club21 = ClubDirectory(club_name='American Institute of Chemical Engineers ', tags='engineering|professional dev|',
+    club21 = ClubDirectory(club_name='American Institute of Chemical Engineers', tags='engineering|professional dev|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The American Institute of Chemical Engineers (AIChE) is the largest national organization for chemical engineers '
@@ -189,7 +195,7 @@ def db_seed():
                                        'UF AIChE is your ChemE home. Join us in a multitude of activities ranging from intramurals and socials to various chemical competitions. '
                                        'Joining the UF AIChE is your first step towards a career as a chemical engineer!',
                            link='https://www.instagram.com/ufaiche/')
-    club22 = ClubDirectory(club_name='American Marketing Association ', tags='business|professional dev|',
+    club22 = ClubDirectory(club_name='American Marketing Association', tags='business|professional dev|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The University of Florida Chapter of the American Marketing Association (UF-AMA) is a student organization '
@@ -199,7 +205,7 @@ def db_seed():
                                        'Whether you are a business major, graphic design enthusiast, or psychology student interested in consumer behavior, '
                                        'there is a place for you here.',
                            link='https://www.amagator.com/')
-    club23 = ClubDirectory(club_name='American Meteorological Society ', tags='earth science', avg_overall_rating=0.0,
+    club23 = ClubDirectory(club_name='American Meteorological Society', tags='earth science', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.instagram.com/amsatuf/')
@@ -210,7 +216,7 @@ def db_seed():
                                        'is the student section of the American Pharmacist Association, representing over 18,000 '
                                        'students at all colleges of pharmacy in the United States and Puerto Rico.',
                            link='https://aphaasp.pharmacy.ufl.edu/')
-    club25 = ClubDirectory(club_name='American Physician Scientists Association ', tags='medicine|professional dev|',
+    club25 = ClubDirectory(club_name='American Physician Scientists Association', tags='medicine|professional dev|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The purpose of the American Physician Scientist Association is to foster research training and '
@@ -220,7 +226,7 @@ def db_seed():
                                        'who could serve as advisors and mentors. We are also interested in giving students who are actively conducting '
                                        'research an opportunity to present their findings to their peers.',
                            link='https://mcc.med.ufl.edu/committees/apsa/')
-    club26 = ClubDirectory(club_name='American Society for Microbiology, Student Chapter ', tags='biology|',
+    club26 = ClubDirectory(club_name='American Society for Microbiology, Student Chapter', tags='biology|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='Welcome to the official website for the American Society for Microbiology (ASM), Student Chapter at the University of Florida! '
@@ -230,7 +236,7 @@ def db_seed():
                                        'We achieve this by offering valuable resources for students to get more involved in microbiology, '
                                        'including research presentations, career talks, and professional development workshops. ',
                            link='https://asmgators.wixsite.com/home')
-    club27 = ClubDirectory(club_name='American Society of Civil Engineers ', tags='engineering|',
+    club27 = ClubDirectory(club_name='American Society of Civil Engineers', tags='engineering|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='Join a family of civil and environmental engineers at the University of Florida. Grow as a leader, mentor, and engineer.',
@@ -241,7 +247,7 @@ def db_seed():
                            description='Our mission is to create a supportive and inclusive community for future landscape architects '
                                        'and allied professionals who share a passion for design, sustainability, and social responsibility.',
                            link='https://www.instagram.com/uf.scasla/')
-    club29 = ClubDirectory(club_name='American Society of Mechanical Engineers ', tags='engineering|professional dev|',
+    club29 = ClubDirectory(club_name='American Society of Mechanical Engineers', tags='engineering|professional dev|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The American Society of Mechanical Engineers is a student organization that promotes social, professional, and technical development of our members. '
@@ -250,11 +256,11 @@ def db_seed():
                                        'and through tours of companies that include Exactech and Disney Imagineering. At the forefront of ASME are our 5 technical design teams '
                                        'which cater to different interests in mechanical engineering. Each team competes in a competition at the end of the year with schools around the country.',
                            link='https://www.instagram.com/asmeuf/')
-    club30 = ClubDirectory(club_name='American Student Dental Association ', tags='dental', avg_overall_rating=0.0,
+    club30 = ClubDirectory(club_name='American Student Dental Association', tags='dental', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.instagram.com/ufasda/')
-    club31 = ClubDirectory(club_name='Animal Science Graduate Student Association ', tags='animal science|graduate|',
+    club31 = ClubDirectory(club_name='Animal Science Graduate Student Association', tags='animal science|graduate|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The Animal Sciences Graduate Student Association (ASGSA) is active in promoting career development, '
@@ -263,26 +269,26 @@ def db_seed():
                                        'industry, and other career options to the department; social events such as tailgates, happy hours, '
                                        'and the Annual Cook-off, and fundraisers that support student travel grants and other activities of the organization. ',
                            link='https://animal.ifas.ufl.edu/graduate/asgsa/')
-    club32 = ClubDirectory(club_name='Apollodorus Chapter of Alpha Rho Chi Fraternity, Inc. ',
+    club32 = ClubDirectory(club_name='Apollodorus Chapter of Alpha Rho Chi Fraternity, Inc.',
                            tags='greek life|architecture|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.instagram.com/apx_apollodorus/?hl=en')
-    club33 = ClubDirectory(club_name='Aquatic Animal Health Club ', tags='animal science|', avg_overall_rating=0.0,
+    club33 = ClubDirectory(club_name='Aquatic Animal Health Club', tags='animal science|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The UF Aquatic Animal Health Club, which consists of both Aquatic Animal Medicine Certificate '
                                        'and other UF College of Veterinary Medicine (UF CVM) students, provides educational '
                                        'and networking opportunities for UF CVM students in the field of aquatic animal medicine.',
                            link='https://ufaahc.square.site/')
-    club34 = ClubDirectory(club_name='Arab Students\' Association ', tags='cultural|', avg_overall_rating=0.0,
+    club34 = ClubDirectory(club_name='Arab Students\' Association', tags='cultural|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.instagram.com/ufarabsa/?hl=en')
-    club35 = ClubDirectory(club_name='Architrave ', tags='architecture|publication|', avg_overall_rating=0.0,
+    club35 = ClubDirectory(club_name='Architrave', tags='architecture|publication|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.ufarchitrave.com/')
-    club36 = ClubDirectory(club_name='Argentine Student Association ', tags='cultural|', avg_overall_rating=0.0,
+    club36 = ClubDirectory(club_name='Argentine Student Association', tags='cultural|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The Argentinian student association is a club dedicated to spreading and promoting Argentinian culture '
                                        'throughout UF campus. We welcome people of all backgrounds and cover topics ranging from spoken slang to food to historical information. '
@@ -290,7 +296,7 @@ def db_seed():
                                        'which is a traditional Argentinian barbecue. We are all about promoting social interaction amongst people of '
                                        'all backgrounds as we spread our love and passion for the roots that we were raised on.',
                            link='https://www.instagram.com/arsa_uf/?hl=en')
-    club37 = ClubDirectory(club_name='Art History Association ', tags='arts|', avg_overall_rating=0.0,
+    club37 = ClubDirectory(club_name='Art History Association', tags='arts|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.instagram.com/aha_uf/?hl=en')
@@ -298,31 +304,31 @@ def db_seed():
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='Promoting mental, physical, and emotional health to our members and the greater Gainesville community through the use of the arts',
                            link='https://www.instagram.com/artsinhealthuf/?hl=en')
-    club39 = ClubDirectory(club_name='AscenDance Salsa Company ', tags='performing arts|', avg_overall_rating=0.0,
+    club39 = ClubDirectory(club_name='AscenDance Salsa Company', tags='performing arts|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='AscenDance aims to focus on the various styles of salsa dancing, ensuring that all classes are taught by high caliber instructors. '
                                        'The goal is to create a student base that has fun dancing while being good dancers at any level, '
                                        'ultimately creating a community of confident, respectful, and talented dancers, among various styles of Latin dance.',
                            link='https://www.ascendancesalsa.com/')
-    club40 = ClubDirectory(club_name='Asian American Student Union ', tags='cultural|', avg_overall_rating=0.0,
+    club40 = ClubDirectory(club_name='Asian American Student Union', tags='cultural|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.instagram.com/ufaasu/?hl=en')
-    club41 = ClubDirectory(club_name='Asian Business Student Association ', tags='cultural|business|professional dev|',
+    club41 = ClubDirectory(club_name='Asian Business Student Association', tags='cultural|business|professional dev|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='Asian-interest business organization at UF focused on practicing professional development.',
                            link='https://www.instagram.com/uf.absa/')
-    club42 = ClubDirectory(club_name='Asian Student Pharmacists Coalition ', tags='cultural|medicine|pharmacy|',
+    club42 = ClubDirectory(club_name='Asian Student Pharmacists Coalition', tags='cultural|medicine|pharmacy|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.instagram.com/aspcoalition/')
-    club43 = ClubDirectory(club_name='Assemble Ballet Company ', tags='performing arts|', avg_overall_rating=0.0,
+    club43 = ClubDirectory(club_name='Assemble Ballet Company', tags='performing arts|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The University of Florida’s student-run ballet company',
                            link='https://www.instagram.com/assembleballetco/?hl=en')
-    club44 = ClubDirectory(club_name='Associated Builders and Contractors ', tags='construction|',
+    club44 = ClubDirectory(club_name='Associated Builders and Contractors', tags='construction|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The purpose of Associated Builders and Contractors is to promote academic '
@@ -330,7 +336,7 @@ def db_seed():
                                        'The ABC student chapter provides our members with hands on speaker series events from industry professionals '
                                        'and access to network outside the classroom and within the industry.',
                            link='')
-    club45 = ClubDirectory(club_name='Association for Computing Machinery ', tags='engineering|professional dev|',
+    club45 = ClubDirectory(club_name='Association for Computing Machinery', tags='engineering|professional dev|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='Largest Pre-Professional CS Community at UF. We work to answer the question "Where do I go?"'
@@ -339,14 +345,14 @@ def db_seed():
                                        'and anything you need to secure that job! We engage our members with technical experiences'
                                        'through our workshops and design team!',
                            link='https://www.instagram.com/uf.acm/')
-    club46 = ClubDirectory(club_name='Association for Law and Business ', tags='law|business|', avg_overall_rating=0.0,
+    club46 = ClubDirectory(club_name='Association for Law and Business', tags='law|business|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='The mission of the UF Association for Law & Business (ALB) is to expand the vision '
                                        'and network of its business-oriented membership and to equip member with the technical skills, '
                                        'social skills, and professional relationships to afford them the ability of capitalize on '
                                        'traditional and non-traditional opportunities presented throughout their professional careers.',
                            link='https://www.instagram.com/ufalb/?hl=en')
-    club47 = ClubDirectory(club_name='Association for Tax Law ', tags='law|professional dev|', avg_overall_rating=0.0,
+    club47 = ClubDirectory(club_name='Association for Tax Law', tags='law|professional dev|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='University of Florida Levin College of Law\'s Association for Tax Law (ATL) brings together students '
                                        'interested in tax and connects them with the professional opportunities available to tax lawyers. '
@@ -354,12 +360,12 @@ def db_seed():
                                        'which allows ATL to provide a forum for practitioners, academics, and policymakers to '
                                        'expand the conversation around tax law.',
                            link='https://www.linkedin.com/company/association-for-tax-law')
-    club48 = ClubDirectory(club_name='Association of Computer Engineers ', tags='engineering|professional dev|',
+    club48 = ClubDirectory(club_name='Association of Computer Engineers', tags='engineering|professional dev|',
                            avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
                            link='https://www.instagram.com/ace_uf/')
-    club49 = ClubDirectory(club_name='Association of Latino Professionals in Finance and Accounting ',
+    club49 = ClubDirectory(club_name='Association of Latino Professionals in Finance and Accounting',
                            tags='business|professional dev|', avg_overall_rating=0.0,
                            avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, active_mem=0,
                            description='',
@@ -537,7 +543,7 @@ def db_seed():
                            link='https://ufcaribsadotorg.wordpress.com/')
 
     entities = [
-        student_guest, student_test, student_jungkook, student_jhope, student_v,
+        sample_review1, sample_review2, student_guest, student_test, student_jungkook, student_jhope, student_v,
         student_jimin, student_suga, student_jin, student_rm, student_lisa,
         student_jennie, student_rose, student_jisoo, clubExec_guestExec,
         admin_julio, admin_erin, admin_graciela, admin_natalie, club1, club2,

@@ -53,7 +53,8 @@ class ClubDirectory(db.Model):
 # Define the ClubReviews model
 class ClubReviews(db.Model):  # There will be lots of instances of this class
     __tablename__ = 'club_reviews'
-    user = Column(String, primary_key=True)
+    user_email = Column(String, primary_key=True)
+    club_name = Column(String)
     date = Column(String)  # Date format?
     overall_rating = Column(Float)
     soc_rating = Column(Float)
