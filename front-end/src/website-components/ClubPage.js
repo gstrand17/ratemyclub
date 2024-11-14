@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import YourReviews from "./YourReviews";
 
 const ClubPage = () => {
     const navigate = useNavigate();
@@ -36,6 +37,14 @@ const ClubPage = () => {
         // Navigate to user profile page
         navigate('/profile');
     };
+
+    const handleReviewForm = () => {
+        navigate('/ReviewForm');
+    }
+
+    const handleReviews = () => {
+        navigate('/YourReviews')
+    }
 
     const handleHome = () => {
         navigate('/front-page');
@@ -85,7 +94,7 @@ const ClubPage = () => {
                          textAlign: 'right',
                      }}>
                     <button onClick={handleProfile}>Profile</button>
-                    <button>Your Reviews</button>
+                    <button onClick={handleReviews}>Your Reviews</button>
                     <button onClick={handleHome}>Home</button>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
@@ -93,6 +102,7 @@ const ClubPage = () => {
             <p>Description: {club.description}</p>
             <p>Link: <a href={club.link}>{club.link}</a></p>
             <p>Average Rating: {club.avg_rating}</p>
+            <button onClick={handleReviewForm}>Submit a Review</button>
             {/*<div>*/}
             {/*    {reviews.map((review, index) => (*/}
             {/*        <div key={index}>*/}
