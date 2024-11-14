@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 const ClubPage = () => {
+    const navigate = useNavigate();
     const { club_name } = useParams(); // using club_name to get club
     //const [reviews, setReviews] = useState([]);
     const [club, setClub] = useState({
@@ -15,6 +16,31 @@ const ClubPage = () => {
         active_mem_rating:0.0,
         link: ''
     });
+
+    const handleLogout = () => {
+        // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
+        // Navigate back home
+        fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(response => {
+                if (response.ok) {
+                    navigate('/');
+                } else {
+                    console.log('Error:', response.message);
+                }
+            });
+    };
+    const handleProfile = () => {
+        // Navigate to user profile page
+        navigate('/profile');
+    };
+
+    const handleHome = () => {
+        navigate('/front-page');
+    };
+
     //const [newRating, setNewRating] = useState(0);
     //const [newReview, setNewReview] = useState('');
 
@@ -45,9 +71,25 @@ const ClubPage = () => {
 
     return (
         <div>
-            <h1 style={{
-                textAlign: 'center',
-            }}>{club_name}</h1>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center', // Align items vertically centered
+                justifyContent: 'space-between', // Center horizontally
+                textAlign: 'center', // center text for h1
+            }}>
+                <h1 style={{
+                    textAlign: 'center',
+                }}>{club_name}</h1>
+                <div className="button-container"
+                     style={{
+                         textAlign: 'right',
+                     }}>
+                    <button onClick={handleProfile}>Profile</button>
+                    <button>Your Reviews</button>
+                    <button onClick={handleHome}>Home</button>
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
+            </div>
             <p>Description: {club.description}</p>
             <p>Link: <a href={club.link}>{club.link}</a></p>
             <p>Average Rating: {club.avg_rating}</p>
