@@ -47,7 +47,7 @@ const ClubPage = () => {
         <div>
             <h1 style={{
                 textAlign: 'center',
-            }}> {club_name}</h1>
+            }}>{club_name}</h1>
             <p>Description: {club.description}</p>
             <p>Link: <a href={club.link}>{club.link}</a></p>
             <p>Average Rating: {club.avg_rating}</p>

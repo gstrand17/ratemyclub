@@ -117,19 +117,29 @@ const FrontPage = () => {
                 }}
             />
 
-            <h1 style={{
-                fontFamily: "'Alfa Slab One', serif",
-                fontSize: '3rem',
-                marginTop: '20px',
+            <div style={{
+                display: 'flex',
+                alignItems: 'center', // Align items vertically centered
+                justifyContent: 'space-between', // Center horizontally
+                textAlign: 'center', // center text for h1
             }}>
-                WELCOME {firstName} {lastName}
-            </h1>
+                <h1 style={{
+                    fontFamily: "'Alfa Slab One', serif",
+                    fontSize: '3rem',
+                    marginTop: '20px',
+                }}>
+                    WELCOME {firstName} {lastName}
+                </h1>
 
 
-            <div className="button-container">
-                <button onClick={handleProfile}>Profile</button>
-                <button>Your Reviews</button>
-                <button onClick={handleLogout}>Logout</button>
+                <div className="button-container"
+                     style={{
+                         textAlign: 'right',
+                     }}>
+                    <button onClick={handleProfile}>Profile</button>
+                    <button>Your Reviews</button>
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
             </div>
 
             <div style={{maxWidth: '600px', margin: 'auto', padding: '20px', border: '3px solid #ccc'}}>
