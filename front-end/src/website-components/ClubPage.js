@@ -45,10 +45,12 @@ const ClubPage = () => {
 
     return (
         <div>
-            <h1> {club_name}</h1>
-            <p>{club.description}</p>
-            <p>{club.link}</p>
-            <p>{club.avg_rating}</p>
+            <h1 style={{
+                textAlign: 'center',
+            }}> {club_name}</h1>
+            <p>Description: {club.description}</p>
+            <p>Link: <a href={club.link}>{club.link}</a></p>
+            <p>Average Rating: {club.avg_rating}</p>
             {/*<div>*/}
             {/*    {reviews.map((review, index) => (*/}
             {/*        <div key={index}>*/}

@@ -175,7 +175,7 @@ const FrontPage = () => {
                         it didnt update on website :( */}
                         <div
                             style={{
-                                backgroundColor: getRatingColor(clubs.avg_rating),
+                                backgroundColor: getRatingColor(club.avg_rating),
                                 color: '#fff',
                                 padding: '5px',
                                 borderRadius: '8px',
@@ -185,7 +185,7 @@ const FrontPage = () => {
                                 marginTop: '10px',
                             }}
                         >
-                            Average Rating: {clubs.avg_rating}
+                            Average Rating: {club.avg_rating}
                         </div>
 
 
