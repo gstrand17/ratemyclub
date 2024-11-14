@@ -56,7 +56,7 @@ class ClubReviews(db.Model):  # There will be lots of instances of this class
     user_email = Column(String, primary_key=True)
     club_name = Column(String)
     date = Column(String)  # Date format?
-    overall_rating = Column(Float) # Different than the name in command.py, however when changed, nothing happens
+    overall_rating = Column(Float)
     soc_rating = Column(Float)
     acad_rating = Column(Float)
     exec_rating = Column(Float)
