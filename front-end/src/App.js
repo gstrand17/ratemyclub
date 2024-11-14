@@ -7,6 +7,7 @@ import FrontPage from './website-components/front-page';
 import CreateAccount from './website-components/create-account';
 import UserProfile from './website-components/UserProfile';
 import ClubPage from './website-components/ClubPage';
+import YourReviews from './website-components/YourReviews';
 
 const App = () => {
     return (
@@ -18,6 +19,7 @@ const App = () => {
                 <Route path ="/front-page" element={<FrontPage />} />
                 <Route path ="/profile" element={<UserProfile />} />
                 <Route path="/club-page/:club_name" element={<ClubPage />} />
+                <Route path="/YourReviews" element={<YourReviews />} />
             </Routes>
         </Router>
     );

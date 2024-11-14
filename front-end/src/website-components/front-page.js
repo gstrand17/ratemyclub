@@ -80,6 +80,10 @@ const FrontPage = () => {
         navigate('/profile');
     };
 
+    const handleReviews = () => {
+        navigate('/YourReviews')
+    }
+
 
     //help from chat.gpt: randomly generates a consistent color based on the tag
     const getTagColor = (tag) => {
@@ -137,7 +141,7 @@ const FrontPage = () => {
                          textAlign: 'right',
                      }}>
                     <button onClick={handleProfile}>Profile</button>
-                    <button>Your Reviews</button>
+                    <button onClick={handleReviews}>Your Reviews</button>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             </div>
