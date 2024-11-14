@@ -6,27 +6,34 @@ const ClubPage = () => {
     const [review, setReview] = useState([]);
     const [description, setDescription] = useState('');
     const [link, setLink] = useState('');
+    const [clubs, setClubs] = useState([]);  //club data
+    const [club, setClub] = useState(null);  // state to hold specific club information
     //const [newRating, setNewRating] = useState(0);
     //const [newReview, setNewReview] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/club-page/${club_name}`)
-            .then(response =>  {
-                if (response.status === 401 || 404) {
-                    return response.json();
-                } else if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data =>  {
-                if (data.message === "Data has been fetched!") {
-                    console.log(data.description);
-                    setDescription(data.description);
-                    setLink(data.link);
+        fetch('http://localhost:5000/api/clubs', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Log the fetched data to see its structure
+                setClubs(data); // Assume each club object already has avg_rating property
+
+                // Find the specific club that matches the club_name
+                const foundClub = data.find(club => club.name === club_name);
+                if (foundClub) {
+                    setClub(foundClub);
+                    setDescription(foundClub.description || 'No description available'); // Set description if available
+                    setLink(foundClub.link || 'No link available'); // Set link if available
                 } else {
-                    console.log('Error:', data.message);
-                }})
+                    setClub(null); // If no club is found, set club to null
+                }
+            })
             .catch(error => console.log('Error fetching club data:', error));
     }, [club_name]);
 
@@ -36,10 +43,11 @@ const ClubPage = () => {
 
     return (
         <div>
-            <h1> {club_name}</h1>
-            <p>{description}</p>
-            <p>{link}</p>
-
+            <h1 style = {{
+                textAlign: 'center',
+            }}>Club Name: {club_name}</h1>
+            <p>Description: {description}</p>
+            <p>Link: {link}</p>
 
             {/* code option to submit their own ratings and/or reviews */}
         </div>

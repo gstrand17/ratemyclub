@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate, useRouteLoaderData} from 'react-router-dom';
 
 //import bannerImage from './uf_dupe.png';
 //import bannerImage from './banner.jpg';
@@ -56,7 +56,10 @@ const FrontPage = () => {
             }
         })
             .then(response => response.json())
-            .then(data => setClubs(data))
+            .then(data => {
+                console.log(data); // Log the fetched data to see it's structure
+                setClubs(data); // Assume each club object already has avg_rating property
+            })
             .catch(error => console.log('Error fetching club data:', error));
     }, []);
 
@@ -175,7 +178,7 @@ const FrontPage = () => {
                         it didnt update on website :( */}
                         <div
                             style={{
-                                backgroundColor: getRatingColor(clubs.avg_rating),
+                                backgroundColor: getRatingColor(club.avg_rating), // Pass the avg_rating of the current club
                                 color: '#fff',
                                 padding: '5px',
                                 borderRadius: '8px',
@@ -185,7 +188,7 @@ const FrontPage = () => {
                                 marginTop: '10px',
                             }}
                         >
-                            Average Rating: {clubs.avg_rating}
+                            Average Rating: {club.avg_rating}
                         </div>
 
 

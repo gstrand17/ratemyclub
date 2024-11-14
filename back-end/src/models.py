@@ -55,7 +55,7 @@ class ClubReviews(db.Model):  # There will be lots of instances of this class
     __tablename__ = 'club_reviews'
     user = Column(String, primary_key=True)
     date = Column(String)  # Date format?
-    overall_rating = Column(Float)
+    overall_rating = Column(Float) # Different than the name in command.py, however when changed, nothing happens
     soc_rating = Column(Float)
     acad_rating = Column(Float)
     exec_rating = Column(Float)
