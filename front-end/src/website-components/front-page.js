@@ -117,7 +117,8 @@ const FrontPage = () => {
                     width: '100%', // Make the image full width
                     height: '200px', // Maintain aspect ratio
                     objectFit: 'cover',
-                    marginTop: '0'
+                    display: 'block',
+                    margin: '0'
                 }}
             />
 
@@ -185,8 +186,6 @@ const FrontPage = () => {
                                 ))}
                         </div>
 
-                        {/*It's printing out 0 for all clubs, when I tried changing a couple in command.py,
-                        it didnt update on website :( */}
                         <div
                             style={{
                                 backgroundColor: getRatingColor(club.avg_rating),

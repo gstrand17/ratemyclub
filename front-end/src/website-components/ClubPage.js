@@ -2,6 +2,20 @@ import React, { useEffect, useState } from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import YourReviews from "./YourReviews";
 
+//helper method to color code tags
+const getTagColor = (tag) => {
+    //creates a hash value for each tag
+    let hash = 0;
+    for (let i = 0; i < tag.length; i++) {
+        hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    //convert hash value->hex color
+    const color = `#${((hash >> 24) & 0xFF).toString(16).padStart(2, '0')}${
+        ((hash >> 16) & 0xFF).toString(16).padStart(2, '0')
+    }${((hash >> 8) & 0xFF).toString(16).padStart(2, '0')}`;
+    return color;
+};
+
 const ClubPage = () => {
     const navigate = useNavigate();
     const { club_name } = useParams(); // using club_name to get club
@@ -74,10 +88,6 @@ const ClubPage = () => {
             .catch(error => console.log('Error fetching club data:', error));
     }, [club_name]);
 
-    //Having issue finding the club from backend
-    //if (!club) return <div>Club Not Found...</div>;
-
-
     return (
         <div>
             <div style={{
@@ -99,9 +109,31 @@ const ClubPage = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             </div>
-            <p>Description: {club.description}</p>
+
+            <div style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap',}}>
+                {(Array.isArray(club.tags) ? club.tags : club.tags ? club.tags.split('|') : [])
+                    .filter(tag => tag.trim() !== '') // Filter out empty tags
+                    .map((tag, tagIndex) => (
+                        <span
+                            key={tagIndex}
+                            style={{
+                                backgroundColor: getTagColor(tag),
+                                color: 'white',
+                                padding: '5px 10px',
+                                borderRadius: '15px',
+                                fontSize: '0.9rem',
+                                fontWeight: 'bold',
+                            }}>
+                            {tag.trim()}
+                        </span>
+                    ))}
+            </div>
+
+            <p>{club.description}</p>
             <p>Link: <a href={club.link}>{club.link}</a></p>
             <p>Average Rating: {club.avg_rating}</p>
+
+
             <button onClick={handleReviewForm}>Submit a Review</button>
             {/*<div>*/}
             {/*    {reviews.map((review, index) => (*/}
