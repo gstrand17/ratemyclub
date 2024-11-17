@@ -76,8 +76,8 @@ def db_seed():
     admin_erin = User(email='ehargrave@ufl.edu', username='erin', password='coding123',
                        first_name='Erin', last_name='Hargrave', student=False, club_exec=False, admin=True,
                        clubs='', passkey=2509)
-    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=1.1,
-                          avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, avg_comlev=0.0, active_mem=0,
+    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=4.5,
+                          avg_soc_rating=3.0, avg_acad_rating=4.0, avg_exec_rating=3.7, avg_comlev=1.0, active_mem=0,
                           description='A student organization at the University of Florida striving to educate students '
                                       'on the world of 3D printing',
                           link='https://www.instagram.com/3dprintuf/')
