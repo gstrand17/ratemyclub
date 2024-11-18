@@ -51,11 +51,12 @@ class ClubDirectory(db.Model):
     link = Column(String)
 
 # Define the ClubReviews model
-class ClubReviews(db.Model):  # There will be lots of instances of this class
+class ClubReviews(db.Model):
     __tablename__ = 'club_reviews'
     user_email = Column(String, primary_key=True)
     club_name = Column(String)
     date = Column(String)  # Date format?
+    review_text = Column(String) #body of the review
     overall_rating = Column(Float)
     soc_rating = Column(Float)
     acad_rating = Column(Float)
