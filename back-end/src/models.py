@@ -64,4 +64,5 @@ class ClubReviews(db.Model):  # There will be lots of instances of this class
     current_mem = Column(Boolean)
     time_mem = Column(String)  # Date format?
     paid = Column(Boolean)
+    
 
