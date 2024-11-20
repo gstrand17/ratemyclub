@@ -17,11 +17,12 @@ def db_drop():
 @app.cli.command('db_seed')  # Starter data
 def db_seed():
     sample_review1 = ClubReviews(user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2022",
-                                 overall_rating=4, soc_rating = 5, acad_rating = 2, exec_rating = 5, comlev = 4,
-                                 current_mem = True, time_mem = "4 semesters", paid = False)
+                                 review_text="omg I love this club", overall_rating=4, soc_rating = 5, acad_rating = 2,
+                                 exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False)
     sample_review2 = ClubReviews(user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
-                                 overall_rating=5, soc_rating = 5, acad_rating = 2, exec_rating = 5, comlev = 6,
-                                 current_mem = True, time_mem = "1 semester", paid = False)
+                                 review_text="this was the worst club I've ever gone to", overall_rating=5, soc_rating = 5,
+                                 acad_rating = 2, exec_rating = 5, comlev = 6, current_mem = True, time_mem = "1 semester",
+                                 paid = False)
     student_guest = User(email='guest@ufl.edu', username='guest', password='coding123',
                        first_name='Guest', last_name='Guest', student=True, club_exec=False, admin=False,
                        clubs='', passkey=None)
