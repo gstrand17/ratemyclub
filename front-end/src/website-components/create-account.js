@@ -35,7 +35,6 @@ const CreateAccount = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(createAccountData),
-            credentials: "include",
         })
             .then(response => {
                 if (response.status === 401) {

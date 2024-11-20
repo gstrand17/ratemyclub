@@ -215,9 +215,8 @@ def get_clubs():
             'social_rating': club.avg_soc_rating,
             'academic_rating': club.avg_acad_rating,
             'exec_rating': club.avg_exec_rating,
-            'commitment_level': club.avg_comlev,
             'active_mem_rating': club.active_mem,
-            'link': club.link
+            'link': club.link,
         } for club in clubs
     ]
     return jsonify(clubs_data)
@@ -233,7 +232,6 @@ def get_club(name: str):
     #         'user_email': review.user_email,
     #         'club_name': review.club_name,
     #         'date': review.date,
-    #         'review_text': review.review_text,
     #         'overall_rating': review.overall_rating,
     #         'soc_rating':  review.soc_rating,
     #         'acad_rating': review.acad_rating,
@@ -256,8 +254,7 @@ def get_club(name: str):
                 social_rating = club.avg_soc_rating,
                 academic_rating = club.avg_acad_rating,
                 exec_rating = club.avg_exec_rating,
-                commitment_level= club.avg_comlev,
-                active_mem_count =club.active_mem,
+                active_mem_rating =club.active_mem,
                 link = club.link
             )
     else:
