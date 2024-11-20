@@ -5,7 +5,7 @@ import YourReviews from "./YourReviews";
 const ClubPage = () => {
     const navigate = useNavigate();
     const { club_name } = useParams(); // using club_name to get club
-    //const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const [club, setClub] = useState({
         name: '',
         description: '',
@@ -65,9 +65,20 @@ const ClubPage = () => {
             })
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
-                    console.log(data.description);
-                    //setReviews(data);
-                    setClub(data);
+                    setClub({
+                        name: data.name,
+                        description: data.description,
+                        tags: data.tags,
+                        avg_rating: data.avg_rating,
+                        social_rating: data.social_rating,
+                        academic_rating: data.academic_rating,
+                        exec_rating: data.exec_rating,
+                        active_mem_rating: data.active_mem_rating,
+                        link: data.link
+                    });
+                    if (data.reviews) {
+                        setReviews(data.reviews); // Ensure reviews is an array
+                    }
                 } else {
                     console.log('Error:', data.message);
                 }})
@@ -103,13 +114,13 @@ const ClubPage = () => {
             <p>Link: <a href={club.link}>{club.link}</a></p>
             <p>Average Rating: {club.avg_rating}</p>
             <button onClick={handleReviewForm}>Submit a Review</button>
-            {/*<div>*/}
-            {/*    {reviews.map((review, index) => (*/}
-            {/*        <div key={index}>*/}
-            {/*            <h2>{review.user_email}</h2>*/}
-            {/*        </div>*/}
-            {/*    ))}*/}
-            {/*</div>*/}
+            <div>
+                {reviews.map((review, index) => (
+                    <div key={index}>
+                        <h2>{review.user_email}</h2>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
