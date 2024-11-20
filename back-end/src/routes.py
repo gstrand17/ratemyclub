@@ -226,29 +226,28 @@ def get_clubs():
 def get_club(name: str):
     #name = name.replace("%20", " ")
     club = ClubDirectory.query.filter_by(club_name=name).first()
-    # reviews = ClubReviews.query.filter_by(club_name=name).all()
-    #
-    # reviews_data = [
-    #     {
-    #         'user_email': review.user_email,
-    #         'club_name': review.club_name,
-    #         'date': review.date,
-    #         'review_text': review.review_text,
-    #         'overall_rating': review.overall_rating,
-    #         'soc_rating':  review.soc_rating,
-    #         'acad_rating': review.acad_rating,
-    #         'exec_rating': review.exec_rating,
-    #         'comlev': review.comlev,
-    #         'current_mem': review.current_mem,
-    #         'time_mem': review.time_mem,
-    #         'paid': review.paid
-    #     } for review in reviews
-    # ]
+    reviews = ClubReviews.query.filter_by(club_name=name).all()
+
+    reviews_data = [
+        {
+            'user_email': review.user_email,
+            'club_name': review.club_name,
+            'date': review.date,
+            'overall_rating': review.overall_rating,
+            'soc_rating':  review.soc_rating,
+            'acad_rating': review.acad_rating,
+            'exec_rating': review.exec_rating,
+            'comlev': review.comlev,
+            'current_mem': review.current_mem,
+            'time_mem': review.time_mem,
+            'paid': review.paid
+        } for review in reviews
+    ]
 
     if club:
             return jsonify(
-                #reviews_data,
                 message="Data has been fetched!",
+                reviews=reviews_data,
                 name= club.club_name,
                 description= club.description,
                 tags = club.tags,
