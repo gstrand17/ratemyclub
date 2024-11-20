@@ -215,8 +215,9 @@ def get_clubs():
             'social_rating': club.avg_soc_rating,
             'academic_rating': club.avg_acad_rating,
             'exec_rating': club.avg_exec_rating,
+            'commitment_level': club.avg_comlev,
             'active_mem_rating': club.active_mem,
-            'link': club.link,
+            'link': club.link
         } for club in clubs
     ]
     return jsonify(clubs_data)
@@ -254,7 +255,8 @@ def get_club(name: str):
                 social_rating = club.avg_soc_rating,
                 academic_rating = club.avg_acad_rating,
                 exec_rating = club.avg_exec_rating,
-                active_mem_rating =club.active_mem,
+                commitment_level= club.avg_comlev,
+                active_mem_count =club.active_mem,
                 link = club.link
             )
     else:

@@ -17,11 +17,12 @@ def db_drop():
 @app.cli.command('db_seed')  # Starter data
 def db_seed():
     sample_review1 = ClubReviews(user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2022",
-                                 overall_rating=4, soc_rating = 5, acad_rating = 2, exec_rating = 5, comlev = 4,
-                                 current_mem = True, time_mem = "4 semesters", paid = False)
+                                 review_text="omg I love this club", overall_rating=4, soc_rating = 5, acad_rating = 2,
+                                 exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False)
     sample_review2 = ClubReviews(user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
-                                 overall_rating=5, soc_rating = 5, acad_rating = 2, exec_rating = 5, comlev = 6,
-                                 current_mem = True, time_mem = "1 semester", paid = False)
+                                 review_text="this was the worst club I've ever gone to", overall_rating=5, soc_rating = 5,
+                                 acad_rating = 2, exec_rating = 5, comlev = 6, current_mem = True, time_mem = "1 semester",
+                                 paid = False)
     student_guest = User(email='guest@ufl.edu', username='guest', password='coding123',
                        first_name='Guest', last_name='Guest', student=True, club_exec=False, admin=False,
                        clubs='', passkey=None)
@@ -76,8 +77,8 @@ def db_seed():
     admin_erin = User(email='ehargrave@ufl.edu', username='erin', password='coding123',
                        first_name='Erin', last_name='Hargrave', student=False, club_exec=False, admin=True,
                        clubs='', passkey=2509)
-    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=1.1,
-                          avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, avg_comlev=0.0, active_mem=0,
+    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=4.5,
+                          avg_soc_rating=3.0, avg_acad_rating=4.0, avg_exec_rating=3.7, avg_comlev=1.0, active_mem=0,
                           description='A student organization at the University of Florida striving to educate students '
                                       'on the world of 3D printing',
                           link='https://www.instagram.com/3dprintuf/')
