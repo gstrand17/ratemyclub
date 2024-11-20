@@ -38,7 +38,7 @@ const ReviewForm = () => {
         }}>
             <h1 style={{
                 textAlign: 'center',
-            }}>Your Reviews</h1>
+            }}>Review Form</h1>
             <div className="button-container"
                  style={{
                      textAlign: 'right',

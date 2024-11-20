@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import YourReviews from "./YourReviews";
 
 const ClubPage = () => {
     const navigate = useNavigate();
