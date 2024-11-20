@@ -233,6 +233,7 @@ def get_club(name: str):
             'user_email': review.user_email,
             'club_name': review.club_name,
             'date': review.date,
+            'review_text': review.text,
             'overall_rating': review.overall_rating,
             'soc_rating':  review.soc_rating,
             'acad_rating': review.acad_rating,
