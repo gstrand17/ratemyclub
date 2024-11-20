@@ -103,7 +103,7 @@ const ClubPage = () => {
                         social_rating: data.social_rating,
                         academic_rating: data.academic_rating,
                         exec_rating: data.exec_rating,
-                        active_mem_rating: data.active_mem_rating,
+                        active_mem_count: data.active_mem_count,
                         link: data.link
                     });
                     if (data.reviews) {
@@ -222,7 +222,7 @@ const ClubPage = () => {
             <p>{club.description}</p>
             <p>Link: <a href={club.link}>{club.link}</a></p>
 
-            {/* emphasize overall average rating*/}
+             {/*emphasize overall average rating*/}
             <h2>
                 <span style={{fontWeight: 'bold', fontSize: '3rem'}}>{club.avg_rating.toFixed(1)}</span>
                 <span style={{fontWeight: 'bold', fontSize: '1.5rem', color: '#777'}}> / 5</span>
