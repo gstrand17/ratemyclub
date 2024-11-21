@@ -53,7 +53,8 @@ class ClubDirectory(db.Model):
 # Define the ClubReviews model
 class ClubReviews(db.Model):
     __tablename__ = 'club_reviews'
-    user_email = Column(String, primary_key=True)
+    review_num = Column(Integer, primary_key=True)
+    user_email = Column(String)
     club_name = Column(String)
     date = Column(String)  # Date format?
     review_text = Column(String) #body of the review
@@ -65,5 +66,7 @@ class ClubReviews(db.Model):
     current_mem = Column(Boolean)
     time_mem = Column(String)  # Date format?
     paid = Column(Boolean)
+    thumbs = Column(Integer)
+    flagged = Column(Boolean)
     
 
