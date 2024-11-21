@@ -133,7 +133,7 @@ const FrontPage = () => {
                     fontSize: '3rem',
                     marginTop: '20px',
                 }}>
-                    WELCOME {firstName} {lastName}
+                    WELCOME {firstName}
                 </h1>
 
 
@@ -198,7 +198,7 @@ const FrontPage = () => {
                                 marginTop: '10px',
                             }}
                         >
-                            Average Rating: {club.avg_rating}
+                            Average Rating: {club.avg_rating.toFixed(1)}
                         </div>
 
 
