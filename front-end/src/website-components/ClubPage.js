@@ -103,7 +103,8 @@ const ClubPage = () => {
                         social_rating: data.social_rating,
                         academic_rating: data.academic_rating,
                         exec_rating: data.exec_rating,
-                        active_mem_rating: data.active_mem_rating,
+                        active_mem_count: data.active_mem_count,
+                        commitment_level: data.commitment_level,
                         link: data.link
                     });
                     if (data.reviews) {
