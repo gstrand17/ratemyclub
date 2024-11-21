@@ -253,7 +253,10 @@ const ClubPage = () => {
                             <span>Executive: <strong>{review.exec_rating}</strong>/5</span>
                             <span>Commitment Level: <strong>{review.comlev}</strong>/5</span>
                         </div>
-                        <p>{review.review_text}</p>
+                        <p style={{
+                            border: '1px solid #ddd',
+                            borderRadius: '7px',
+                            padding: '1rem'}}>{review.review_text}</p>
                         <p>Time as Member: <strong>{review.time_mem}</strong></p>
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No, Former'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
