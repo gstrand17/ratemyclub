@@ -18,7 +18,10 @@ def db_drop():
 def db_seed():
     sample_review1 = ClubReviews(review_num=1, user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2022",
                                  review_text="omg I love this club", overall_rating=4, soc_rating = 5, acad_rating = 2,
-                                 exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False,
+                                 exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False)
+    sample_review2 = ClubReviews(user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
+                                 review_text="this was the worst club I've ever gone to", overall_rating=0, soc_rating = 1,
+                                 acad_rating = 2, exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False,
                                  thumbs=0, flagged=False)
     sample_review2 = ClubReviews(review_num=2, user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
                                  review_text="this was the worst club I've ever gone to", overall_rating=5, soc_rating = 5,
@@ -82,13 +85,13 @@ def db_seed():
     admin_erin = User(email='ehargrave@ufl.edu', username='erin', password='coding123',
                        first_name='Erin', last_name='Hargrave', student=False, club_exec=False, admin=True,
                        clubs='', passkey=2509)
-    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=4.5,
+    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=0.0,
                           avg_soc_rating=3.0, avg_acad_rating=4.0, avg_exec_rating=3.7, avg_comlev=1.0, active_mem=0,
                           description='A student organization at the University of Florida striving to educate students '
                                       'on the world of 3D printing',
                           link='https://www.instagram.com/3dprintuf/')
     club2 = ClubDirectory(club_name='A Reason to Give', tags='volunteering|', avg_overall_rating=0.0,
-                          avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, avg_comlev=0, active_mem=0,
+                          avg_soc_rating=4.0, avg_acad_rating=4.0, avg_exec_rating=4.9, avg_comlev=3.5, active_mem=0,
                           description='Dedicated to overcoming the stigmas surrounding homelessness through the '
                                       'empowering gift of a sandwich!',
                           link='https://www.instagram.com/areasontogive/')

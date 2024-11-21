@@ -50,6 +50,7 @@ class ClubDirectory(db.Model):
     description = Column(String)
     link = Column(String)
 
+
 # Define the ClubReviews model
 class ClubReviews(db.Model):
     __tablename__ = 'club_reviews'
@@ -68,5 +69,5 @@ class ClubReviews(db.Model):
     paid = Column(Boolean)
     thumbs = Column(Integer)
     flagged = Column(Boolean)
-    
+
 

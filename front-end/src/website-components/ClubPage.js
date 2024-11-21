@@ -19,17 +19,10 @@ const getTagColor = (tag) => {
     return color;
 };
 
-//commitment level
-//active_membership is int
 
 //button if only club or admin edit details->blanks to change data?
-
 //time_mem: store dates? member since ____
-
 //date of review??
-
-//funct to calculate avg reviews?!!! (do not take into acct level of commitment
-//avg_rating= social_rating + academic_rating + exec_rating
 
 const ClubPage = () => {
     const navigate = useNavigate();
@@ -47,6 +40,7 @@ const ClubPage = () => {
         commitment_level: 0.0,
         link: ''
     });
+    //const [avgRating, setAvgRating] = useState(0);
 
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
@@ -95,6 +89,7 @@ const ClubPage = () => {
             })
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
+
                     setClub({
                         name: data.name,
                         description: data.description,
@@ -104,6 +99,7 @@ const ClubPage = () => {
                         academic_rating: data.academic_rating,
                         exec_rating: data.exec_rating,
                         active_mem_count: data.active_mem_count,
+                        comlev: data.comlev,
                         link: data.link
                     });
                     if (data.reviews) {
@@ -236,22 +232,40 @@ const ClubPage = () => {
                 <Bar data={barChartData} options={barChartOptions}/>
             </div>
 
-            <div style={{fontSize: '1rem', fontWeight: 'bold'}}>
-                Student Ratings:
+            <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>
+                Student Reviews:
             </div>
 
-
-
-
-
-            <button onClick={handleReviewForm}>Submit a Review</button>
             <div>
                 {reviews.map((review, index) => (
-                    <div key={index}>
-                        <h2>{review.user_email}</h2>
+                    <div key={index} style={{
+                        border: '2px solid #ddd',
+                        borderRadius: '8px',
+                        padding: '1rem',
+                        marginBottom: '1rem'
+                    }}>
+                        <h3 style={{fontSize: '1.5rem', marginBottom: '0.5rem'}}>{club_name}</h3>
+                        <p style={{fontStyle: 'italic', color: '#666'}}>Date: {review.date}</p>
+                        <h1 style={{fontSize: '1.2rem'}}>Overall: <strong>{review.overall_rating.toFixed(1)}/5</strong></h1>
+                        <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '1rem'}}>
+                            <span>Social: <strong>{review.soc_rating}</strong>/5</span>
+                            <span>Academic: <strong>{review.acad_rating}</strong>/5</span>
+                            <span>Executive: <strong>{review.exec_rating}</strong>/5</span>
+                            <span>Commitment Level: <strong>{review.comlev}</strong>/5</span>
+                        </div>
+                        <p style={{
+                            border: '1px solid #ddd',
+                            borderRadius: '7px',
+                            padding: '1rem'}}>{review.review_text}</p>
+                        <p>Time as Member: <strong>{review.time_mem}</strong></p>
+                        <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No, Former'}</strong></p>
+                        <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
                     </div>
                 ))}
             </div>
+
+            <button onClick={handleReviewForm}>Submit a Review</button>
+
         </div>
     );
 };
