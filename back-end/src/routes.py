@@ -192,14 +192,6 @@ def logout():
     return jsonify(message='Successful Logout!'), 200
 
 
-@app.route('/log-in/<string:username>/<string:password>') # var types comes before
-def url_variables(username: str, password: int): # var type comes after
-    if password != '1234':
-        return jsonify(message='Incorrect password'), 401
-    else:
-        return jsonify(message='Welcome ' + username), 200
-
-    # basic idea of one way we can do login with routes, of course the database would need to be involved
 
 #fetches the list of clubs from the database to display on front page
 #display the rest of the info on specific club landing pages?
@@ -229,12 +221,13 @@ def get_club(name: str):
     #name = name.replace("%20", " ")
     club = ClubDirectory.query.filter_by(club_name=name).first()
     reviews = ClubReviews.query.filter_by(club_name=name).all()
-
-    reviews_data = []
+    reviews_data=[]
     for review in reviews:
         avg_rating = review.calculate_avg_rating()
         review.overall_rating = avg_rating
+
         reviews_data.append({
+            'review_num': review.review_num,
             'user_email': review.user_email,
             'club_name': review.club_name,
             'date': review.date,
@@ -246,8 +239,10 @@ def get_club(name: str):
             'comlev': review.comlev,
             'current_mem': review.current_mem,
             'time_mem': review.time_mem,
-            'paid': review.paid
-        })
+            'paid': review.paid,
+            'thumbs': review.thumbs,
+            'flagged': review.flagged
+    })
 
     if club:
         avg_rating = calculate_avg_rating(club.avg_soc_rating, club.avg_acad_rating, club.avg_exec_rating)
@@ -270,8 +265,92 @@ def get_club(name: str):
     else:
         return jsonify(message='Club not found'), 401
 
+
 def calculate_avg_rating(social, academic, exec):
     ratings = [social, academic, exec]
     valid_ratings = [r for r in ratings if r is not None]
     return sum(valid_ratings) / len(valid_ratings) if valid_ratings else 0
 
+
+@app.route('/YourReviews', methods=['GET', 'DELETE'])
+def your_reviews():
+    if 'logged_in' in session:
+        existing_user = User.query.filter((User.username == session['username']) | (User.email == session['email'])).first()
+        if not existing_user:
+            return jsonify(message='User does not exist!'), 401
+        else:
+            role = None
+            if existing_user.student:
+                role = 'student'
+            elif existing_user.club_exec:
+                role = 'club_exec'
+            elif existing_user.admin:
+                role = 'admin'
+        if request.method == 'GET':
+            reviews = ClubReviews.query.filter_by(user_email=existing_user.email).all()
+            reviews_data = [
+                {
+                    'user_email': review.user_email,
+                    'club_name': review.club_name,
+                    'date': review.date,
+                    'review_text': review.review_text,
+                    'overall_rating': review.overall_rating,
+                    'soc_rating': review.soc_rating,
+                    'acad_rating': review.acad_rating,
+                    'exec_rating': review.exec_rating,
+                    'comlev': review.comlev,
+                    'current_mem': review.current_mem,
+                    'time_mem': review.time_mem,
+                    'paid': review.paid
+                } for review in reviews]
+            return jsonify(
+                reviews=reviews_data,
+                firstname = existing_user.first_name,
+                lastname = existing_user.last_name
+            )
+
+        # elif request.method == 'DELETE':
+        #
+    else:
+        return jsonify(message='You are not logged in!'), 401
+
+@app.route('/writereview/<string:name>', methods=['GET', 'POST'])
+def write_review(name: str):
+    if 'logged_in' in session:
+        existing_user = User.query.filter(
+            (User.username == session['username']) | (User.email == session['email'])).first()
+        club = ClubDirectory.query.filter_by(club_name=name).first()
+        if not existing_user:
+            return jsonify(message='User does not exist!'), 401
+        elif not club:
+            return jsonify(message='Club not found!'), 401
+        else:
+            if request.method == 'GET':
+                return jsonify(
+                    user_name = existing_user.username,
+                    club_name = name
+                )
+            elif request.method == 'POST':
+                data = request.get_json()
+
+                if not data:
+                    return jsonify(message='No Input Provided!'), 401
+                else:
+                    new_review = ClubReviews(user_name=existing_user.username,
+                                             club_name=name,
+                                             date=data.get('date'),
+                                             review_text=data.get('review_text'),
+                                             overall_rating=data.get('overall_rating'),
+                                             soc_rating=data.get('soc_rating'),
+                                             acad_rating=data.get('acad_rating'),
+                                             exec_rating=data.get('exec_rating'),
+                                             comlev=data.get('comlev'),
+                                             current_mem=data.get('current_mem'),
+                                             time_mem=data.get('time_mem'),
+                                             paid=data.get('paid'),
+                                             thumbs=0, flagged=False)
+                    db.add(new_review)
+                    db.session.commit()
+                return jsonify(
+                    message="Database updated!"
+                )

@@ -49,15 +49,13 @@ class ClubDirectory(db.Model):
     active_mem = Column(Integer)
     description = Column(String)
     link = Column(String)
-    def calculate_avg_rating(self):
-        ratings = [self.avg_soc_rating, self.avg_acad_rating, self.avg_exec_rating]
-        valid_ratings = [r for r in ratings if r is not None]
-        return sum(valid_ratings) / len(valid_ratings) if valid_ratings else 0.0
+
 
 # Define the ClubReviews model
 class ClubReviews(db.Model):
     __tablename__ = 'club_reviews'
-    user_email = Column(String, primary_key=True)
+    review_num = Column(Integer, primary_key=True)
+    user_email = Column(String)
     club_name = Column(String)
     date = Column(String)  # Date format?
     review_text = Column(String) #body of the review
@@ -69,9 +67,7 @@ class ClubReviews(db.Model):
     current_mem = Column(Boolean)
     time_mem = Column(String)  # Date format?
     paid = Column(Boolean)
-    def calculate_avg_rating(self):
-        ratings = [self.soc_rating, self.acad_rating, self.exec_rating]
-        valid_ratings = [r for r in ratings if r is not None]
-        return sum(valid_ratings) / len(valid_ratings) if valid_ratings else 0.0
-    
+    thumbs = Column(Integer)
+    flagged = Column(Boolean)
+
 

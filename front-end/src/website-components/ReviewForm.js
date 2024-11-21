@@ -5,6 +5,29 @@ const ReviewForm = () => {
 
     const navigate = useNavigate();
 
+    const [message, setMessage] = useState('');
+    const { club_name } = useParams(); // using club_name to get club
+    const [user, setUser] = useState({
+        user_email: '',
+        club_name: '',
+        date: '',
+        review_text: '',
+        overall_rating: '',
+        soc_rating: '',
+        acad_rating: '',
+        exec_rating: '',
+        comlev: '',
+        current_mem: '',
+        time_mem: '',
+        paid: ''
+    });
+
+    const [writtenReview, confirmReview] = useState(false);
+
+    const updateProfile = (type, currValue) =>{
+      setUser({...user, [type]: currValue});
+    };
+
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
         // Navigate back home
@@ -24,12 +47,84 @@ const ReviewForm = () => {
         // Navigate to user profile page
         navigate('/profile');
     };
-
     const handleHome = () => {
         navigate('/front-page');
     };
 
+    useEffect(() => {
+        fetch(`http://localhost:5000/api/club-page/${club_name}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response =>  {
+                if (response.status === 401 || 404) {
+                    return response.json();
+                } else if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data =>  {
+                if (data.message === "Data has been fetched!") {
+                    setUser({
+                        user_email: data.response.user_email,
+                        club_name: data.response.club_name,
+                        date: data.date,
+                        review_text: data.review_text,
+                        overall_rating: '',
+                        soc_rating: '',
+                        acad_rating: '',
+                        exec_rating: '',
+                        comlev: '',
+                        current_mem: '',
+                        time_mem: '',
+                        paid: ''
+                    });
+                } else {
+                    console.log('Error:', data.message);
+                }})
+            .catch(error => console.log('Error fetching club data:', error));
+    }, [club_name]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        fetch(`http://localhost:5000/api/club-page/${club_name}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    return response.json();
+                } else if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message === "Data has been fetched!") {
+                    setMessage(data.message);
+                    setUser({
+                        user_name: data.user_name
+                    });
+                    confirmReview(false);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setMessage('An error occurred. Please try again.');
+            });
+    };
+
     return (
+        <body>
         <div style={{
             display: 'flex',
             alignItems: 'center', // Align items vertically centered
@@ -38,7 +133,7 @@ const ReviewForm = () => {
         }}>
             <h1 style={{
                 textAlign: 'center',
-            }}>Your Reviews</h1>
+            }}>Review Form</h1>
             <div className="button-container"
                  style={{
                      textAlign: 'right',
@@ -48,6 +143,132 @@ const ReviewForm = () => {
                 <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
+
+        {/* Container for the review form */}
+        <div style={{position: 'relative'}}>
+            <h1 style={{
+                fontFamily: "'Alfa Slab One', serif",
+                fontSize: '3rem',
+            }}>
+                Review Form
+            </h1>
+            <div>
+                <label>
+                    User Email:
+                    <input
+                        type="text"
+                        value={user.user_email}
+                        disabled={!writtenReview}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Club Name:
+                    <input
+                        type="text"
+                        value={user.club_name}
+                        disabled={!writtenReview}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Date:
+                    <input
+                        type="text"
+                        value={user.date}
+                        disabled={!writtenReview}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Overall Rating:
+                    <input
+                        type='number'
+                        value={user.overall_rating}
+                        onChange={(e) => {
+                            updateProfile('overall_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Social Rating:
+                    <input
+                        type='number'
+                        value={user.soc_rating}
+                        onChange={(e) => {
+                            updateProfile('overall_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Academic Rating:
+                    <input
+                        type='number'
+                        value={user.acad_rating}
+                        onChange={(e) => {
+                            updateProfile('overall_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Executive Rating:
+                    <input
+                        type='number'
+                        value={user.exec_rating}
+                        onChange={(e) => {
+                            updateProfile('overall_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Current Member:
+                    <input
+                        type='number'
+                        value={user.current_mem}
+                        onChange={(e) => {
+                            updateProfile('overall_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Time Member:
+                    <input
+                        type='number'
+                        value={user.time_mem}
+                        onChange={(e) => {
+                            updateProfile('overall_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Paid:
+                    <input
+                        type='number'
+                        value={user.paid}
+                        onChange={(e) => {
+                            updateProfile('overall_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+        </div>
+        <button onClick={handleSubmit}>Save</button>
+        </body>
     )
 };
 
