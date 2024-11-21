@@ -19,6 +19,14 @@ const getTagColor = (tag) => {
     return color;
 };
 
+// Helper function to calculate the average overall rating
+const calculateAvgRating = (social, academic, exec) => {
+    const ratings = [social, academic, exec];
+    const validRatings = ratings.filter(r => r !== null && r !== undefined);
+    if (validRatings.length === 0) return 0; // No valid ratings to average
+    return validRatings.reduce((sum, rating) => sum + rating, 0) / validRatings.length;
+};
+
 //commitment level
 //active_membership is int
 
@@ -95,6 +103,7 @@ const ClubPage = () => {
             })
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
+
                     setClub({
                         name: data.name,
                         description: data.description,
@@ -177,6 +186,9 @@ const ClubPage = () => {
         }
     };
 
+    //calculate the average overall club rating!
+    const avgRating = calculateAvgRating(club.social_rating, club.academic_rating, club.exec_rating);
+
     return (
         <div>
             <div style={{
@@ -225,7 +237,7 @@ const ClubPage = () => {
 
             {/* emphasize overall average rating*/}
             <h2>
-                <span style={{fontWeight: 'bold', fontSize: '3rem'}}>{club.avg_rating.toFixed(1)}</span>
+                <span style={{fontWeight: 'bold', fontSize: '3rem'}}>{avgRating.toFixed(1)}</span>
                 <span style={{fontWeight: 'bold', fontSize: '1.5rem', color: '#777'}}> / 5</span>
                 <div style={{fontSize: '1rem', fontWeight: 'bold'}}>
                     Average Overall Rating
