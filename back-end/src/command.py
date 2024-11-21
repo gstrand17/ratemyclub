@@ -20,8 +20,8 @@ def db_seed():
                                  review_text="omg I love this club", overall_rating=4, soc_rating = 5, acad_rating = 2,
                                  exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False)
     sample_review2 = ClubReviews(user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
-                                 review_text="this was the worst club I've ever gone to", overall_rating=5, soc_rating = 5,
-                                 acad_rating = 2, exec_rating = 5, comlev = 6, current_mem = True, time_mem = "1 semester",
+                                 review_text="this was the worst club I've ever gone to", overall_rating=0, soc_rating = 1,
+                                 acad_rating = 2, exec_rating = 2, comlev = 5, current_mem = True, time_mem = "1 semester",
                                  paid = False)
     student_guest = User(email='guest@ufl.edu', username='guest', password='coding123',
                        first_name='Guest', last_name='Guest', student=True, club_exec=False, admin=False,

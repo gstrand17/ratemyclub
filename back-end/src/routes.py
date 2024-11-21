@@ -230,8 +230,11 @@ def get_club(name: str):
     club = ClubDirectory.query.filter_by(club_name=name).first()
     reviews = ClubReviews.query.filter_by(club_name=name).all()
 
-    reviews_data = [
-        {
+    reviews_data = []
+    for review in reviews:
+        avg_rating = review.calculate_avg_rating()
+        review.overall_rating = avg_rating
+        reviews_data.append({
             'user_email': review.user_email,
             'club_name': review.club_name,
             'date': review.date,
@@ -244,8 +247,7 @@ def get_club(name: str):
             'current_mem': review.current_mem,
             'time_mem': review.time_mem,
             'paid': review.paid
-        } for review in reviews
-    ]
+        })
 
     if club:
         avg_rating = calculate_avg_rating(club.avg_soc_rating, club.avg_acad_rating, club.avg_exec_rating)
