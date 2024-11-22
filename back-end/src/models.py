@@ -49,11 +49,16 @@ class ClubDirectory(db.Model):
     active_mem = Column(Integer)
     description = Column(String)
     link = Column(String)
-    def calculate_avg_rating(self):
-        ratings = [self.avg_soc_rating, self.avg_acad_rating, self.avg_exec_rating]
-        valid_ratings = [r for r in ratings if r is not None]
-        return sum(valid_ratings) / len(valid_ratings) if valid_ratings else 0.0
-
+    def calculate_avg_ratings(self):
+        reviews = ClubReviews.query.filter_by(club_name=self.club_name).all()
+        if reviews:
+            self.avg_overall_rating = sum(review.overall_rating for review in reviews) / len(reviews)
+            self.avg_soc_rating = sum(review.soc_rating for review in reviews) / len(reviews)
+            self.avg_acad_rating = sum(review.acad_rating for review in reviews) / len(reviews)
+            self.avg_exec_rating = sum(review.exec_rating for review in reviews) / len(reviews)
+            self.avg_comlev = sum(review.comlev for review in reviews) / len(reviews)
+        else:
+            self.avg_overall_rating = self.avg_soc_rating = self.avg_acad_rating = self.avg_exec_rating = self.avg_comlev = 0.0
 
 # Define the ClubReviews model
 class ClubReviews(db.Model):
@@ -73,9 +78,6 @@ class ClubReviews(db.Model):
     paid = Column(Boolean)
     thumbs = Column(Integer)
     flagged = Column(Boolean)
-    def calculate_avg_rating(self):
-        ratings = [self.soc_rating, self.acad_rating, self.exec_rating]
-        valid_ratings = [r for r in ratings if r is not None]
-        return sum(valid_ratings) / len(valid_ratings) if valid_ratings else 0.0
+
 
 

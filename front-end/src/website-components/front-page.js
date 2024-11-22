@@ -188,7 +188,7 @@ const FrontPage = () => {
 
                         <div
                             style={{
-                                backgroundColor: getRatingColor(club.avg_rating),
+                                backgroundColor: getRatingColor(club.avg_overall_rating),
                                 color: '#fff',
                                 padding: '5px',
                                 borderRadius: '8px',
@@ -198,7 +198,7 @@ const FrontPage = () => {
                                 marginTop: '10px',
                             }}
                         >
-                            Average Rating: {club.avg_rating.toFixed(1)}
+                            Average Overall Rating: {club.avg_overall_rating?.toFixed(1) ?? 'N/A'}
                         </div>
 
 
