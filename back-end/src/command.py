@@ -18,7 +18,10 @@ def db_drop():
 def db_seed():
     sample_review1 = ClubReviews(review_num=1, user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2022",
                                  review_text="omg I love this club", overall_rating=4, soc_rating = 5, acad_rating = 2,
-                                 exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False,
+                                 exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False)
+    sample_review2 = ClubReviews(user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
+                                 review_text="this was the worst club I've ever gone to", overall_rating=0, soc_rating = 1,
+                                 acad_rating = 2, exec_rating = 1, comlev = 5, current_mem = True, time_mem = "4 semesters", paid = False,
                                  thumbs=0, flagged=False)
     sample_review2 = ClubReviews(review_num=2, user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
                                  review_text="this was the worst club I've ever gone to", overall_rating=5, soc_rating = 5,
@@ -27,6 +30,18 @@ def db_seed():
     sample_review3 = ClubReviews(review_num=3,user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2024",
                                  review_text="I never want to leave this club. I love everyone so much", overall_rating = 5,
                                  soc_rating = 5, acad_rating=3, exec_rating=5, comlev = 5, current_mem = True, time_mem = "8 semesters",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review4 = ClubReviews(review_num=4,user_email="ehargrave@ufl.edu", club_name="3D Printing Club", date="October 2024",
+                                 review_text="learned that 3d printing is about the friends u make along the way.", overall_rating = 5,
+                                 soc_rating = 5, acad_rating=4, exec_rating=5, comlev = 1, current_mem = False, time_mem = "2 semesters",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review5 = ClubReviews(review_num=5,user_email="ehargrave@ufl.edu", club_name="A Reason to Give", date="November 2024",
+                                 review_text="absolutely so slay found so many reasons to give", overall_rating = 4.5,
+                                 soc_rating = 4, acad_rating=3, exec_rating=4, comlev = 2, current_mem = True, time_mem = "2 semesters",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review6 = ClubReviews(review_num=6,user_email="ehargrave@ufl.edu", club_name="A Reason to Give", date="October 2024",
+                                 review_text="never found the reason for giving...", overall_rating = 1,
+                                 soc_rating = 4, acad_rating=1, exec_rating=1, comlev = 4, current_mem = False, time_mem = "1 semester",
                                  paid = False, thumbs=0, flagged=False)
     student_guest = User(email='guest@ufl.edu', username='guest', password='coding123',
                        first_name='Guest', last_name='Guest', student=True, club_exec=False, admin=False,
@@ -82,13 +97,13 @@ def db_seed():
     admin_erin = User(email='ehargrave@ufl.edu', username='erin', password='coding123',
                        first_name='Erin', last_name='Hargrave', student=False, club_exec=False, admin=True,
                        clubs='', passkey=2509)
-    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=4.5,
-                          avg_soc_rating=3.0, avg_acad_rating=4.0, avg_exec_rating=3.7, avg_comlev=1.0, active_mem=0,
+    club1 = ClubDirectory(club_name='3D Printing Club', tags='engineering|', avg_overall_rating=0.0,
+                          avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, avg_comlev=0.0, active_mem=0,
                           description='A student organization at the University of Florida striving to educate students '
                                       'on the world of 3D printing',
                           link='https://www.instagram.com/3dprintuf/')
     club2 = ClubDirectory(club_name='A Reason to Give', tags='volunteering|', avg_overall_rating=0.0,
-                          avg_soc_rating=0.0, avg_acad_rating=0.0, avg_exec_rating=0.0, avg_comlev=0, active_mem=0,
+                          avg_soc_rating=4.0, avg_acad_rating=4.0, avg_exec_rating=4.9, avg_comlev=3.5, active_mem=0,
                           description='Dedicated to overcoming the stigmas surrounding homelessness through the '
                                       'empowering gift of a sandwich!',
                           link='https://www.instagram.com/areasontogive/')
@@ -549,7 +564,7 @@ def db_seed():
                            link='https://ufcaribsadotorg.wordpress.com/')
 
     entities = [
-        sample_review1, sample_review2, sample_review3, student_guest, student_test, student_jungkook, student_jhope,
+        sample_review1, sample_review2, sample_review3, sample_review4, sample_review5, sample_review6, student_guest, student_test, student_jungkook, student_jhope,
         student_v, student_jimin, student_suga, student_jin, student_rm, student_lisa,
         student_jennie, student_rose, student_jisoo, clubExec_guestExec,
         admin_julio, admin_erin, admin_graciela, admin_natalie, club1, club2,
