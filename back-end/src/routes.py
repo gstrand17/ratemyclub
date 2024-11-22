@@ -210,7 +210,7 @@ def get_clubs():
             'social_rating': club.avg_soc_rating,
             'academic_rating': club.avg_acad_rating,
             'exec_rating': club.avg_exec_rating,
-            'commitment_level': club.avg_comlev,
+            'comlev': club.avg_comlev,
             'active_mem_rating': club.active_mem,
             'link': club.link
         })
@@ -258,7 +258,7 @@ def get_club(name: str):
             social_rating = club.avg_soc_rating,
             academic_rating = club.avg_acad_rating,
             exec_rating = club.avg_exec_rating,
-            commitment_level= club.avg_comlev,
+            comlev= club.avg_comlev,
             active_mem_count =club.active_mem,
             link = club.link
         )

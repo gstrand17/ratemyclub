@@ -37,7 +37,7 @@ const ClubPage = () => {
         academic_rating:0.0,
         exec_rating:0.0,
         active_mem_count:0,
-        commitment_level: 0.0,
+        comlev: 0.0,
         link: ''
     });
     //const [avgRating, setAvgRating] = useState(0);
@@ -99,7 +99,7 @@ const ClubPage = () => {
                         academic_rating: data.academic_rating,
                         exec_rating: data.exec_rating,
                         active_mem_count: data.active_mem_count,
-                        comlev: data.comlev,
+                        comlev: data.comlev, //????
                         link: data.link
                     });
                     if (data.reviews) {
@@ -121,7 +121,7 @@ const ClubPage = () => {
                     club.social_rating,
                     club.academic_rating,
                     club.exec_rating,
-                    club.commitment_level
+                    club.comlev
                 ],
                 backgroundColor: [
                     'rgba(75, 192, 192, 0.2)', // Light teal
@@ -240,8 +240,9 @@ const ClubPage = () => {
                 {reviews.map((review, index) => (
                     <div key={index} style={{
                         border: '2px solid #ddd',
-                        borderRadius: '8px',
+                        borderRadius: '7px',
                         padding: '1rem',
+                        backgroundColor: '#eee',
                         marginBottom: '1rem'
                     }}>
                         <h3 style={{fontSize: '1.5rem', marginBottom: '0.5rem'}}>{club_name}</h3>
@@ -253,10 +254,7 @@ const ClubPage = () => {
                             <span>Executive: <strong>{review.exec_rating}</strong>/5</span>
                             <span>Commitment Level: <strong>{review.comlev}</strong>/5</span>
                         </div>
-                        <p style={{
-                            border: '1px solid #ddd',
-                            borderRadius: '7px',
-                            padding: '1rem'}}>{review.review_text}</p>
+                        <p style={{paddingTop: '1rem', paddingBottom: '1rem'}}>{review.review_text}</p>
                         <p>Time as Member: <strong>{review.time_mem}</strong></p>
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No, Former'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
