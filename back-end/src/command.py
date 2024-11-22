@@ -31,6 +31,18 @@ def db_seed():
                                  review_text="I never want to leave this club. I love everyone so much", overall_rating = 5,
                                  soc_rating = 5, acad_rating=3, exec_rating=5, comlev = 5, current_mem = True, time_mem = "8 semesters",
                                  paid = False, thumbs=0, flagged=False)
+    sample_review4 = ClubReviews(review_num=4,user_email="ehargrave@ufl.edu", club_name="3D Printing Club", date="October 2024",
+                                 review_text="learned that 3d printing is about the friends u make along the way.", overall_rating = 5,
+                                 soc_rating = 5, acad_rating=4, exec_rating=5, comlev = 1, current_mem = False, time_mem = "2 semesters",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review5 = ClubReviews(review_num=5,user_email="ehargrave@ufl.edu", club_name="A Reason to Give", date="November 2024",
+                                 review_text="absolutely so slay found so many reasons to give", overall_rating = 4.5,
+                                 soc_rating = 4, acad_rating=3, exec_rating=4, comlev = 2, current_mem = True, time_mem = "2 semesters",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review6 = ClubReviews(review_num=6,user_email="ehargrave@ufl.edu", club_name="A Reason to Give", date="October 2024",
+                                 review_text="never found the reason for giving...", overall_rating = 1,
+                                 soc_rating = 4, acad_rating=1, exec_rating=1, comlev = 4, current_mem = False, time_mem = "1 semester",
+                                 paid = False, thumbs=0, flagged=False)
     student_guest = User(email='guest@ufl.edu', username='guest', password='coding123',
                        first_name='Guest', last_name='Guest', student=True, club_exec=False, admin=False,
                        clubs='', passkey=None)
@@ -552,7 +564,7 @@ def db_seed():
                            link='https://ufcaribsadotorg.wordpress.com/')
 
     entities = [
-        sample_review1, sample_review2, sample_review3, student_guest, student_test, student_jungkook, student_jhope,
+        sample_review1, sample_review2, sample_review3, sample_review4, sample_review5, sample_review6, student_guest, student_test, student_jungkook, student_jhope,
         student_v, student_jimin, student_suga, student_jin, student_rm, student_lisa,
         student_jennie, student_rose, student_jisoo, clubExec_guestExec,
         admin_julio, admin_erin, admin_graciela, admin_natalie, club1, club2,

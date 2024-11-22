@@ -228,7 +228,7 @@ const ClubPage = () => {
 
             {/* Student Reviews */}
             <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>
-                Student Reviews:
+                Student Reviews ({reviews.length}):
             </div>
             <div>
                 {reviews.map((review, index) => (
@@ -249,9 +249,12 @@ const ClubPage = () => {
                             <span>Executive: <strong>{review.exec_rating}</strong>/5</span>
                             <span>Commitment Level: <strong>{review.comlev}</strong>/5</span>
                         </div>
-                        <p style={{paddingTop: '1rem', paddingBottom: '1rem'}}>{review.review_text}</p>
+                        <p style={{border: '2px solid #ddd',
+                            borderRadius: '6px',
+                            padding: '1rem',
+                            backgroundColor: '#e8e6e6',}}>{review.review_text}</p>
                         <p>Time as Member: <strong>{review.time_mem}</strong></p>
-                        <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No, Former'}</strong></p>
+                        <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
                     </div>
                 ))}
