@@ -301,7 +301,7 @@ def your_reviews():
     else:
         return jsonify(message='You are not logged in!'), 401
 
-@app.route('/writereview/<string:name>', methods=['GET', 'POST'])
+@app.route('/ReviewForm/<string:name>', methods=['GET', 'POST'])
 def write_review(name: str):
     if 'logged_in' in session:
         existing_user = User.query.filter(
@@ -314,7 +314,8 @@ def write_review(name: str):
         else:
             if request.method == 'GET':
                 return jsonify(
-                    user_name = existing_user.username,
+                    message="Data has been fetched!",
+                    user_email = existing_user.email,
                     club_name = name
                 )
             elif request.method == 'POST':
@@ -323,7 +324,8 @@ def write_review(name: str):
                 if not data:
                     return jsonify(message='No Input Provided!'), 401
                 else:
-                    new_review = ClubReviews(user_name=existing_user.username,
+                    new_review = ClubReviews(review_num=session.query(ClubReviews).count()+1,
+                                             user_email=existing_user.email,
                                              club_name=name,
                                              date=data.get('date'),
                                              review_text=data.get('review_text'),
