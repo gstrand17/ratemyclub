@@ -68,8 +68,8 @@ def db_seed():
                           first_name='Ji-soo', last_name='Kim', student=True, club_exec=False, admin=False,
                           clubs='', passkey=None)
     clubExec_guestExec = User(email='guestExec@ufl.edu', username='guestExec', password='coding123',
-                          first_name='GuestExec', last_name='GuestExec', student=False, club_exec=True, admin=False,
-                          clubs='', passkey=None)
+                          first_name='Chandini', last_name='GuestExec', student=False, club_exec=True, admin=False,
+                          clubs='3D Printing Club', passkey=None)
     admin_julio = User(email='julioarboleda@ufl.edu', username='julio', password='coding123',
                      first_name='Julio', last_name='Arboleda', student=False, club_exec=False, admin=True,
                      clubs='', passkey=1277)

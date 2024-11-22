@@ -313,6 +313,7 @@ def write_review(name: str):
         else:
             if request.method == 'GET':
                 return jsonify(
+                    message="Data has been fetched!",
                     user_email = existing_user.email,
                     club_name = name
                 )
