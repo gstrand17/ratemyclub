@@ -65,7 +65,7 @@ const ReviewForm = () => {
     };
 
     const handleSubmit = () =>{
-        fetch(`http://localhost:5000/ReviewFrom/${club_name}`, {
+        fetch(`http://localhost:5000/ReviewForm/${club_name}`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -96,7 +96,7 @@ const ReviewForm = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:5000/ReviewFrom/${club_name}`, {
+        fetch(`http://localhost:5000/ReviewForm/${club_name}`, {
             method: 'GET',
             credentials: 'include',
             headers: {
