@@ -8,7 +8,7 @@ const ReviewForm = () => {
     const [message, setMessage] = useState('');
     const { club_name } = useParams(); // using club_name to get club
     const [user, setUser] = useState({
-        user_email: '',
+        user_name: '',
         club_name: '',
         date: '',
         review_text: '',
@@ -52,7 +52,7 @@ const ReviewForm = () => {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/club-page/${club_name}`, {
+        fetch(`http://localhost:5000/writereview/${club_name}`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -70,8 +70,8 @@ const ReviewForm = () => {
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
                     setUser({
-                        user_email: data.response.user_email,
-                        club_name: data.response.club_name,
+                        user_name: data.user_name,
+                        club_name: data.club_name,
                         date: data.date,
                         review_text: data.review_text,
                         overall_rating: '',
@@ -92,13 +92,13 @@ const ReviewForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch(`http://localhost:5000/api/club-page/${club_name}`, {
-            method: 'PUT',
+        fetch(`http://localhost:5000/writereview/${club_name}`, {
+            method: 'POST',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify()
         })
             .then(response => {
                 if (response.status === 401) {
