@@ -237,7 +237,8 @@ const ClubPage = () => {
                         borderRadius: '7px',
                         padding: '1rem',
                         backgroundColor: '#eee',
-                        marginBottom: '1rem',
+                        margin: '2rem',
+                        marginTop: '1rem',
                         position: 'relative'
                     }}>
                         <h3 style={{fontSize: '1.5rem', marginTop: 0, marginBottom: '0.5rem'}}>{club_name}</h3>
