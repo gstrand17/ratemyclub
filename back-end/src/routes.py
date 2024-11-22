@@ -200,17 +200,16 @@ def get_clubs():
     clubs = ClubDirectory.query.all()
     clubs_data = []
     for club in clubs:
-        avg_rating = club.calculate_avg_rating()
-        club.avg_overall_rating = avg_rating
+        club.calculate_avg_ratings()
         clubs_data.append({
             'name': club.club_name,
             "description": club.description,
             'tags': club.tags,
-            'avg_rating': avg_rating,
+            'avg_overall_rating': club.avg_overall_rating,
             'social_rating': club.avg_soc_rating,
             'academic_rating': club.avg_acad_rating,
             'exec_rating': club.avg_exec_rating,
-            'commitment_level': club.avg_comlev,
+            'comlev': club.avg_comlev,
             'active_mem_rating': club.active_mem,
             'link': club.link
         })
@@ -223,9 +222,6 @@ def get_club(name: str):
     reviews = ClubReviews.query.filter_by(club_name=name).all()
     reviews_data=[]
     for review in reviews:
-        avg_rating = review.calculate_avg_rating()
-        review.overall_rating = avg_rating
-
         reviews_data.append({
             'review_num': review.review_num,
             'user_email': review.user_email,
@@ -245,32 +241,23 @@ def get_club(name: str):
     })
 
     if club:
-        avg_rating = calculate_avg_rating(club.avg_soc_rating, club.avg_acad_rating, club.avg_exec_rating)
-        # Update the club's average rating in the database
-        club.avg_overall_rating = avg_rating
+        club.calculate_avg_ratings()
         return jsonify(
             message="Data has been fetched!",
             reviews=reviews_data,
             name= club.club_name,
             description= club.description,
             tags = club.tags,
-            avg_rating = avg_rating,
-            social_rating = club.avg_soc_rating,
-            academic_rating = club.avg_acad_rating,
-            exec_rating = club.avg_exec_rating,
-            commitment_level= club.avg_comlev,
+            avg_overall_rating=club.avg_overall_rating,
+            avg_soc_rating=club.avg_soc_rating,
+            avg_acad_rating=club.avg_acad_rating,
+            avg_exec_rating=club.avg_exec_rating,
             active_mem_count =club.active_mem,
+            avg_comlev=club.avg_comlev,
             link = club.link
         )
     else:
         return jsonify(message='Club not found'), 401
-
-
-def calculate_avg_rating(social, academic, exec):
-    ratings = [social, academic, exec]
-    valid_ratings = [r for r in ratings if r is not None]
-    return sum(valid_ratings) / len(valid_ratings) if valid_ratings else 0
-
 
 @app.route('/YourReviews', methods=['GET', 'DELETE'])
 def your_reviews():

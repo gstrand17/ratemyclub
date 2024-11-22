@@ -21,8 +21,8 @@ const getTagColor = (tag) => {
 
 
 //button if only club or admin edit details->blanks to change data?
-//time_mem: store dates? member since ____
-//date of review??
+//AVG_OVERALL_RATING IS DISPLAYED AT TOP AND IS AVG OF ALL OVERALL RATINGS
+//overall_rating is seperate val user enters/rates
 
 const ClubPage = () => {
     const navigate = useNavigate();
@@ -32,15 +32,14 @@ const ClubPage = () => {
         name: '',
         description: '',
         tags: '',
-        avg_rating: 0.0,
-        social_rating: 0.0,
-        academic_rating:0.0,
-        exec_rating:0.0,
+        avg_overall_rating: 0.0,
+        avg_soc_rating: 0.0,
+        avg_acad_rating:0.0,
+        avg_exec_rating:0.0,
         active_mem_count:0,
-        commitment_level: 0.0,
+        avg_comlev: 0.0,
         link: ''
     });
-    //const [avgRating, setAvgRating] = useState(0);
 
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
@@ -58,7 +57,6 @@ const ClubPage = () => {
             });
     };
     const handleProfile = () => {
-        // Navigate to user profile page
         navigate('/profile');
     };
 
@@ -74,9 +72,6 @@ const ClubPage = () => {
         navigate('/front-page');
     };
 
-    //const [newRating, setNewRating] = useState(0);
-    //const [newReview, setNewReview] = useState('');
-
     useEffect(() => {
         fetch(`http://localhost:5000/api/club-page/${club_name}`)
             .then(response =>  {
@@ -89,17 +84,16 @@ const ClubPage = () => {
             })
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
-
                     setClub({
                         name: data.name,
                         description: data.description,
                         tags: data.tags,
-                        avg_rating: data.avg_rating,
-                        social_rating: data.social_rating,
-                        academic_rating: data.academic_rating,
-                        exec_rating: data.exec_rating,
+                        avg_overall_rating: data.avg_overall_rating,
+                        avg_soc_rating: data.avg_soc_rating,
+                        avg_acad_rating: data.avg_acad_rating,
+                        avg_exec_rating: data.avg_exec_rating,
                         active_mem_count: data.active_mem_count,
-                        comlev: data.comlev,
+                        avg_comlev: data.avg_comlev,
                         link: data.link
                     });
                     if (data.reviews) {
@@ -118,10 +112,10 @@ const ClubPage = () => {
             {
                 label: 'Rating',
                 data: [
-                    club.social_rating,
-                    club.academic_rating,
-                    club.exec_rating,
-                    club.commitment_level
+                    club.avg_soc_rating,
+                    club.avg_acad_rating,
+                    club.avg_exec_rating,
+                    club.avg_comlev
                 ],
                 backgroundColor: [
                     'rgba(75, 192, 192, 0.2)', // Light teal
@@ -145,7 +139,7 @@ const ClubPage = () => {
         plugins: {
             title: {
                 display: true,
-                text: 'Rating Distribution by Category',
+                text: 'Average Rating Distributions by Category',
                 font: {
                     size: 16,
                     weight: 'bold'
@@ -220,7 +214,7 @@ const ClubPage = () => {
 
              {/*emphasize overall average rating*/}
             <h2>
-                <span style={{fontWeight: 'bold', fontSize: '3rem'}}>{club.avg_rating.toFixed(1)}</span>
+                <span style={{fontWeight: 'bold', fontSize: '3rem'}}>{club.avg_overall_rating.toFixed(1)}</span>
                 <span style={{fontWeight: 'bold', fontSize: '1.5rem', color: '#777'}}> / 5</span>
                 <div style={{fontSize: '1rem', fontWeight: 'bold'}}>
                     Average Overall Rating
@@ -232,31 +226,30 @@ const ClubPage = () => {
                 <Bar data={barChartData} options={barChartOptions}/>
             </div>
 
+            {/* Student Reviews */}
             <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>
                 Student Reviews:
             </div>
-
             <div>
                 {reviews.map((review, index) => (
                     <div key={index} style={{
                         border: '2px solid #ddd',
-                        borderRadius: '8px',
+                        borderRadius: '7px',
                         padding: '1rem',
-                        marginBottom: '1rem'
+                        backgroundColor: '#eee',
+                        marginBottom: '1rem',
+                        position: 'relative'
                     }}>
-                        <h3 style={{fontSize: '1.5rem', marginBottom: '0.5rem'}}>{club_name}</h3>
-                        <p style={{fontStyle: 'italic', color: '#666'}}>Date: {review.date}</p>
-                        <h1 style={{fontSize: '1.2rem'}}>Overall: <strong>{review.overall_rating.toFixed(1)}/5</strong></h1>
+                        <h3 style={{fontSize: '1.5rem', marginTop: 0, marginBottom: '0.5rem'}}>{club_name}</h3>
+                        <p style={{fontStyle: 'italic', color: '#666', position: 'absolute',top: '1rem',right: '1rem',margin: 0}}>Date: {review.date}</p>
+                        <h1 style={{fontSize: '1.2rem'}}>Overall: <strong>{review.overall_rating}/5</strong></h1>
                         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '1rem'}}>
                             <span>Social: <strong>{review.soc_rating}</strong>/5</span>
                             <span>Academic: <strong>{review.acad_rating}</strong>/5</span>
                             <span>Executive: <strong>{review.exec_rating}</strong>/5</span>
                             <span>Commitment Level: <strong>{review.comlev}</strong>/5</span>
                         </div>
-                        <p style={{
-                            border: '1px solid #ddd',
-                            borderRadius: '7px',
-                            padding: '1rem'}}>{review.review_text}</p>
+                        <p style={{paddingTop: '1rem', paddingBottom: '1rem'}}>{review.review_text}</p>
                         <p>Time as Member: <strong>{review.time_mem}</strong></p>
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No, Former'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
