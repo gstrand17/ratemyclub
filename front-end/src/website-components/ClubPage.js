@@ -61,7 +61,7 @@ const ClubPage = () => {
     };
 
     const handleReviewForm = () => {
-        navigate('/ReviewForm');
+        navigate(`/ReviewForm/${club_name}`);
     }
 
     const handleReviews = () => {
