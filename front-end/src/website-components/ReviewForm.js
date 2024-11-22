@@ -101,7 +101,7 @@ const ReviewForm = () => {
         e.preventDefault();
 
         fetch(`http://localhost:5000/writereview/${club_name}`, {
-            method: 'POST',
+            method: 'PUT',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
@@ -175,7 +175,7 @@ const ReviewForm = () => {
                     Club Name:
                     <input
                         type="text"
-                        value={user.club_name}
+                        value={club_name}
                         disabled={!writtenReview}
                     />
                 </label>
