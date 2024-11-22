@@ -7,34 +7,31 @@ const ReviewForm = () => {
 
     const [message, setMessage] = useState('');
     const { club_name } = useParams(); // using club_name to get club
-    const [user, setUser] = useState({
-        user_name: '',
+    //const { user_name } = useParams();
+    const [review, setReview] = useState({
+        // review_num:0,
+        user_email: '',
         club_name: '',
         date: '',
         review_text: '',
-        overall_rating: '',
-        soc_rating: '',
-        acad_rating: '',
-        exec_rating: '',
-        comlev: '',
-        current_mem: '',
+        overall_rating: 0,
+        soc_rating: 0,
+        acad_rating: 0,
+        exec_rating: 0,
+        comlev: 0,
+        current_mem: false,
         time_mem: '',
-        paid: ''
+        paid: false
     });
-
-    function getCurrentDate() {
-        const date = new Date();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        const day = String(date.getDate()).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${month}-${day}-${year}`;
-    }
 
     const [writtenReview, confirmReview] = useState(false);
 
-    const updateProfile = (type, currValue) =>{
-      setUser({...user, [type]: currValue});
+    const createReview = (type, currValue) =>{
+      setReview({...review, [type]: currValue});
     };
+
+
+
 
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
@@ -59,8 +56,39 @@ const ReviewForm = () => {
         navigate('/front-page');
     };
 
+    const handleSubmit = () =>{
+        fetch(`http://localhost:5000/api/ReviewFrom/${club_name}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(review),
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    return response.json();
+                } else if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message === 'Review created!') {
+                    console.log(data.message);
+                    navigate(`/club-page/${review.club_name}`);
+                }
+                setMessage(data.message);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setMessage('An error occurred. Please try again.');
+            });
+    };
+
+
     useEffect(() => {
-        fetch(`http://localhost:5000/writereview/${club_name}`, {
+        fetch(`http://localhost:5000/api/ReviewFrom/${club_name}`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -77,19 +105,19 @@ const ReviewForm = () => {
             })
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
-                    setUser({
-                        user_name: data.user_name,
-                        club_name: data.club_name,
-                        date: new Date().toISOString(),
-                        review_text: data.review_text,
-                        overall_rating: '',
-                        soc_rating: '',
-                        acad_rating: '',
-                        exec_rating: '',
-                        comlev: '',
-                        current_mem: '',
-                        time_mem: '',
-                        paid: ''
+                    setReview({
+                        user_email: data.user_email,
+                        club_name: club_name,
+                        date: new Date().toISOString()
+                        // review_text: '',
+                        // overall_rating: '',
+                        // soc_rating: '',
+                        // acad_rating: '',
+                        // exec_rating: '',
+                        // comlev: '',
+                        // current_mem: '',
+                        // time_mem: '',
+                        // paid: ''
                     });
                 } else {
                     console.log('Error:', data.message);
@@ -97,39 +125,6 @@ const ReviewForm = () => {
             .catch(error => console.log('Error fetching club data:', error));
     }, [club_name]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        fetch(`http://localhost:5000/writereview/${club_name}`, {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify()
-        })
-            .then(response => {
-                if (response.status === 401) {
-                    return response.json();
-                } else if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.message === "Data has been fetched!") {
-                    setMessage(data.message);
-                    setUser({
-                        user_name: data.user_name
-                    });
-                    confirmReview(false);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                setMessage('An error occurred. Please try again.');
-            });
-    };
 
     return (
         <body>
@@ -165,7 +160,7 @@ const ReviewForm = () => {
                     User Email:
                     <input
                         type="text"
-                        value={user.user_email}
+                        value={review.user_email}
                         disabled={!writtenReview}
                     />
                 </label>
@@ -175,7 +170,7 @@ const ReviewForm = () => {
                     Club Name:
                     <input
                         type="text"
-                        value={club_name}
+                        value={review.club_name}
                         disabled={!writtenReview}
                     />
                 </label>
@@ -185,7 +180,7 @@ const ReviewForm = () => {
                     Date:
                     <input
                         type="text"
-                        value={getCurrentDate()}
+                        value={review.date}
                         disabled={!writtenReview}
                     />
                 </label>
@@ -195,9 +190,9 @@ const ReviewForm = () => {
                     Overall Rating:
                     <input
                         type='number'
-                        value={user.overall_rating}
+                        value={review.overall_rating}
                         onChange={(e) => {
-                            updateProfile('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value)
                         }}
                     />
                 </label>
@@ -207,9 +202,9 @@ const ReviewForm = () => {
                     Social Rating:
                     <input
                         type='number'
-                        value={user.soc_rating}
+                        value={review.soc_rating}
                         onChange={(e) => {
-                            updateProfile('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value)
                         }}
                     />
                 </label>
@@ -219,9 +214,9 @@ const ReviewForm = () => {
                     Academic Rating:
                     <input
                         type='number'
-                        value={user.acad_rating}
+                        value={review.acad_rating}
                         onChange={(e) => {
-                            updateProfile('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value)
                         }}
                     />
                 </label>
@@ -231,9 +226,9 @@ const ReviewForm = () => {
                     Executive Rating:
                     <input
                         type='number'
-                        value={user.exec_rating}
+                        value={review.exec_rating}
                         onChange={(e) => {
-                            updateProfile('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value)
                         }}
                     />
                 </label>
@@ -243,9 +238,9 @@ const ReviewForm = () => {
                     Current Member:
                     <input
                         type='number'
-                        value={user.current_mem}
+                        value={review.current_mem}
                         onChange={(e) => {
-                            updateProfile('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value)
                         }}
                     />
                 </label>
@@ -255,9 +250,9 @@ const ReviewForm = () => {
                     Time Member:
                     <input
                         type='number'
-                        value={user.time_mem}
+                        value={review.time_mem}
                         onChange={(e) => {
-                            updateProfile('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value)
                         }}
                     />
                 </label>
@@ -267,9 +262,9 @@ const ReviewForm = () => {
                     Paid:
                     <input
                         type='number'
-                        value={user.paid}
+                        value={review.paid}
                         onChange={(e) => {
-                            updateProfile('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value)
                         }}
                     />
                 </label>
