@@ -17,6 +17,7 @@ const FrontPage = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [clubs, setClubs] = useState([]);  //club data
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetch('http://localhost:5000/front-page', {
@@ -82,7 +83,16 @@ const FrontPage = () => {
 
     const handleReviews = () => {
         navigate('/YourReviews')
-    }
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const filteredClubs = clubs.filter(club =>
+        club.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        club.tags.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
 
     //help from chat.gpt: randomly generates a consistent color based on the tag
@@ -114,11 +124,12 @@ const FrontPage = () => {
                 src={`${process.env.PUBLIC_URL}/banner.jpg`} //Replaced it with img src to avoid using import
                 alt="Banner"
                 style={{
-                    width: '100%', // Make the image full width
-                    height: '200px', // Maintain aspect ratio
+                    width: '100%',
+                    height: '200px',
                     objectFit: 'cover',
                     display: 'block',
-                    margin: '0'
+                    padding: 0,
+                    margin: 0
                 }}
             />
 
@@ -147,8 +158,26 @@ const FrontPage = () => {
                 </div>
             </div>
 
+            {/* Search bar */}
+            <div style={{maxWidth: '600px', margin: '20px auto', padding: '10px',}}>
+                <input
+                    type="text"
+                    placeholder="Search by clubs or tags"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    style={{
+                        width: '100%',
+                        padding: '10px',
+                        fontSize: '16px',
+                        borderRadius: '5px',
+                        border: '2px solid #c7c7c7'
+                    }}
+                />
+            </div>
+
+            {/* Clubs list */}
             <div style={{maxWidth: '600px', margin: 'auto', padding: '20px', border: '3px solid #ccc'}}>
-                {clubs.map((club, index) => (
+                {filteredClubs.map((club, index) => (
                     <div key={index}
                          onClick={() => navigate(`/club-page/${club.name}`)}
                          style={{
@@ -161,7 +190,7 @@ const FrontPage = () => {
                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#c7c7c7')}
                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ededed')}
                     >
-                        <h2 style={{ fontSize: '1.8rem',fontWeight: 'bold'}}>
+                        <h2 style={{fontSize: '1.8rem', fontWeight: 'bold'}}>
                             {club.name}
                         </h2>
 

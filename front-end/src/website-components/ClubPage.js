@@ -61,7 +61,7 @@ const ClubPage = () => {
     };
 
     const handleReviewForm = () => {
-        navigate('/ReviewForm');
+        navigate(`/ReviewForm/${club_name}`);
     }
 
     const handleReviews = () => {
@@ -228,7 +228,7 @@ const ClubPage = () => {
 
             {/* Student Reviews */}
             <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>
-                Student Reviews:
+                Student Reviews ({reviews.length}):
             </div>
             <div>
                 {reviews.map((review, index) => (
@@ -237,7 +237,8 @@ const ClubPage = () => {
                         borderRadius: '7px',
                         padding: '1rem',
                         backgroundColor: '#eee',
-                        marginBottom: '1rem',
+                        margin: '2rem',
+                        marginTop: '1rem',
                         position: 'relative'
                     }}>
                         <h3 style={{fontSize: '1.5rem', marginTop: 0, marginBottom: '0.5rem'}}>{club_name}</h3>
@@ -249,9 +250,12 @@ const ClubPage = () => {
                             <span>Executive: <strong>{review.exec_rating}</strong>/5</span>
                             <span>Commitment Level: <strong>{review.comlev}</strong>/5</span>
                         </div>
-                        <p style={{paddingTop: '1rem', paddingBottom: '1rem'}}>{review.review_text}</p>
+                        <p style={{border: '2px solid #ddd',
+                            borderRadius: '6px',
+                            padding: '1rem',
+                            backgroundColor: '#e8e6e6',}}>{review.review_text}</p>
                         <p>Time as Member: <strong>{review.time_mem}</strong></p>
-                        <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No, Former'}</strong></p>
+                        <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
                     </div>
                 ))}
