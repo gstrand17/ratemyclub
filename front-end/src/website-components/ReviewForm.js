@@ -22,6 +22,14 @@ const ReviewForm = () => {
         paid: ''
     });
 
+    function getCurrentDate() {
+        const date = new Date();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${month}-${day}-${year}`;
+    }
+
     const [writtenReview, confirmReview] = useState(false);
 
     const updateProfile = (type, currValue) =>{
@@ -72,7 +80,7 @@ const ReviewForm = () => {
                     setUser({
                         user_name: data.user_name,
                         club_name: data.club_name,
-                        date: data.date,
+                        date: new Date().toISOString(),
                         review_text: data.review_text,
                         overall_rating: '',
                         soc_rating: '',
@@ -177,7 +185,7 @@ const ReviewForm = () => {
                     Date:
                     <input
                         type="text"
-                        value={user.date}
+                        value={getCurrentDate()}
                         disabled={!writtenReview}
                     />
                 </label>

@@ -21,7 +21,7 @@ const App = () => {
                 <Route path ="/profile" element={<UserProfile />} />
                 <Route path="/club-page/:club_name" element={<ClubPage />} />
                 <Route path="/YourReviews" element={<YourReviews />} />
-                <Route path="ReviewForm" element={<ReviewForm />} />
+                <Route path="/ReviewForm" element={<ReviewForm />} />
             </Routes>
         </Router>
     );
