@@ -212,7 +212,7 @@ const ClubPage = () => {
             <p>{club.description}</p>
             <p>Link: <a href={club.link}>{club.link}</a></p>
 
-             {/*emphasize overall average rating*/}
+            {/*emphasize overall average rating*/}
             <h2>
                 <span style={{fontWeight: 'bold', fontSize: '3rem'}}>{club.avg_overall_rating.toFixed(1)}</span>
                 <span style={{fontWeight: 'bold', fontSize: '1.5rem', color: '#777'}}> / 5</span>
@@ -225,6 +225,8 @@ const ClubPage = () => {
             <div style={{maxWidth: '600px', margin: '2rem auto'}}>
                 <Bar data={barChartData} options={barChartOptions}/>
             </div>
+
+            <button onClick={handleReviewForm}>Submit a Review</button>
 
             {/* Student Reviews */}
             <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>
@@ -242,7 +244,14 @@ const ClubPage = () => {
                         position: 'relative'
                     }}>
                         <h3 style={{fontSize: '1.5rem', marginTop: 0, marginBottom: '0.5rem'}}>{club_name}</h3>
-                        <p style={{fontStyle: 'italic', color: '#666', position: 'absolute',top: '1rem',right: '1rem',margin: 0}}>Date: {review.date}</p>
+                        <p style={{
+                            fontStyle: 'italic',
+                            color: '#666',
+                            position: 'absolute',
+                            top: '1rem',
+                            right: '1rem',
+                            margin: 0
+                        }}>Date: {review.date}</p>
                         <h1 style={{fontSize: '1.2rem'}}>Overall: <strong>{review.overall_rating}/5</strong></h1>
                         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '1rem'}}>
                             <span>Social: <strong>{review.soc_rating}</strong>/5</span>
@@ -250,19 +259,18 @@ const ClubPage = () => {
                             <span>Executive: <strong>{review.exec_rating}</strong>/5</span>
                             <span>Commitment Level: <strong>{review.comlev}</strong>/5</span>
                         </div>
-                        <p style={{border: '2px solid #ddd',
+                        <p style={{
+                            border: '2px solid #ddd',
                             borderRadius: '6px',
                             padding: '1rem',
-                            backgroundColor: '#e8e6e6',}}>{review.review_text}</p>
+                            backgroundColor: '#e8e6e6',
+                        }}>{review.review_text}</p>
                         <p>Time as Member: <strong>{review.time_mem}</strong></p>
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
                     </div>
                 ))}
             </div>
-
-            <button onClick={handleReviewForm}>Submit a Review</button>
-
         </div>
     );
 };

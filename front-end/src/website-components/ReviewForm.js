@@ -9,18 +9,17 @@ const ReviewForm = () => {
     const { club_name } = useParams(); // using club_name to get club
     //const { user_name } = useParams();
     const [review, setReview] = useState({
-        // review_num:0,
         user_email: '',
         club_name: '',
         date: '',
         review_text: '',
-        overall_rating: 0,
-        soc_rating: 0,
-        acad_rating: 0,
-        exec_rating: 0,
-        comlev: 0,
+        overall_rating: 1,
+        soc_rating: 1,
+        acad_rating: 1,
+        exec_rating: 1,
+        comlev: 1,
         current_mem: false,
-        time_mem: '',
+        time_mem: 'Example: 3 semesters',
         paid: false
     });
 
@@ -41,21 +40,21 @@ const ReviewForm = () => {
 
 
 
-    const handleLogout = () => {
-        // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
-        // Navigate back home
-        fetch('http://localhost:5000/logout', {
-            method: 'POST',
-            credentials: 'include'
-        })
-            .then(response => {
-                if (response.ok) {
-                    navigate('/');
-                } else {
-                    console.log('Error:', response.message);
-                }
-            });
-    };
+    // const handleLogout = () => {
+    //     // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
+    //     // Navigate back home
+    //     fetch('http://localhost:5000/logout', {
+    //         method: 'POST',
+    //         credentials: 'include'
+    //     })
+    //         .then(response => {
+    //             if (response.ok) {
+    //                 navigate('/');
+    //             } else {
+    //                 console.log('Error:', response.message);
+    //             }
+    //         });
+    // };
     const handleProfile = () => {
         // Navigate to user profile page
         navigate('/profile');
@@ -84,7 +83,7 @@ const ReviewForm = () => {
             .then(data => {
                 if (data.message === 'Review created!') {
                     console.log(data.message);
-                    navigate(`/club-page/${review.club_name}`);
+                    navigate(`/club-page/${club_name}`);
                 }
                 setMessage(data.message);
             })
@@ -104,7 +103,7 @@ const ReviewForm = () => {
             }
         })
             .then(response =>  {
-                if (response.status === 401 || 404) {
+                if (response.status === 401 || 500) {
                     return response.json();
                 } else if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -117,15 +116,6 @@ const ReviewForm = () => {
                         user_email: data.user_email,
                         club_name: club_name,
                         date: getCurrentDate()
-                        // review_text: '',
-                        // overall_rating: '',
-                        // soc_rating: '',
-                        // acad_rating: '',
-                        // exec_rating: '',
-                        // comlev: '',
-                        // current_mem: '',
-                        // time_mem: '',
-                        // paid: ''
                     });
                 } else {
                     console.log('Error:', data.message);
@@ -151,18 +141,18 @@ const ReviewForm = () => {
                  }}>
                 <button onClick={handleProfile}>Profile</button>
                 <button onClick={handleHome}>Home</button>
-                <button onClick={handleLogout}>Logout</button>
+                {/*<button onClick={handleLogout}>Logout</button>*/}
             </div>
         </div>
 
         {/* Container for the review form */}
         <div style={{position: 'relative'}}>
-            <h1 style={{
-                fontFamily: "'Alfa Slab One', serif",
-                fontSize: '3rem',
-            }}>
-                Review Form
-            </h1>
+            {/*<h1 style={{*/}
+            {/*    fontFamily: "'Alfa Slab One', serif",*/}
+            {/*    fontSize: '3rem',*/}
+            {/*}}>*/}
+            {/*    Review Form*/}
+            {/*</h1>*/}
             <div>
                 <label>
                     User Email:
@@ -193,11 +183,66 @@ const ReviewForm = () => {
                     />
                 </label>
             </div>
+            <br></br>
+            <label><u>Rate the following aspects from 1-5 </u></label>
             <div>
                 <label>
-                    Overall Rating:
+                    Social Atmosphere:
                     <input
                         type='number'
+                        maxLength={1}
+                        value={review.soc_rating}
+                        onChange={(e) => {
+                            createReview('soc_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Academic Strength:
+                    <input
+                        type='number'
+                        maxLength={1}
+                        value={review.acad_rating}
+                        onChange={(e) => {
+                            createReview('acad_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Executive Leadership:
+                    <input
+                        type='number'
+                        maxLength={1}
+                        value={review.exec_rating}
+                        onChange={(e) => {
+                            createReview('exec_rating', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Level of Commitment:
+                    <input
+                        type='number'
+                        maxLength={1}
+                        value={review.comlev}
+                        onChange={(e) => {
+                            createReview('comlev', e.target.value)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Overall Scoring:
+                    <input
+                        type='number'
+                        maxLength={1}
                         value={review.overall_rating}
                         onChange={(e) => {
                             createReview('overall_rating', e.target.value)
@@ -205,79 +250,53 @@ const ReviewForm = () => {
                     />
                 </label>
             </div>
+            <br></br>
             <div>
-                <label>
-                    Social Rating:
-                    <input
-                        type='number'
-                        value={review.soc_rating}
-                        onChange={(e) => {
-                            createReview('overall_rating', e.target.value)
-                        }}
-                    />
-                </label>
+                <label>Tell us about your experience: </label><br></br>
+                <input
+                    type='string'
+                    value={review.review_text}
+                    onChange={(e) => {
+                        createReview('review_text', e.target.value)
+                    }}
+                />
             </div>
+
             <div>
                 <label>
-                    Academic Rating:
+                    Membership Duration:
                     <input
-                        type='number'
-                        value={review.acad_rating}
-                        onChange={(e) => {
-                            createReview('overall_rating', e.target.value)
-                        }}
-                    />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Executive Rating:
-                    <input
-                        type='number'
-                        value={review.exec_rating}
-                        onChange={(e) => {
-                            createReview('overall_rating', e.target.value)
-                        }}
-                    />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Current Member:
-                    <input
-                        type='number'
-                        value={review.current_mem}
-                        onChange={(e) => {
-                            createReview('overall_rating', e.target.value)
-                        }}
-                    />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Time Member:
-                    <input
-                        type='number'
+                        type='string'
                         value={review.time_mem}
                         onChange={(e) => {
-                            createReview('overall_rating', e.target.value)
+                            createReview('time_mem', e.target.value)
                         }}
                     />
                 </label>
             </div>
             <div>
-                <label>
-                    Paid:
-                    <input
-                        type='number'
-                        value={review.paid}
-                        onChange={(e) => {
-                            createReview('overall_rating', e.target.value)
-                        }}
-                    />
-                </label>
+                <input type="checkbox"
+                       value="True"
+                       name="check1"
+                       onChange={(e) => {
+                           createReview('current_mem', e.target.checked)
+                       }}/>
+                <label> Currently a member?</label>
+            </div>
+            <div>
+                <input type="checkbox"
+                       value="True"
+                       name="check2"
+                       onChange={(e) => {
+                           createReview('paid', e.target.checked)
+                       }}/>
+
+                <label> This club requires membership payment</label>
+                {/*</label>*/}
             </div>
         </div>
+        <br></br>
+
         <button onClick={handleSubmit}>Save</button>
         </body>
     )
