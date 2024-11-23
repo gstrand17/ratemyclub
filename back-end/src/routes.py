@@ -198,20 +198,21 @@ def logout():
 @app.route('/api/clubs', methods=['GET'])
 def get_clubs():
     clubs = ClubDirectory.query.all()
-    clubs_data = [
-        {
+    clubs_data = []
+    for club in clubs:
+        club.calculate_avg_ratings()
+        clubs_data.append({
             'name': club.club_name,
             "description": club.description,
             'tags': club.tags,
-            'avg_rating': club.avg_overall_rating,
+            'avg_overall_rating': club.avg_overall_rating,
             'social_rating': club.avg_soc_rating,
             'academic_rating': club.avg_acad_rating,
             'exec_rating': club.avg_exec_rating,
-            'commitment_level': club.avg_comlev,
+            'comlev': club.avg_comlev,
             'active_mem_rating': club.active_mem,
             'link': club.link
-        } for club in clubs
-    ]
+        })
     return jsonify(clubs_data)
 
 @app.route('/api/club-page/<string:name>', methods=['GET'])
@@ -219,9 +220,9 @@ def get_club(name: str):
     #name = name.replace("%20", " ")
     club = ClubDirectory.query.filter_by(club_name=name).first()
     reviews = ClubReviews.query.filter_by(club_name=name).all()
-
-    reviews_data = [
-        {
+    reviews_data=[]
+    for review in reviews:
+        reviews_data.append({
             'review_num': review.review_num,
             'user_email': review.user_email,
             'club_name': review.club_name,
@@ -237,24 +238,24 @@ def get_club(name: str):
             'paid': review.paid,
             'thumbs': review.thumbs,
             'flagged': review.flagged
-    } for review in reviews
-    ]
+    })
 
     if club:
-            return jsonify(
-                message="Data has been fetched!",
-                reviews=reviews_data,
-                name= club.club_name,
-                description= club.description,
-                tags = club.tags,
-                avg_rating = club.avg_overall_rating,
-                social_rating = club.avg_soc_rating,
-                academic_rating = club.avg_acad_rating,
-                exec_rating = club.avg_exec_rating,
-                commitment_level= club.avg_comlev,
-                active_mem_count =club.active_mem,
-                link = club.link
-            )
+        club.calculate_avg_ratings()
+        return jsonify(
+            message="Data has been fetched!",
+            reviews=reviews_data,
+            name= club.club_name,
+            description= club.description,
+            tags = club.tags,
+            avg_overall_rating=club.avg_overall_rating,
+            avg_soc_rating=club.avg_soc_rating,
+            avg_acad_rating=club.avg_acad_rating,
+            avg_exec_rating=club.avg_exec_rating,
+            active_mem_count =club.active_mem,
+            avg_comlev=club.avg_comlev,
+            link = club.link
+        )
     else:
         return jsonify(message='Club not found'), 401
 
