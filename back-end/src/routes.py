@@ -319,24 +319,25 @@ def write_review(name: str):
                     club_name = name
                 )
             elif request.method == 'POST':
-                data = request.get_json()
+                data = request.get_json('review') #HELP
 
                 if not data:
                     return jsonify(message='No Input Provided!'), 401
                 else:
+                    review = data.get()
                     new_review = ClubReviews(review_num=session.query(ClubReviews).count()+1,
                                              user_email=existing_user.email,
                                              club_name=name,
-                                             date=data.get('date'),
-                                             review_text=data.get('review_text'),
-                                             overall_rating=data.get('overall_rating'),
-                                             soc_rating=data.get('soc_rating'),
-                                             acad_rating=data.get('acad_rating'),
-                                             exec_rating=data.get('exec_rating'),
-                                             comlev=data.get('comlev'),
-                                             current_mem=data.get('current_mem'),
-                                             time_mem=data.get('time_mem'),
-                                             paid=data.get('paid'),
+                                             date=data.get(review.date),
+                                             review_text=data.get(review.review_text),
+                                             overall_rating=data.get(review.overall_rating),
+                                             soc_rating=data.get(review.soc_rating),
+                                             acad_rating=data.get(review.acad_rating),
+                                             exec_rating=data.get(review.exec_rating),
+                                             comlev=data.get(review.comlev),
+                                             current_mem=data.get(review.current_mem),
+                                             time_mem=data.get(review.time_mem),
+                                             paid=data.get(review.paid),
                                              thumbs=0, flagged=False)
                     db.add(new_review)
                     db.session.commit()
