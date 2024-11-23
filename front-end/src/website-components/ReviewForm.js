@@ -37,24 +37,26 @@ const ReviewForm = () => {
       setReview({...review, [type]: currValue});
     };
 
+    const backToClubs = () => {
+        navigate(`/club-page/${club_name}`);
+    }
 
+    const handleLogout = () => {
+        // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
+        // Navigate back home
+        fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(response => {
+                if (response.ok) {
+                    navigate('/');
+                } else {
+                    console.log('Error:', response.message);
+                }
+            });
+    };
 
-
-    // const handleLogout = () => {
-    //     // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
-    //     // Navigate back home
-    //     fetch('http://localhost:5000/logout', {
-    //         method: 'POST',
-    //         credentials: 'include'
-    //     })
-    //         .then(response => {
-    //             if (response.ok) {
-    //                 navigate('/');
-    //             } else {
-    //                 console.log('Error:', response.message);
-    //             }
-    //         });
-    // };
     const handleProfile = () => {
         // Navigate to user profile page
         navigate('/profile');
@@ -62,10 +64,6 @@ const ReviewForm = () => {
     const handleHome = () => {
         navigate('/front-page');
     };
-
-    const handleSave = () => {
-        navigate(`/club-page/${club_name}`)
-    }
 
     const handleSubmit = () =>{
         fetch(`http://localhost:5000/ReviewForm/${club_name}`, {
@@ -87,7 +85,7 @@ const ReviewForm = () => {
             .then(data => {
                 if (data.message === 'Review created!') {
                     console.log(data.message);
-                    navigate(`/club-page/${club_name}`);
+                    backToClubs();
                 }
                 setMessage(data.message);
             })
@@ -95,7 +93,6 @@ const ReviewForm = () => {
                 console.error('Error:', error);
                 setMessage('An error occurred. Please try again.');
             });
-        handleSave();
     };
 
 
@@ -146,7 +143,8 @@ const ReviewForm = () => {
                  }}>
                 <button onClick={handleProfile}>Profile</button>
                 <button onClick={handleHome}>Home</button>
-                {/*<button onClick={handleLogout}>Logout</button>*/}
+                <button onClick={backToClubs}>Club</button>
+                <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
 
