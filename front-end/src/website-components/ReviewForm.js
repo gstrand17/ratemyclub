@@ -271,6 +271,7 @@ const ReviewForm = () => {
                         onChange={(e) => {
                             createReview('time_mem', e.target.value)
                         }}
+                        disabled={!writtenReview}
                     />
                 </label>
             </div>
