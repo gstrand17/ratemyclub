@@ -344,3 +344,23 @@ def write_review(name: str):
                 return jsonify(
                     message="Database updated!"
                 )
+
+#route for thumbs up functionality
+@app.route('/api/review/<int:review_id>/thumbs-up', methods=['POST'])
+def thumbs_up(review_id): #review_num
+    review = ClubReviews.query.get(review_id)
+    if not review:
+        return jsonify(message="Review not found"), 404
+    review.thumbs += 1
+    db.session.commit()
+    return jsonify(message="Thumbs up updated", thumbs=review.thumbs), 200
+
+#route for flag functionality
+@app.route('/api/review/<int:review_id>/flag', methods=['POST'])
+def flag_review(review_id):
+    review = ClubReviews.query.get(review_id)
+    if not review:
+        return jsonify(message="Review not found"), 404
+    review.flagged = True
+    db.session.commit()
+    return jsonify(message="Review flagged"), 200

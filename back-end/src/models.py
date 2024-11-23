@@ -76,8 +76,8 @@ class ClubReviews(db.Model):
     current_mem = Column(Boolean)
     time_mem = Column(String)  # Date format?
     paid = Column(Boolean)
-    thumbs = Column(Integer)
-    flagged = Column(Boolean)
+    thumbs = Column(Integer, default=0)  #set default val
+    flagged = Column(Boolean, default=False)
 
 
 

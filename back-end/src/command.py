@@ -18,7 +18,7 @@ def db_drop():
 def db_seed():
     sample_review1 = ClubReviews(review_num=1, user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2022",
                                  review_text="omg I love this club", overall_rating=4, soc_rating = 5, acad_rating = 2,
-                                 exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False)
+                                 exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False, thumbs=0, flagged=False)
     sample_review2 = ClubReviews(user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
                                  review_text="this was the worst club I've ever gone to", overall_rating=0, soc_rating = 1,
                                  acad_rating = 2, exec_rating = 1, comlev = 5, current_mem = True, time_mem = "4 semesters", paid = False,
