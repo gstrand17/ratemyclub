@@ -63,6 +63,10 @@ const ReviewForm = () => {
         navigate('/front-page');
     };
 
+    const handleSave = () => {
+        navigate(`/club-page/${club_name}`)
+    }
+
     const handleSubmit = () =>{
         fetch(`http://localhost:5000/ReviewForm/${club_name}`, {
             method: 'POST',
@@ -91,6 +95,7 @@ const ReviewForm = () => {
                 console.error('Error:', error);
                 setMessage('An error occurred. Please try again.');
             });
+        handleSave();
     };
 
 
@@ -297,7 +302,6 @@ const ReviewForm = () => {
             </div>
         </div>
         <br></br>
-
         <button onClick={handleSubmit}>Save</button>
         </body>
     )
