@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate, Link } from "react-router-dom"; // Import useNavigate
 
 const CreateAccount = () => {
     const [message, setMessage] = useState('');
@@ -180,6 +180,12 @@ const CreateAccount = () => {
                 <button type="submit" style={{padding: '10px 20px', fontSize: '16px', marginTop: '10px'}}>
                     Create Account
                 </button>
+
+                <Link to="/">
+                    <button style={{padding: '10px 20px', fontSize: '16px', marginTop: '10px'}}>
+                        Home
+                    </button>
+                </Link>
             </form>
             {message && <p>{message}</p>}
         </div>
