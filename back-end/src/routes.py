@@ -238,7 +238,7 @@ def get_club(name: str):
             'paid': review.paid,
             'thumbs': review.thumbs,
             'flagged': review.flagged
-    })
+        })
 
     if club:
         club.calculate_avg_ratings()

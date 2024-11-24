@@ -34,7 +34,7 @@ const ReviewForm = () => {
     const [writtenReview, confirmReview] = useState(false);
 
     const createReview = (type, currValue) =>{
-      setReview({...review, [type]: currValue});
+        setReview({...review, [type]: currValue});
     };
 
     const backToClubs = () => {
@@ -143,7 +143,6 @@ const ReviewForm = () => {
                  }}>
                 <button onClick={handleProfile}>Profile</button>
                 <button onClick={handleHome}>Home</button>
-                <button onClick={backToClubs}>Club</button>
                 <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
@@ -301,6 +300,7 @@ const ReviewForm = () => {
         </div>
         <br></br>
         <button onClick={handleSubmit}>Save</button>
+        <button onClick={backToClubs}>Back to Club</button>
         </body>
     )
 };
