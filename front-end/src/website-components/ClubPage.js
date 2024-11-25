@@ -105,6 +105,17 @@ const ClubPage = () => {
             .catch(error => console.log('Error fetching club data:', error));
     }, [club_name]);
 
+    //fetch the list of review IDs the user has liked
+    useEffect(() => {
+        fetch('http://localhost:5000/api/liked-reviews', { credentials: 'include' })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.liked_reviews) {
+                    setLikedReviews(data.liked_reviews);
+                }
+            });
+    }, []);
+
     //code for a bar chart of average club ratings
     const barChartData = {
         labels: ['Social', 'Academic', 'Executive Board', 'Commitment Level'], // Rating categories
@@ -153,10 +164,12 @@ const ClubPage = () => {
             legend: {display: false},
             tooltip: {
                 callbacks: {
+                    title: () => null,
                     label: function (tooltipItem) {
                         return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toFixed(1)}`;
                     }
-                }
+                },
+                bodyColor: 'black',
             }
         },
         scales: {
@@ -168,19 +181,21 @@ const ClubPage = () => {
     };
 
     //helper method for users to like a review and update count in backend
+    const [likedReviews, setLikedReviews] = useState([]);
     const handleThumbsUp = (reviewId) => {
+        if (likedReviews.includes(reviewId)) return; // Prevents double thumbs-up???
         fetch(`http://localhost:5000/api/review/${reviewId}/thumbs-up`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             credentials: "include",
         })
             .then((response) => response.json())
             .then((data) => {
                 if (data.message === "Thumbs up updated") {
+                    setLikedReviews((prev) => [...prev, reviewId]);
                     setReviews((prevReviews) =>
                         prevReviews.map((review) =>
                             review.review_num === reviewId
-                                ? { ...review, thumbs: data.thumbs, liked: true }
+                                ? { ...review, thumbs: data.thumbs }
                                 : review
                         )
                     );
@@ -336,12 +351,13 @@ const ClubPage = () => {
                         <div style={{display: "flex", justifyContent: "space-between", marginTop: "1rem"}}>
                             <button
                                 onClick={() => handleThumbsUp(review.review_num)}
+                                disabled={likedReviews.includes(review.review_num)}
                                 style={{
-                                    backgroundColor: review.liked ? "green" : "#cccccc",
+                                    backgroundColor: likedReviews.includes(review.review_num) ? "green" : "#cccccc",
                                     color: "white",
-                                    borderRadius: "5px",
                                     border: '2px solid #545353',
-                                    cursor: "pointer",
+                                    borderRadius: "5px",
+                                    cursor: likedReviews.includes(review.review_num) ? "not-allowed" : "pointer",
                                     padding: "5px 10px",}}>
                                 👍 {review.thumbs}
                             </button>
