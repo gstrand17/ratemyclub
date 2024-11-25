@@ -1,1 +1,13 @@
+# Ignore SQLite database
+back-end/Databases/ratemyclub-db.sqlite
+
+# Ignore virtual environment folders
+back-end/.venv/
+.venv/
+
+# Ignore IDE configuration folders
 .idea/
+back-end/.idea/
+
+# Ignore Python cache files
+back-end/src/**/__pycache__/

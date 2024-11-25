@@ -64,6 +64,7 @@ const ReviewForm = () => {
     };
 
     const handleSubmit = () =>{
+
         fetch(`http://localhost:5000/ReviewForm/${club_name}`, {
             method: 'POST',
             credentials: 'include',
@@ -190,6 +191,8 @@ const ReviewForm = () => {
                     Social Atmosphere:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.soc_rating}
                         onChange={(e) => {
@@ -203,6 +206,8 @@ const ReviewForm = () => {
                     Academic Strength:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.acad_rating}
                         onChange={(e) => {
@@ -216,6 +221,8 @@ const ReviewForm = () => {
                     Executive Leadership:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.exec_rating}
                         onChange={(e) => {
@@ -229,6 +236,8 @@ const ReviewForm = () => {
                     Level of Commitment:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.comlev}
                         onChange={(e) => {
@@ -242,6 +251,8 @@ const ReviewForm = () => {
                     Overall Scoring:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.overall_rating}
                         onChange={(e) => {
