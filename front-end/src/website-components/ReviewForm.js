@@ -18,9 +18,9 @@ const ReviewForm = () => {
         acad_rating: 1,
         exec_rating: 1,
         comlev: 1,
-        current_mem: false,
+        current_mem: null,
         time_mem: 'Example: 3 semesters',
-        paid: false
+        paid: null
     });
 
     function getCurrentDate() {
@@ -56,7 +56,6 @@ const ReviewForm = () => {
                 }
             });
     };
-
     const handleProfile = () => {
         // Navigate to user profile page
         navigate('/profile');
@@ -66,6 +65,7 @@ const ReviewForm = () => {
     };
 
     const handleSubmit = () =>{
+
         fetch(`http://localhost:5000/ReviewForm/${club_name}`, {
             method: 'POST',
             credentials: 'include',
@@ -105,7 +105,7 @@ const ReviewForm = () => {
             }
         })
             .then(response =>  {
-                if (response.status === 401 || 500) {
+                if (response.status === 401 || 404) {
                     return response.json();
                 } else if (!response.ok) {
                     throw new Error('Network response was not ok' + response.statusText);
@@ -192,6 +192,8 @@ const ReviewForm = () => {
                     Social Atmosphere:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.soc_rating}
                         onChange={(e) => {
@@ -205,6 +207,8 @@ const ReviewForm = () => {
                     Academic Strength:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.acad_rating}
                         onChange={(e) => {
@@ -218,6 +222,8 @@ const ReviewForm = () => {
                     Executive Leadership:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.exec_rating}
                         onChange={(e) => {
@@ -231,6 +237,8 @@ const ReviewForm = () => {
                     Level of Commitment:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.comlev}
                         onChange={(e) => {
@@ -244,6 +252,8 @@ const ReviewForm = () => {
                     Overall Scoring:
                     <input
                         type='number'
+                        min={1}
+                        max={5}
                         maxLength={1}
                         value={review.overall_rating}
                         onChange={(e) => {
@@ -273,7 +283,6 @@ const ReviewForm = () => {
                         onChange={(e) => {
                             createReview('time_mem', e.target.value)
                         }}
-                        disabled={!writtenReview}
                     />
                 </label>
             </div>
@@ -295,7 +304,7 @@ const ReviewForm = () => {
                        }}/>
 
                 <label> This club requires membership payment</label>
-                {/*</label>*/}
+
             </div>
         </div>
         <br></br>

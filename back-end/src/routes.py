@@ -259,6 +259,7 @@ def get_club(name: str):
     else:
         return jsonify(message='Club not found'), 401
 
+
 @app.route('/YourReviews', methods=['GET', 'DELETE'])
 def your_reviews():
     if 'logged_in' in session:
@@ -275,8 +276,10 @@ def your_reviews():
                 role = 'admin'
         if request.method == 'GET':
             reviews = ClubReviews.query.filter_by(user_email=existing_user.email).all()
-            reviews_data = [
-                {
+            reviews_data = []
+            for review in reviews:
+                reviews_data.append({
+                    'review_num': review.review_num,
                     'user_email': review.user_email,
                     'club_name': review.club_name,
                     'date': review.date,
@@ -288,18 +291,36 @@ def your_reviews():
                     'comlev': review.comlev,
                     'current_mem': review.current_mem,
                     'time_mem': review.time_mem,
-                    'paid': review.paid
-                } for review in reviews]
+                    'paid': review.paid,
+                    'thumbs': review.thumbs,
+                    'flagged': review.flagged
+                })
             return jsonify(
-                reviews=reviews_data,
-                firstname = existing_user.first_name,
-                lastname = existing_user.last_name
+                message="Data has been fetched!",
+                reviews=reviews_data
+                #firstname = existing_user.first_name,
+                #lastname = existing_user.last_name
             )
 
-        # elif request.method == 'DELETE':
-        #
+        elif request.method == 'DELETE':
+            data = request.get_json()
+            review_id = data.get('review_id')
+
+            if not review_id:
+                return jsonify(message='Review ID is required!'), 400
+
+            delete_review = ClubReviews.query.filter_by(review_num=review_id, user_email=existing_user.email).first()
+
+            if not delete_review:
+                return jsonify(message='Review not found!'), 400
+
+            db.session.delete(delete_review)
+            db.session.commit()
+
+            return jsonify(message='Review has been deleted!'), 200
     else:
         return jsonify(message='You are not logged in!'), 401
+
 
 @app.route('/ReviewForm/<string:name>', methods=['GET', 'POST'])
 def write_review(name: str):
@@ -319,28 +340,77 @@ def write_review(name: str):
                     club_name = name
                 )
             elif request.method == 'POST':
-                data = request.get_json('review') #HELP
+                data = request.get_json() #HELP
 
                 if not data:
                     return jsonify(message='No Input Provided!'), 401
                 else:
-                    review = data.get()
-                    new_review = ClubReviews(review_num=session.query(ClubReviews).count()+1,
+                    new_review = ClubReviews(
+                                             review_num=db.session.query(ClubReviews).count() + 1,
                                              user_email=existing_user.email,
                                              club_name=name,
-                                             date=data.get(review.date),
-                                             review_text=data.get(review.review_text),
-                                             overall_rating=data.get(review.overall_rating),
-                                             soc_rating=data.get(review.soc_rating),
-                                             acad_rating=data.get(review.acad_rating),
-                                             exec_rating=data.get(review.exec_rating),
-                                             comlev=data.get(review.comlev),
-                                             current_mem=data.get(review.current_mem),
-                                             time_mem=data.get(review.time_mem),
-                                             paid=data.get(review.paid),
-                                             thumbs=0, flagged=False)
-                    db.add(new_review)
+                                             date=data.get('date'),
+                                             review_text=data.get('review_text'),
+                                             overall_rating=data.get('overall_rating', 1),
+                                             soc_rating=data.get('soc_rating', 1),
+                                             acad_rating=data.get('acad_rating', 1),
+                                             exec_rating=data.get('exec_rating', 1),
+                                             comlev=data.get('comlev', 1),
+                                             current_mem=data.get('current_mem', False),
+                                             time_mem=data.get('time_mem'),
+                                             paid=data.get('paid', False),
+                                             thumbs=0,
+                                             flagged=False
+                                             )
+                    db.session.add(new_review)
                     db.session.commit()
                 return jsonify(
-                    message="Database updated!"
-                )
+                    message="Review created!"
+                ), 201
+
+
+@app.route('/api/review/<int:review_id>/thumbs-up', methods=['POST'])
+def thumbs_up(review_id):
+    if 'email' not in session:
+        return jsonify(message="User not logged in"), 401
+
+    user_email = session['email']
+    review = ClubReviews.query.get(review_id)
+    if not review:
+        return jsonify(message="Review not found"), 404
+
+    liked_by = review.liked_by or []
+
+    if user_email in liked_by:
+        return jsonify(message="User already liked this review"), 400
+
+    review.thumbs += 1
+    liked_by.append(user_email)
+    review.liked_by = liked_by
+    db.session.commit()
+
+    return jsonify(message="Thumbs up updated", thumbs=review.thumbs), 200
+
+
+#route to fetch reviews liked by curr user
+@app.route('/api/liked-reviews', methods=['GET'])
+def get_liked_reviews():
+    if 'email' not in session:
+        return jsonify(message="User not logged in"), 401
+
+    user_email = session['email']
+    #liked_reviews = ClubReviews.query.filter(ClubReviews.liked_by.contains([user_email])).all()
+    liked_reviews = ClubReviews.query.filter(ClubReviews.liked_by.like(f'%{user_email}%')).all()
+    liked_review_ids = [review.review_num for review in liked_reviews]
+
+    return jsonify(liked_reviews=liked_review_ids), 200
+
+#route for flag functionality
+@app.route('/api/review/<int:review_id>/flag', methods=['POST'])
+def flag_review(review_id):
+    review = ClubReviews.query.get(review_id)
+    if not review:
+        return jsonify(message="Review not found"), 404
+    review.flagged = True
+    db.session.commit()
+    return jsonify(message="Review flagged"), 200
