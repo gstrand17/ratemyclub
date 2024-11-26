@@ -40,21 +40,21 @@ const ReviewForm = () => {
 
 
 
-    // const handleLogout = () => {
-    //     // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
-    //     // Navigate back home
-    //     fetch('http://localhost:5000/logout', {
-    //         method: 'POST',
-    //         credentials: 'include'
-    //     })
-    //         .then(response => {
-    //             if (response.ok) {
-    //                 navigate('/');
-    //             } else {
-    //                 console.log('Error:', response.message);
-    //             }
-    //         });
-    // };
+    const handleLogout = () => {
+        // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
+        // Navigate back home
+        fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(response => {
+                if (response.ok) {
+                    navigate('/');
+                } else {
+                    console.log('Error:', response.message);
+                }
+            });
+    };
     const handleProfile = () => {
         // Navigate to user profile page
         navigate('/profile');
@@ -104,7 +104,7 @@ const ReviewForm = () => {
             }
         })
             .then(response =>  {
-                if (response.status === 401 || 500) {
+                if (response.status === 401 || 404) {
                     return response.json();
                 } else if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -142,7 +142,7 @@ const ReviewForm = () => {
                  }}>
                 <button onClick={handleProfile}>Profile</button>
                 <button onClick={handleHome}>Home</button>
-                {/*<button onClick={handleLogout}>Logout</button>*/}
+                <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
 
@@ -303,7 +303,7 @@ const ReviewForm = () => {
                        }}/>
 
                 <label> This club requires membership payment</label>
-                {/*</label>*/}
+
             </div>
         </div>
         <br></br>
