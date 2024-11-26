@@ -183,12 +183,16 @@ const ClubPage = () => {
     //helper method for users to like a review and update count in backend
     const [likedReviews, setLikedReviews] = useState([]);
     const handleThumbsUp = (reviewId) => {
-        if (likedReviews.includes(reviewId)) return; // Prevents double thumbs-up???
         fetch(`http://localhost:5000/api/review/${reviewId}/thumbs-up`, {
             method: "POST",
             credentials: "include",
         })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("You already liked this review");
+                }
+                return response.json();
+            })
             .then((data) => {
                 if (data.message === "Thumbs up updated") {
                     setLikedReviews((prev) => [...prev, reviewId]);
@@ -201,8 +205,9 @@ const ClubPage = () => {
                     );
                 }
             })
-            .catch((error) => console.log("Error updating thumbs up:", error));
+            .catch((error) => console.log("Error updating thumbs up:", error.message));
     };
+
 
     //helper method to set flag variable as true and mark review as 'flagged'
     const handleFlag = (reviewId) => {
@@ -347,33 +352,40 @@ const ClubPage = () => {
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
 
-                        {/* thumbs-up button for  user to 'like' reviews */}
-                        <div style={{display: "flex", justifyContent: "space-between", marginTop: "1rem"}}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
                             <button
                                 onClick={() => handleThumbsUp(review.review_num)}
-                                disabled={likedReviews.includes(review.review_num)}
                                 style={{
-                                    backgroundColor: likedReviews.includes(review.review_num) ? "green" : "#cccccc",
-                                    color: "white",
-                                    border: '2px solid #545353',
-                                    borderRadius: "5px",
-                                    cursor: likedReviews.includes(review.review_num) ? "not-allowed" : "pointer",
-                                    padding: "5px 10px",}}>
+                                    padding: '5px 10px',
+                                    fontSize: '1rem',
+                                    backgroundColor: likedReviews.includes(review.review_num) ? '#ccc' : '#59a7ff',
+                                    color: likedReviews.includes(review.review_num) ? 'black' : 'white',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: likedReviews.includes(review.review_num) ? 'not-allowed' : 'pointer'
+                                }}
+                                disabled={likedReviews.includes(review.review_num)} // Prevent multiple likes
+                            >
                                 👍 {review.thumbs}
                             </button>
 
-                            {/* code for users to 'flag' reviews-send to separate page for admin? */}
                             <button
                                 onClick={() => handleFlag(review.review_num)}
                                 style={{
-                                    backgroundColor: review.flagged ? "#ad2f2f" : "#cccccc",
-                                    color: "white",
-                                    border: '2px solid #545353',
-                                    borderRadius: "5px",
-                                    cursor: "pointer",
-                                    padding: "5px 10px",}}>
-                                🚩</button>
+                                    padding: '5px 10px',
+                                    fontSize: '1rem',
+                                    backgroundColor: review.flagged ? '#ffcccc' : '#ff5757',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: review.flagged ? 'not-allowed' : 'pointer'
+                                }}
+                                disabled={review.flagged} // Prevent multiple flags
+                            >
+                                🚩 {review.flagged ? 'Flagged' : 'Flag'}
+                            </button>
                         </div>
+
                     </div>
                 ))}
             </div>

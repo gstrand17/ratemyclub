@@ -369,12 +369,8 @@ def write_review(name: str):
                 ), 201
 
 
-#route for thumbs up functionality
 @app.route('/api/review/<int:review_id>/thumbs-up', methods=['POST'])
-def thumbs_up(review_id): #review_num
-    #review = ClubReviews.query.get(review_id)
-    #if not review:
-        #return jsonify(message="Review not found"), 404
+def thumbs_up(review_id):
     if 'email' not in session:
         return jsonify(message="User not logged in"), 401
 
@@ -382,14 +378,19 @@ def thumbs_up(review_id): #review_num
     review = ClubReviews.query.get(review_id)
     if not review:
         return jsonify(message="Review not found"), 404
-    if user_email in review.liked_by:
+
+    liked_by = review.liked_by or []
+
+    if user_email in liked_by:
         return jsonify(message="User already liked this review"), 400
 
-    # update count and add the user to the liked_by list to keep track of who liked a review
     review.thumbs += 1
-    review.liked_by.append(user_email)
+    liked_by.append(user_email)
+    review.liked_by = liked_by
     db.session.commit()
+
     return jsonify(message="Thumbs up updated", thumbs=review.thumbs), 200
+
 
 #route to fetch reviews liked by curr user
 @app.route('/api/liked-reviews', methods=['GET'])
