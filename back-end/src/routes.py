@@ -259,6 +259,7 @@ def get_club(name: str):
     else:
         return jsonify(message='Club not found'), 401
 
+
 @app.route('/YourReviews', methods=['GET', 'DELETE'])
 def your_reviews():
     if 'logged_in' in session:
@@ -275,8 +276,10 @@ def your_reviews():
                 role = 'admin'
         if request.method == 'GET':
             reviews = ClubReviews.query.filter_by(user_email=existing_user.email).all()
-            reviews_data = [
-                {
+            reviews_data = []
+            for review in reviews:
+                reviews_data.append({
+                    'review_num': review.review_num,
                     'user_email': review.user_email,
                     'club_name': review.club_name,
                     'date': review.date,
@@ -288,18 +291,36 @@ def your_reviews():
                     'comlev': review.comlev,
                     'current_mem': review.current_mem,
                     'time_mem': review.time_mem,
-                    'paid': review.paid
-                } for review in reviews]
+                    'paid': review.paid,
+                    'thumbs': review.thumbs,
+                    'flagged': review.flagged
+                })
             return jsonify(
-                reviews=reviews_data,
-                firstname = existing_user.first_name,
-                lastname = existing_user.last_name
+                message="Data has been fetched!",
+                reviews=reviews_data
+                #firstname = existing_user.first_name,
+                #lastname = existing_user.last_name
             )
 
-        # elif request.method == 'DELETE':
-        #
+        elif request.method == 'DELETE':
+            data = request.get_json()
+            review_id = data.get('review_id')
+
+            if not review_id:
+                return jsonify(message='Review ID is required!'), 400
+
+            delete_review = ClubReviews.query.filter_by(review_num=review_id, user_email=existing_user.email).first()
+
+            if not delete_review:
+                return jsonify(message='Review not found!'), 400
+
+            db.session.delete(delete_review)
+            db.session.commit()
+
+            return jsonify(message='Review has been deleted!'), 200
     else:
         return jsonify(message='You are not logged in!'), 401
+
 
 @app.route('/ReviewForm/<string:name>', methods=['GET', 'POST'])
 def write_review(name: str):
@@ -335,9 +356,9 @@ def write_review(name: str):
                                              acad_rating=data.get('acad_rating', 1),
                                              exec_rating=data.get('exec_rating', 1),
                                              comlev=data.get('comlev', 1),
-                                             current_mem=data.get('current_mem'),
+                                             current_mem=data.get('current_mem', False),
                                              time_mem=data.get('time_mem'),
-                                             paid=data.get('paid'),
+                                             paid=data.get('paid', False),
                                              thumbs=0,
                                              flagged=False
                                              )
