@@ -108,7 +108,7 @@ const ReviewForm = () => {
                 if (response.status === 401 || 500) {
                     return response.json();
                 } else if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok' + response.statusText);
                 }
                 return response.json();
             })
