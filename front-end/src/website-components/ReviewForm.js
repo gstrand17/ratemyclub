@@ -37,8 +37,9 @@ const ReviewForm = () => {
       setReview({...review, [type]: currValue});
     };
 
-
-
+    const backToClubs = () => {
+        navigate(`/club-page/${club_name}`);
+    }
 
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
@@ -84,7 +85,7 @@ const ReviewForm = () => {
             .then(data => {
                 if (data.message === 'Review created!') {
                     console.log(data.message);
-                    navigate(`/club-page/${club_name}`);
+                    backToClubs();
                 }
                 setMessage(data.message);
             })
@@ -142,6 +143,7 @@ const ReviewForm = () => {
                  }}>
                 <button onClick={handleProfile}>Profile</button>
                 <button onClick={handleHome}>Home</button>
+                <button onClick={backToClubs}>Club</button>
                 <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
@@ -282,6 +284,7 @@ const ReviewForm = () => {
                         onChange={(e) => {
                             createReview('time_mem', e.target.value)
                         }}
+                        disabled={!writtenReview}
                     />
                 </label>
             </div>
@@ -307,7 +310,6 @@ const ReviewForm = () => {
             </div>
         </div>
         <br></br>
-
         <button onClick={handleSubmit}>Save</button>
         </body>
     )

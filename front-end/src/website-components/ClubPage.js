@@ -21,8 +21,8 @@ const getTagColor = (tag) => {
 
 
 //button if only club or admin edit details->blanks to change data?
-//AVG_OVERALL_RATING IS DISPLAYED AT TOP AND IS AVG OF ALL OVERALL RATINGS
-//overall_rating is seperate val user enters/rates
+//button to edit your review in YourReviews.js?
+//admin can delete reviews
 
 const ClubPage = () => {
     const navigate = useNavigate();
@@ -105,7 +105,18 @@ const ClubPage = () => {
             .catch(error => console.log('Error fetching club data:', error));
     }, [club_name]);
 
-    //code for a bar chart of ratings
+    //fetch the list of review IDs the user has liked
+    useEffect(() => {
+        fetch('http://localhost:5000/api/liked-reviews', { credentials: 'include' })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.liked_reviews) {
+                    setLikedReviews(data.liked_reviews);
+                }
+            });
+    }, []);
+
+    //code for a bar chart of average club ratings
     const barChartData = {
         labels: ['Social', 'Academic', 'Executive Board', 'Commitment Level'], // Rating categories
         datasets: [
@@ -134,6 +145,7 @@ const ClubPage = () => {
         ]
     };
 
+    //helper method for bar chart
     const barChartOptions = {
         responsive: true,
         plugins: {
@@ -145,17 +157,19 @@ const ClubPage = () => {
                     weight: 'bold'
                 },
                 padding: {
-                    top: 20, // Padding from the top
-                    bottom: 20 // Padding from the bottom
+                    top: 20,
+                    bottom: 20
                 }
             },
             legend: {display: false},
             tooltip: {
                 callbacks: {
+                    title: () => null,
                     label: function (tooltipItem) {
                         return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toFixed(1)}`;
                     }
-                }
+                },
+                bodyColor: 'black',
             }
         },
         scales: {
@@ -164,6 +178,52 @@ const ClubPage = () => {
                 max: 5 //scale of 0-5 for ratings!
             }
         }
+    };
+
+    //helper method for users to like a review and update count in backend
+    const [likedReviews, setLikedReviews] = useState([]);
+    const handleThumbsUp = (reviewId) => {
+        if (likedReviews.includes(reviewId)) return; // Prevents double thumbs-up???
+        fetch(`http://localhost:5000/api/review/${reviewId}/thumbs-up`, {
+            method: "POST",
+            credentials: "include",
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message === "Thumbs up updated") {
+                    setLikedReviews((prev) => [...prev, reviewId]);
+                    setReviews((prevReviews) =>
+                        prevReviews.map((review) =>
+                            review.review_num === reviewId
+                                ? { ...review, thumbs: data.thumbs }
+                                : review
+                        )
+                    );
+                }
+            })
+            .catch((error) => console.log("Error updating thumbs up:", error));
+    };
+
+    //helper method to set flag variable as true and mark review as 'flagged'
+    const handleFlag = (reviewId) => {
+        fetch(`http://localhost:5000/api/review/${reviewId}/flag`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message === "Review flagged") {
+                    setReviews((prevReviews) =>
+                        prevReviews.map((review) =>
+                            review.review_num === reviewId
+                                ? { ...review, flagged: true }
+                                : review
+                        )
+                    );
+                }
+            })
+            .catch((error) => console.log("Error flagging review:", error));
     };
 
     return (
@@ -226,12 +286,26 @@ const ClubPage = () => {
                 <Bar data={barChartData} options={barChartOptions}/>
             </div>
 
-            <button onClick={handleReviewForm}>Submit a Review</button>
 
             {/* Student Reviews */}
             <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>
                 Student Reviews ({reviews.length}):
             </div>
+
+            {/* button to submit a student review */}
+            <button onClick={handleReviewForm}
+                    style={{
+                        padding: '5px 10px',
+                        fontSize: '1rem',
+                        backgroundColor: '#59a7ff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        marginTop: '10px'
+                    }}>Submit a Review</button>
+
+            {/* Display all student reviews/ratings */}
             <div>
                 {reviews.map((review, index) => (
                     <div key={index} style={{
@@ -252,6 +326,8 @@ const ClubPage = () => {
                             right: '1rem',
                             margin: 0
                         }}>Date: {review.date}</p>
+
+                        {/* display ratings */}
                         <h1 style={{fontSize: '1.2rem'}}>Overall: <strong>{review.overall_rating}/5</strong></h1>
                         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '1rem'}}>
                             <span>Social: <strong>{review.soc_rating}</strong>/5</span>
@@ -259,15 +335,45 @@ const ClubPage = () => {
                             <span>Executive: <strong>{review.exec_rating}</strong>/5</span>
                             <span>Commitment Level: <strong>{review.comlev}</strong>/5</span>
                         </div>
-                        <p style={{
-                            border: '2px solid #ddd',
+
+                        {/* Actual written Review */}
+                        <p style={{border: '2px solid #ddd',
                             borderRadius: '6px',
                             padding: '1rem',
                             backgroundColor: '#e8e6e6',
                         }}>{review.review_text}</p>
+
                         <p>Time as Member: <strong>{review.time_mem}</strong></p>
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
+
+                        {/* thumbs-up button for  user to 'like' reviews */}
+                        <div style={{display: "flex", justifyContent: "space-between", marginTop: "1rem"}}>
+                            <button
+                                onClick={() => handleThumbsUp(review.review_num)}
+                                disabled={likedReviews.includes(review.review_num)}
+                                style={{
+                                    backgroundColor: likedReviews.includes(review.review_num) ? "green" : "#cccccc",
+                                    color: "white",
+                                    border: '2px solid #545353',
+                                    borderRadius: "5px",
+                                    cursor: likedReviews.includes(review.review_num) ? "not-allowed" : "pointer",
+                                    padding: "5px 10px",}}>
+                                👍 {review.thumbs}
+                            </button>
+
+                            {/* code for users to 'flag' reviews-send to separate page for admin? */}
+                            <button
+                                onClick={() => handleFlag(review.review_num)}
+                                style={{
+                                    backgroundColor: review.flagged ? "#ad2f2f" : "#cccccc",
+                                    color: "white",
+                                    border: '2px solid #545353',
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    padding: "5px 10px",}}>
+                                🚩</button>
+                        </div>
                     </div>
                 ))}
             </div>
