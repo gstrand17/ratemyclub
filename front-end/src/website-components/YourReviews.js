@@ -5,6 +5,7 @@ const YourReviews = () => {
 
     const navigate = useNavigate();
     const [reviews, setReviews] = useState([]);
+    const [edit, confirmEdit] = useState(false);
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
         // Navigate back home
@@ -81,6 +82,34 @@ const YourReviews = () => {
             })
             .catch((error) => console.log('Error deleting review!', error));
     };
+    const handleEdit = (reviewId) => {
+        reviewId.preventDefault();
+
+        fetch('http://localhost:5000/YourReviews', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({review_id: reviewId}),
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    return response.json();
+                } else if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message === "Data has been fetched!") {
+                    confirmEdit(false);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
 
 
     return (
@@ -144,6 +173,11 @@ const YourReviews = () => {
                                  textAlign: 'right',
                              }}>
                             <button onClick={() => handleDelete(review.review_num)}>Delete</button>
+                            {edit ? (
+                                <button onClick={handleEdit(review.review_num)}>Save</button>
+                            ) : (
+                                <button onClick={() => confirmEdit(true)}>Edit</button>
+                            )}
                         </div>
                     </div>
                 ))}
