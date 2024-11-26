@@ -309,7 +309,7 @@ def your_reviews():
             if not review_id:
                 return jsonify(message='Review ID is required!'), 400
 
-            delete_review = ClubReviews.query.filter(review_num=review_id, user_email=existing_user.email).first()
+            delete_review = ClubReviews.query.filter_by(review_num=review_id, user_email=existing_user.email).first()
 
             if not delete_review:
                 return jsonify(message='Review not found!'), 400
