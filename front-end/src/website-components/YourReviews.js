@@ -31,7 +31,7 @@ const YourReviews = () => {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:5000/YourReviews}`, {
+        fetch(`http://localhost:5000/YourReviews`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -55,6 +55,33 @@ const YourReviews = () => {
                 }})
             .catch(error => console.log('Error fetching club data:', error));
     }, []);
+
+    const handleDelete = (reviewId) => {
+        fetch('http://localhost:5000/YourReviews', {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ review_id: reviewId }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.message === 'Review has been deleted!') {
+                    console.log('Review has been successfully deleted!');
+                    setReviews((prevReviews) => prevReviews.filter((review) => review.review_num !== reviewId)); //Use chatgpt for this line
+                } else {
+                    console.log('Error:', data.message);
+                }
+            })
+            .catch((error) => console.log('Error deleting review!', error));
+    };
+
 
     return (
         <div>
@@ -112,6 +139,12 @@ const YourReviews = () => {
                         <p>Time as Member: <strong>{review.time_mem}</strong></p>
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
+                        <div className="button-container"
+                             style={{
+                                 textAlign: 'right',
+                             }}>
+                            <button onClick={() => handleDelete(review.review_num)}>Delete</button>
+                        </div>
                     </div>
                 ))}
             </div>

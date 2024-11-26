@@ -18,9 +18,9 @@ const ReviewForm = () => {
         acad_rating: 1,
         exec_rating: 1,
         comlev: 1,
-        current_mem: false,
+        current_mem: null,
         time_mem: 'Example: 3 semesters',
-        paid: false
+        paid: null
     });
 
     function getCurrentDate() {

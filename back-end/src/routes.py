@@ -259,6 +259,7 @@ def get_club(name: str):
     else:
         return jsonify(message='Club not found'), 401
 
+
 @app.route('/YourReviews', methods=['GET', 'DELETE'])
 def your_reviews():
     if 'logged_in' in session:
@@ -301,10 +302,25 @@ def your_reviews():
                 #lastname = existing_user.last_name
             )
 
-        # elif request.method == 'DELETE':
-        #
+        elif request.method == 'DELETE':
+            data = request.get_json()
+            review_id = data.get('review_id')
+
+            if not review_id:
+                return jsonify(message='Review ID is required!'), 400
+
+            delete_review = ClubReviews.query.filter(review_num=review_id, user_email=existing_user.email).first()
+
+            if not delete_review:
+                return jsonify(message='Review not found!'), 400
+
+            db.session.delete(delete_review)
+            db.session.commit()
+
+            return jsonify(message='Review has been deleted!'), 200
     else:
         return jsonify(message='You are not logged in!'), 401
+
 
 @app.route('/ReviewForm/<string:name>', methods=['GET', 'POST'])
 def write_review(name: str):
