@@ -4,7 +4,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 const YourReviews = () => {
 
     const navigate = useNavigate();
-    const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState([]); // initialize as empty array
     const [edit, confirmEdit] = useState(false);
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
@@ -82,7 +82,8 @@ const YourReviews = () => {
             })
             .catch((error) => console.log('Error deleting review!', error));
     };
-    const handleEdit = (reviewId) => {
+    const handleSave = (reviewId) => {
+
         reviewId.preventDefault();
 
         fetch('http://localhost:5000/YourReviews', {
@@ -103,13 +104,18 @@ const YourReviews = () => {
             })
             .then(data => {
                 if (data.message === "Data has been fetched!") {
-                    confirmEdit(false);
+                    setReviews(data.reviews); // Inputs the new reviews
+                    confirmEdit(false); // Once data is changed, review edit is returned false
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
     }
+
+    const updateReview = (type, currValue) => {
+        setReviews(prevValue => ({ ...prevValue, [type]: currValue }));
+    };
 
 
     return (
@@ -172,17 +178,84 @@ const YourReviews = () => {
                              style={{
                                  textAlign: 'right',
                              }}>
-                            <button onClick={() => handleDelete(review.review_num)}>Delete</button>
                             {edit ? (
-                                <button onClick={handleEdit(review.review_num)}>Save</button>
+                                <div>
+                                    <div>
+                                        <label>
+                                            Social:
+                                            <input
+                                                type={'number'}
+                                                value={review.soc_rating}
+                                                onChange={(review) => {
+                                                    updateReview('soc_rating', review.target.value)
+                                                }}
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Academic:
+                                            <input
+                                                type={'number'}
+                                                value={review.acad_rating}
+                                                onChange={(review) => {
+                                                    updateReview('acad_rating', review.target.value)
+                                                }}
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Executive:
+                                            <input
+                                                type={'number'}
+                                                value={review.exec_rating}
+                                                onChange={(review) => {
+                                                    updateReview('exec_rating', review.target.value)
+                                                }}
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Commitment Level:
+                                            <input
+                                                type={'number'}
+                                                value={review.comlev}
+                                                onChange={(review) => {
+                                                    updateReview('comlev', review.target.value)
+                                                }}
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Review:
+                                            <input
+                                                type={'text'}
+                                                value={review.review_text}
+                                                onChange={(review) => {
+                                                    updateReview('review_text', review.target.value)
+                                                }}
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <button onClick={handleSave(review)}>Save</button>
+                                </div>
                             ) : (
                                 <button onClick={() => confirmEdit(true)}>Edit</button>
                             )}
+                            <button onClick={() => handleDelete(review.review_num)}>Delete</button>
                         </div>
                     </div>
                 ))}
             </div>
-        </div>);
+        </div>)
 };
 
 export default YourReviews;

@@ -260,7 +260,7 @@ def get_club(name: str):
         return jsonify(message='Club not found'), 401
 
 
-@app.route('/YourReviews', methods=['GET', 'DELETE'])
+@app.route('/YourReviews', methods=['GET', 'DELETE','PUT'])
 def your_reviews():
     if 'logged_in' in session:
         existing_user = User.query.filter((User.username == session['username']) | (User.email == session['email'])).first()
@@ -318,6 +318,38 @@ def your_reviews():
             db.session.commit()
 
             return jsonify(message='Review has been deleted!'), 200
+
+        elif request.method == 'PUT':
+            data = request.get_json()
+            if not data:
+                return jsonify(message='No Input Provided!'), 401
+
+            reviews = ClubReviews.query.filter_by(user_email=existing_user.email).all()
+            reviews_data = []
+            for review in reviews:
+                reviews_data.append({
+                    'review_num': review.review_num,
+                    'user_email': review.user_email,
+                    'club_name': review.club_name,
+                    'date': review.date,
+                    'review_text': review.review_text,
+                    'overall_rating': review.overall_rating,
+                    'soc_rating': review.soc_rating,
+                    'acad_rating': review.acad_rating,
+                    'exec_rating': review.exec_rating,
+                    'comlev': review.comlev,
+                    'current_mem': review.current_mem,
+                    'time_mem': review.time_mem,
+                    'paid': review.paid,
+                    'thumbs': review.thumbs,
+                    'flagged': review.flagged
+                })
+            return jsonify(
+                message="Data has been fetched!",
+                reviews=reviews_data
+                #firstname = existing_user.first_name,
+                #lastname = existing_user.last_name
+            )
     else:
         return jsonify(message='You are not logged in!'), 401
 
