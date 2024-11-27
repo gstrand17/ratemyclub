@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Float, Boolean
 from flask_sqlalchemy.session import Session
 import os
+from sqlalchemy.dialects.sqlite import JSON
 
 # Set up the path for the database
 basedir = os.path.abspath(os.path.dirname(__file__))  # Path for the application itself
@@ -76,8 +77,9 @@ class ClubReviews(db.Model):
     current_mem = Column(Boolean)
     time_mem = Column(String)  # Date format?
     paid = Column(Boolean)
-    thumbs = Column(Integer)
-    flagged = Column(Boolean)
+    thumbs = Column(Integer, default=0)  #set default val
+    flagged = Column(Boolean, default=False)
+    liked_by = Column(JSON, default=[])  #list of user emails to keep track of thumbs-up
 
 
 
