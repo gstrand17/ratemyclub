@@ -437,3 +437,58 @@ def flag_review(review_id):
     db.session.commit()
     return jsonify(message="Review flagged"), 200
 
+#return the logged-in user's role and assoc club
+@app.route('/api/user-role', methods=['GET'])
+def get_user_role():
+    if 'logged_in' not in session or 'email' not in session:
+        return jsonify(message='Unauthorized'), 401
+
+    user_email = session.get('email')
+    user = User.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify(message='User not found'), 404
+
+    if user.admin:
+        role = 'admin'
+    elif user.club_exec:
+        role = 'club_exec'
+    else:
+        role = 'student'
+
+
+    return jsonify({
+        'role': role,
+        'clubs': user.clubs
+    }), 200
+
+#handle put request for when club owners edit club page
+@app.route('/api/club-page/<string:club_name>', methods=['PUT'])
+def update_club(club_name):
+    if 'logged_in' not in session:
+        return jsonify(message='Unauthorized'), 401
+
+    user_email = session.get('email')
+    user = User.query.filter_by(email=user_email).first()  # Fetch user details
+
+    if not user:
+        return jsonify(message='User not found'), 402
+    if not user.club_exec:
+        return jsonify(message='Unauthorized - Not a club executive'), 403
+    if user.clubs != club_name:
+        return jsonify(message=f'Unauthorized - User does not belong to {club_name}'), 404
+
+    data = request.get_json()
+    club = ClubDirectory.query.filter_by(club_name=club_name).first()
+
+    if not club:
+        return jsonify(message='Club not found'), 405
+
+    #club.club_name=data.get('club_name', club.club_name)
+    club.description = data.get('description', club.description)
+    club.link = data.get('link', club.link)
+    #club.tags = data.get('tags', club.tags)
+
+    db.session.commit()
+
+    return jsonify(message='Club updated successfully'), 200
+

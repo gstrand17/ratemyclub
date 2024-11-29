@@ -5,21 +5,6 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title } from 'chart.js';
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title);
 
-//helper method to color code tags
-const getTagColor = (tag) => {
-    //creates a hash value for each tag
-    let hash = 0;
-    for (let i = 0; i < tag.length; i++) {
-        hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    //convert hash value->hex color
-    const color = `#${((hash >> 24) & 0xFF).toString(16).padStart(2, '0')}${
-        ((hash >> 16) & 0xFF).toString(16).padStart(2, '0')
-    }${((hash >> 8) & 0xFF).toString(16).padStart(2, '0')}`;
-    return color;
-};
-
-
 //button if only club or admin edit details->blanks to change data?
 //button to edit your review in YourReviews.js?
 //admin can delete reviews
@@ -40,10 +25,12 @@ const ClubPage = () => {
         avg_comlev: 0.0,
         link: ''
     });
+    const [isEditing, setIsEditing] = useState(false); //track editing mode for admin/club owners
+    const [updatedClub, setUpdatedClub] = useState({description: '', link: '' }); //store the edits,names/tags: ''
+    const [userRole, setUserRole] = useState(''); // Role of the user
+    const [isClubOwner, setIsClubOwner] = useState(false);
 
     const handleLogout = () => {
-        // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
-        // Navigate back home
         fetch('http://localhost:5000/logout', {
             method: 'POST',
             credentials: 'include'
@@ -70,6 +57,20 @@ const ClubPage = () => {
 
     const handleHome = () => {
         navigate('/front-page');
+    };
+
+    //helper method to color code tags
+    const getTagColor = (tag) => {
+        //creates a hash value for each tag
+        let hash = 0;
+        for (let i = 0; i < tag.length; i++) {
+            hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        //convert hash value->hex color
+        const color = `#${((hash >> 24) & 0xFF).toString(16).padStart(2, '0')}${
+            ((hash >> 16) & 0xFF).toString(16).padStart(2, '0')
+        }${((hash >> 8) & 0xFF).toString(16).padStart(2, '0')}`;
+        return color;
     };
 
     useEffect(() => {
@@ -115,6 +116,61 @@ const ClubPage = () => {
                 }
             });
     }, []);
+
+    // Fetch user role and club details
+    useEffect(() => {
+        fetch('http://localhost:5000/api/user-role', { credentials: 'include' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.role) {
+                    setUserRole(data.role); // Set role
+                }
+                if (data.clubs === club_name) {
+                    setIsClubOwner(true);
+                }
+            });
+        fetch(`http://localhost:5000/api/club-page/${club_name}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Data has been fetched!") {
+                    setClub(data);
+                    setUpdatedClub({
+                        description: data.description,
+                        link: data.link,
+                    });
+                }
+            });
+    }, [club_name]);
+
+    // Handle edits
+    const handleEditToggle = () => setIsEditing(!isEditing);
+
+    //store edited changes
+    const handleFieldChange = (field, value) => {
+        setUpdatedClub(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleSave = () => {
+        fetch(`http://localhost:5000/api/club-page/${club_name}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(updatedClub),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Club updated successfully") {
+                    setClub(prev => ({
+                        ...prev,
+                        description: updatedClub.description,
+                        link: updatedClub.link,
+                    }));
+                    setIsEditing(false);
+                }
+            })
+            .catch(error => console.log('Error saving club details:', error));
+    };
+
 
     //code for a bar chart of average club ratings
     const barChartData = {
@@ -243,6 +299,7 @@ const ClubPage = () => {
                     textAlign: 'center',
                     fontSize: '3rem',
                 }}>{club_name}</h1>
+
                 <div className="button-container"
                      style={{
                          textAlign: 'right',
@@ -254,9 +311,44 @@ const ClubPage = () => {
                 </div>
             </div>
 
-            {/* Tags */}
-            <div style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap',}}>
-                {(Array.isArray(club.tags) ? club.tags : club.tags ? club.tags.split('|') : [])
+            {/*edit view for club owner */}
+            {isEditing ? (
+                    <div>
+                    <div style={{marginBottom: '1rem'}}>
+                        <textarea
+                            value={updatedClub.description}
+                            onChange={e => handleFieldChange('description', e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                borderRadius: '5px',
+                                border: '1px solid #ddd',
+                                fontSize: '1rem',
+                            }}
+                            placeholder="Update club description"
+                        />
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                        <input
+                            type="text"
+                            value={updatedClub.link}
+                            onChange={e => handleFieldChange('link', e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                borderRadius: '5px',
+                                border: '1px solid #ddd',
+                            }}
+                            placeholder="Update club link"
+                        />
+                    </div>
+                        <button onClick={handleSave}>Save</button>
+                    </div>
+                ) :
+                (<div>
+
+                        <div style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap',}}>
+                            {(Array.isArray(club.tags) ? club.tags : club.tags ? club.tags.split('|') : [])
                     .filter(tag => tag.trim() !== '') // Filter out empty tags
                     .map((tag, tagIndex) => (
                         <span
@@ -276,6 +368,16 @@ const ClubPage = () => {
 
             <p>{club.description}</p>
             <p>Link: <a href={club.link}>{club.link}</a></p>
+                    </div>
+                )}
+
+            {userRole === 'club_exec' && isClubOwner && (
+                <button onClick={handleEditToggle}>
+                    {isEditing ? 'Cancel' : 'Edit Club Details'}
+                </button>
+            )}
+
+
 
             {/*emphasize overall average rating*/}
             <h2>
