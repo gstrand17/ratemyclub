@@ -606,6 +606,7 @@ def db_show_users():
     else:
         print("No users found in the User table.")
 
+
 @app.cli.command('db_show_directory')  # CLI command to show clubs
 def db_show_directory():
     """List all users in the User table."""
