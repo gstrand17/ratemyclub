@@ -5,7 +5,7 @@ const YourReviews = () => {
 
     const navigate = useNavigate();
     const [reviews, setReviews] = useState([]); // initialize as empty array
-    const [edit, confirmEdit] = useState(false);
+    const [editIndex, setEditIndex] = useState(null); // track wich review is being edited
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
         // Navigate back home
@@ -82,9 +82,10 @@ const YourReviews = () => {
             })
             .catch((error) => console.log('Error deleting review!', error));
     };
-    const handleSave = (reviewId) => {
 
-        reviewId.preventDefault();
+    const handleSave = (index) => {
+        const updatedReview = reviews[index] // get review being edited
+        // event.preventDefault();
 
         fetch('http://localhost:5000/YourReviews', {
             method: 'PUT',
@@ -92,7 +93,7 @@ const YourReviews = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({review_id: reviewId}),
+            body: JSON.stringify(updatedReview),
         })
             .then(response => {
                 if (response.status === 401) {
@@ -105,7 +106,7 @@ const YourReviews = () => {
             .then(data => {
                 if (data.message === "Data has been fetched!") {
                     setReviews(data.reviews); // Inputs the new reviews
-                    confirmEdit(false); // Once data is changed, review edit is returned false
+                    setEditIndex(null); // edit edit mode
                 }
             })
             .catch((error) => {
@@ -113,10 +114,13 @@ const YourReviews = () => {
             });
     }
 
-    const updateReview = (type, currValue) => {
-        setReviews(prevValue => ({ ...prevValue, [type]: currValue }));
+    const handleChange = (index, field, value) => {
+        const updatedReviews = [...reviews]; // Copy the reviews array
+        updatedReviews[index] = {
+            ...updatedReviews[index], // Spread existing review object
+            [field]: value}; // update specific field with new value
+        setReviews(updatedReviews); // Update the state with the new reviews array
     };
-
 
     return (
         <div>
@@ -178,7 +182,7 @@ const YourReviews = () => {
                              style={{
                                  textAlign: 'right',
                              }}>
-                            {edit ? (
+                            {editIndex === index ? ( // Checks if current index it the one being edited
                                 <div>
                                     <div>
                                         <label>
@@ -186,9 +190,7 @@ const YourReviews = () => {
                                             <input
                                                 type={'number'}
                                                 value={review.soc_rating}
-                                                onChange={(review) => {
-                                                    updateReview('soc_rating', review.target.value)
-                                                }}
+                                                onChange = {(e) => handleChange(index, 'soc_rating', e.target.value)}
                                             />
                                         </label>
                                     </div>
@@ -199,9 +201,7 @@ const YourReviews = () => {
                                             <input
                                                 type={'number'}
                                                 value={review.acad_rating}
-                                                onChange={(review) => {
-                                                    updateReview('acad_rating', review.target.value)
-                                                }}
+                                                onChange = {(e) => handleChange(index, 'acad_rating', e.target.value)}
                                             />
                                         </label>
                                     </div>
@@ -212,9 +212,7 @@ const YourReviews = () => {
                                             <input
                                                 type={'number'}
                                                 value={review.exec_rating}
-                                                onChange={(review) => {
-                                                    updateReview('exec_rating', review.target.value)
-                                                }}
+                                                onChange = {(e) => handleChange(index, 'exec_rating', e.target.value)}
                                             />
                                         </label>
                                     </div>
@@ -225,9 +223,7 @@ const YourReviews = () => {
                                             <input
                                                 type={'number'}
                                                 value={review.comlev}
-                                                onChange={(review) => {
-                                                    updateReview('comlev', review.target.value)
-                                                }}
+                                                onChange = {(e) => handleChange(index, 'comlev', e.target.value)}
                                             />
                                         </label>
                                     </div>
@@ -238,17 +234,15 @@ const YourReviews = () => {
                                             <input
                                                 type={'text'}
                                                 value={review.review_text}
-                                                onChange={(review) => {
-                                                    updateReview('review_text', review.target.value)
-                                                }}
+                                                onChange = {(e) => handleChange(index, 'review_text', e.target.value)}
                                             />
                                         </label>
                                     </div>
-
-                                    <button onClick={handleSave(review)}>Save</button>
+                                    <button onClick={(e) => handleSave(index)}>Save</button>
+                                    <button onClick={() => setEditIndex(null)}>Cancel</button>
                                 </div>
                             ) : (
-                                <button onClick={() => confirmEdit(true)}>Edit</button>
+                                <button onClick={() => setEditIndex(index)}>Edit</button>
                             )}
                             <button onClick={() => handleDelete(review.review_num)}>Delete</button>
                         </div>
