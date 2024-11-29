@@ -11,6 +11,7 @@ const CreateAccount = () => {
     const [username, setUsername] = useState('');
     const [passkey, setPasskey] = useState(''); // State for admin passcode
     const navigate = useNavigate();
+    const [clubs, setClubs] = useState('');
 
 
     const handleSubmit = (e) => {
@@ -24,7 +25,8 @@ const CreateAccount = () => {
             user_name: username,
             password: password,
             role: role,
-            passkey: role === 'admin' ? passkey : null
+            passkey: role === 'admin' ? passkey : null,
+            clubs: role === 'club_exec' ? clubs : null
         };
 
         // Use fetch-command to send a POST request to Flask local machine server for /login API route
@@ -126,22 +128,10 @@ const CreateAccount = () => {
                             Student
                         </label>
                         <label>
-                            <input //USER == CLUB MEMBER
-                                type="radio"
-                                value="clubMember"
-                                checked={role === 'clubMember'}
-                                onChange={(e) => {
-                                    setRole(e.target.value);
-                                    setPasskey(''); // Reset passcode when switching roles
-                                }}
-                            />
-                            Club Member
-                        </label>
-                        <label>
                             <input //USER == CLUB OWNER
                                 type="radio"
-                                value="clubOwner"
-                                checked={role === 'clubOwner'}
+                                value="club_exec"
+                                checked={role === 'club_exec'}
                                 onChange={(e) => {
                                     setRole(e.target.value);
                                     setPasskey(''); // Reset passcode when switching roles
@@ -172,6 +162,19 @@ const CreateAccount = () => {
                             value={passkey}
                             onChange={(e) => setPasskey(e.target.value)}
                             maxLength={8} // Limit to 12 digits
+                            required
+                        />
+                    </div>
+                )}
+
+                {/* if club pres, input assoc club */}
+                {role === 'club_exec' && (
+                    <div>
+                        <label>Club you lead:</label>
+                        <input
+                            type="text"
+                            value={clubs}
+                            onChange={(e) => setClubs(e.target.value)}
                             required
                         />
                     </div>
