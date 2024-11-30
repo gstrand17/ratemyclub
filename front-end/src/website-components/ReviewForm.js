@@ -21,24 +21,24 @@ const ReviewForm = () => {
         current_mem: null,
         time_mem: 'Example: 3 semesters',
         paid: null
-    });
+    }); // sets up the review array
 
     function getCurrentDate() {
-        const date = new Date();
+        const date = new Date(); // gets current date
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        const day = String(date.getDate()).padStart(2, '0');
-        const year = date.getFullYear();
+        const day = String(date.getDate()).padStart(2, '0'); // pulls day from date format
+        const year = date.getFullYear(); // pulls year from date format
         return `${month}-${day}-${year}`;
     }
 
     const [writtenReview, confirmReview] = useState(false);
 
     const createReview = (type, currValue) =>{
-        setReview({...review, [type]: currValue});
+        setReview({...review, [type]: currValue}); // changes the review component when information is entered
     };
 
     const backToClubs = () => {
-        navigate(`/club-page/${club_name}`);
+        navigate(`/club-page/${club_name}`); // navigates back to the club page
     }
 
     const handleLogout = () => {
@@ -84,8 +84,8 @@ const ReviewForm = () => {
             })
             .then(data => {
                 if (data.message === 'Review created!') {
-                    console.log(data.message);
-                    backToClubs();
+                    console.log(data.message); // logs the review data in the console
+                    backToClubs(); // once submitted it returns to the club page
                 }
                 setMessage(data.message);
             })
@@ -115,9 +115,9 @@ const ReviewForm = () => {
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
                     setReview({
-                        user_email: data.user_email,
-                        club_name: club_name,
-                        date: getCurrentDate()
+                        user_email: data.user_email, // auto-populates user email, cannot be changed
+                        club_name: club_name, // auto-populates club, cannot be changed
+                        date: getCurrentDate(), // auto-populates current date, cannot be changed
                     });
                 } else {
                     console.log('Error:', data.message);
@@ -141,75 +141,79 @@ const ReviewForm = () => {
                  style={{
                      textAlign: 'right',
                  }}>
-                <button onClick={handleProfile}>Profile</button>
-                <button onClick={handleHome}>Home</button>
-                <button onClick={handleLogout}>Logout</button>
+                <button onClick={handleProfile}>Profile</button> {/* Goes to profile when pressed */}
+                <button onClick={handleHome}>Home</button> {/* Goes to homepage when pressed */}
+                <button onClick={handleLogout}>Logout</button> {/* Logout when pressed */}
             </div>
         </div>
 
         {/* Container for the review form */}
         <div style={{position: 'relative'}}>
-            {/*<h1 style={{*/}
-            {/*    fontFamily: "'Alfa Slab One', serif",*/}
-            {/*    fontSize: '3rem',*/}
-            {/*}}>*/}
-            {/*    Review Form*/}
-            {/*</h1>*/}
+
+            {/* User Email container */}
             <div>
                 <label>
                     User Email:
                     <input
                         type="text"
-                        value={review.user_email}
-                        disabled={!writtenReview}
+                        value={review.user_email} // populates user-email
+                        disabled={!writtenReview} // Makes user email non-changeable
                     />
                 </label>
             </div>
+
+            {/* Club name container*/}
             <div>
                 <label>
                     Club Name:
                     <input
                         type="text"
-                        value={review.club_name}
-                        disabled={!writtenReview}
+                        value={review.club_name} // populates club name
+                        disabled={!writtenReview} // Makes club name non-changeable
                     />
                 </label>
             </div>
+
+            {/* Date container */}
             <div>
                 <label>
                     Date:
                     <input
                         type="text"
-                        value={review.date}
-                        disabled={!writtenReview}
+                        value={review.date} // populates the date
+                        disabled={!writtenReview} // makes date non-changeable
                     />
                 </label>
             </div>
             <br></br>
             <label><u>Rate the following aspects from 1-5 </u></label>
+
+            {/* Social Atmosphere container */}
             <div>
                 <label>
                     Social Atmosphere:
                     <input
                         type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
-                        value={review.soc_rating}
+                        min={1} // sets minimum value
+                        max={5} // set maximum value
+                        maxLength={1} // set maximum length
+                        value={review.soc_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('soc_rating', e.target.value)
+                            createReview('soc_rating', e.target.value) // makes changes to adjusted value inputted by user
                         }}
                     />
                 </label>
             </div>
+
+            {/* Academic Strength container*/}
             <div>
                 <label>
                     Academic Strength:
                     <input
                         type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
+                        min={1} // sets minimum value
+                        max={5} // set maximum value
+                        maxLength={1} // set maximum length
                         value={review.acad_rating}
                         onChange={(e) => {
                             createReview('acad_rating', e.target.value)
@@ -217,14 +221,16 @@ const ReviewForm = () => {
                     />
                 </label>
             </div>
+
+            {/* Executive leadership container*/}
             <div>
                 <label>
                     Executive Leadership:
                     <input
                         type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
+                        min={1} // sets minimum value
+                        max={5} // set maximum value
+                        maxLength={1} // set maximum length
                         value={review.exec_rating}
                         onChange={(e) => {
                             createReview('exec_rating', e.target.value)
@@ -232,14 +238,16 @@ const ReviewForm = () => {
                     />
                 </label>
             </div>
+
+            {/* Level of Commitment container*/}
             <div>
                 <label>
                     Level of Commitment:
                     <input
                         type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
+                        min={1} // sets minimum value
+                        max={5} // set maximum value
+                        maxLength={1} // set maximum length
                         value={review.comlev}
                         onChange={(e) => {
                             createReview('comlev', e.target.value)
@@ -247,14 +255,16 @@ const ReviewForm = () => {
                     />
                 </label>
             </div>
+
+            {/* Overall scoring container */}
             <div>
                 <label>
                     Overall Scoring:
                     <input
                         type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
+                        min={1} // sets minimum value
+                        max={5} // set maximum value
+                        maxLength={1} // set maximum length
                         value={review.overall_rating}
                         onChange={(e) => {
                             createReview('overall_rating', e.target.value)
@@ -263,6 +273,8 @@ const ReviewForm = () => {
                 </label>
             </div>
             <br></br>
+
+            {/* Tell us about your experience container */}
             <div>
                 <label>Tell us about your experience: </label><br></br>
                 <input
@@ -274,6 +286,7 @@ const ReviewForm = () => {
                 />
             </div>
 
+            {/* Member duration container */}
             <div>
                 <label>
                     Membership Duration:

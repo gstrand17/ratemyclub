@@ -198,6 +198,9 @@ const YourReviews = () => {
                                         <label>
                                             Social:
                                             <input
+                                                min={1} // sets minimum value
+                                                max={5} // set maximum value
+                                                maxLength={1} // set maximum length
                                                 type={'number'}
                                                 value={review.soc_rating}
                                                 // Changes review value when inputted by the user
@@ -210,6 +213,9 @@ const YourReviews = () => {
                                         <label>
                                             Academic:
                                             <input
+                                                min={1} // sets minimum value
+                                                max={5} // set maximum value
+                                                maxLength={1} // set maximum length
                                                 type={'number'}
                                                 value={review.acad_rating}
                                                 // Changes review value when inputted by the user
@@ -222,6 +228,9 @@ const YourReviews = () => {
                                         <label>
                                             Executive:
                                             <input
+                                                min={1} // sets minimum value
+                                                max={5} // set maximum value
+                                                maxLength={1} // set maximum length
                                                 type={'number'}
                                                 value={review.exec_rating}
                                                 // Changes review value when inputted by the user
@@ -234,6 +243,9 @@ const YourReviews = () => {
                                         <label>
                                             Commitment Level:
                                             <input
+                                                min={1} // sets minimum value
+                                                max={5} // set maximum value
+                                                maxLength={1} // set maximum length
                                                 type={'number'}
                                                 value={review.comlev}
                                                 // Changes review value when inputted by the user
