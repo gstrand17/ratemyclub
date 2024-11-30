@@ -503,3 +503,17 @@ def delete_review(review_id):
     db.session.delete(review)
     db.session.commit()
     return jsonify(message='Review deleted successfully'), 200
+
+#route for admin to un-flag a review
+@app.route('/api/review/<int:review_id>/unflag', methods=['POST'])
+def unflag_review(review_id):
+    if 'admin' not in session:
+        return jsonify(message='Unauthorized'), 401
+
+    review = ClubReviews.query.get(review_id)
+    if not review:
+        return jsonify(message='Review not found'), 404
+
+    review.flagged = False
+    db.session.commit()
+    return jsonify(message='Review unflagged'), 200
