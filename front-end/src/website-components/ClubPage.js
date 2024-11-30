@@ -171,6 +171,55 @@ const ClubPage = () => {
             .catch(error => console.log('Error saving club details:', error));
     };
 
+    //helper function for admin to delete reviews
+    const handleDelete = (reviewId) => {
+        if (userRole !== 'admin') {
+            console.log('Only admins can delete reviews');
+            return;
+        }
+
+        fetch(`http://localhost:5000/api/review/${reviewId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.message === 'Review deleted successfully') {
+                    console.log('Review has been successfully deleted!');
+                    setReviews((prevReviews) => prevReviews.filter((review) => review.review_num !== reviewId));
+                } else {
+                    console.log('Error:', data.message);
+                }
+            })
+            .catch((error) => console.log('Error deleting review:', error));
+    };
+
+    //helper function for admin to unflag student reviews
+    const handleUnflagReview = (reviewId) => {
+        if (userRole !== 'admin') return;
+
+        fetch(`http://localhost:5000/api/review/${reviewId}/unflag`, {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Review unflagged') {
+                    setReviews(prevReviews => prevReviews.map(review =>
+                        review.review_num === reviewId ? { ...review, flagged: false } : review
+                    ));
+                }
+            })
+            .catch(error => console.log('Error unflagging review:', error));
+    };
 
     //code for a bar chart of average club ratings
     const barChartData = {
@@ -298,12 +347,12 @@ const ClubPage = () => {
                 <h1 style={{
                     textAlign: 'center',
                     fontSize: '3rem',
-                }}>{club_name}</h1>
+                }}>
+                    {club_name}
+                </h1>
 
                 <div className="button-container"
-                     style={{
-                         textAlign: 'right',
-                     }}>
+                     style={{textAlign: 'right',}}>
                     <button onClick={handleProfile}>Profile</button>
                     <button onClick={handleReviews}>Your Reviews</button>
                     <button onClick={handleHome}>Home</button>
@@ -311,11 +360,12 @@ const ClubPage = () => {
                 </div>
             </div>
 
-            {/*edit view for club owner */}
+            {/* edit view for club owner */}
             {isEditing ? (
-                    <div>
+                <div>
                     <div style={{marginBottom: '1rem'}}>
                         <textarea
+                            //edit club description
                             value={updatedClub.description}
                             onChange={e => handleFieldChange('description', e.target.value)}
                             style={{
@@ -330,6 +380,7 @@ const ClubPage = () => {
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
                         <input
+                            //edit club link
                             type="text"
                             value={updatedClub.link}
                             onChange={e => handleFieldChange('link', e.target.value)}
@@ -342,42 +393,39 @@ const ClubPage = () => {
                             placeholder="Update club link"
                         />
                     </div>
-                        <button onClick={handleSave}>Save</button>
+                        <button onClick={handleSave}>Save</button> {/* save changes */}
                     </div>
                 ) :
                 (<div>
-
                         <div style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap',}}>
                             {(Array.isArray(club.tags) ? club.tags : club.tags ? club.tags.split('|') : [])
-                    .filter(tag => tag.trim() !== '') // Filter out empty tags
-                    .map((tag, tagIndex) => (
-                        <span
-                            key={tagIndex}
-                            style={{
-                                backgroundColor: getTagColor(tag),
-                                color: 'white',
-                                padding: '5px 10px',
-                                borderRadius: '15px',
-                                fontSize: '0.9rem',
-                                fontWeight: 'bold',
-                            }}>
-                            {tag.trim()}
-                        </span>
-                    ))}
-            </div>
-
-            <p>{club.description}</p>
-            <p>Link: <a href={club.link}>{club.link}</a></p>
-                    </div>
+                            .filter(tag => tag.trim() !== '') // Filter out empty tags
+                            .map((tag, tagIndex) => (
+                                <span
+                                    key={tagIndex}
+                                    style={{
+                                        backgroundColor: getTagColor(tag),
+                                        color: 'white',
+                                        padding: '5px 10px',
+                                        borderRadius: '15px',
+                                        fontSize: '0.9rem',
+                                        fontWeight: 'bold',
+                                    }}>
+                                    {tag.trim()}
+                                </span>
+                            ))}
+                        </div>
+                        <p>{club.description}</p> {/* club description */}
+                        <p>Link: <a href={club.link}>{club.link}</a></p> {/* club external link */}
+                </div>
                 )}
 
+            {/* button to edit club details */}
             {userRole === 'club_exec' && isClubOwner && (
                 <button onClick={handleEditToggle}>
                     {isEditing ? 'Cancel' : 'Edit Club Details'}
                 </button>
             )}
-
-
 
             {/*emphasize overall average rating*/}
             <h2>
@@ -424,6 +472,19 @@ const ClubPage = () => {
                         marginTop: '1rem',
                         position: 'relative'
                     }}>
+
+                        {/* Button for admin view to delete reviews */}
+                        {userRole==='admin' && (<div className="button-container"
+                                                     style={{textAlign: 'left', marginTop: "0", marginBottom: "1rem"}}>
+                                <button onClick={() => {
+                                        if (window.confirm('Are you sure you want to delete this review?')) {
+                                            handleDelete(review.review_num);}}}
+                                        className="delete-button">
+                                    Delete
+                                </button>
+                            </div>
+                        )}
+
                         <h3 style={{fontSize: '1.5rem', marginTop: 0, marginBottom: '0.5rem'}}>{club_name}</h3>
                         <p style={{
                             fontStyle: 'italic',
@@ -444,7 +505,8 @@ const ClubPage = () => {
                         </div>
 
                         {/* Actual written Review */}
-                        <p style={{border: '2px solid #ddd',
+                        <p style={{
+                            border: '2px solid #ddd',
                             borderRadius: '6px',
                             padding: '1rem',
                             backgroundColor: '#e8e6e6',
@@ -454,7 +516,7 @@ const ClubPage = () => {
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
 
-                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
+                        <div style={{display: "flex", justifyContent: "space-between", marginTop: "1rem"}}>
                             <button
                                 onClick={() => handleThumbsUp(review.review_num)}
                                 style={{
@@ -487,6 +549,7 @@ const ClubPage = () => {
                                 🚩 {review.flagged ? 'Flagged' : 'Flag'}
                             </button>
                         </div>
+
 
                     </div>
                 ))}
