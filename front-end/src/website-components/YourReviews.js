@@ -197,60 +197,68 @@ const YourReviews = () => {
                                     <div>
                                         <label>
                                             Social:
-                                            <input
-                                                min={1} // sets minimum value
-                                                max={5} // set maximum value
-                                                maxLength={1} // set maximum length
-                                                type={'number'}
-                                                value={review.soc_rating}
+                                            <select
+                                                value={review.soc_rating} // connects value to soc_rating for the review
                                                 // Changes review value when inputted by the user
-                                                onChange = {(e) => handleChange(index, 'soc_rating', e.target.value)}
-                                            />
+                                                onChange={(e) => handleChange(index, 'soc_rating', e.target.value)} // updates the review state with the selected value
+                                            >
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={4}>4</option>
+                                                <option value={5}>5</option>
+                                            </select>
                                         </label>
                                     </div>
 
                                     <div>
                                         <label>
                                             Academic:
-                                            <input
-                                                min={1} // sets minimum value
-                                                max={5} // set maximum value
-                                                maxLength={1} // set maximum length
-                                                type={'number'}
-                                                value={review.acad_rating}
+                                            <select
+                                                value={review.acad_rating} // connects value to soc_rating for the review
                                                 // Changes review value when inputted by the user
-                                                onChange = {(e) => handleChange(index, 'acad_rating', e.target.value)}
-                                            />
+                                                onChange={(e) => handleChange(index, 'acad_rating', e.target.value)} // updates the review state with the selected value
+                                            >
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={4}>4</option>
+                                                <option value={5}>5</option>
+                                            </select>
                                         </label>
                                     </div>
 
                                     <div>
                                         <label>
                                             Executive:
-                                            <input
-                                                min={1} // sets minimum value
-                                                max={5} // set maximum value
-                                                maxLength={1} // set maximum length
-                                                type={'number'}
-                                                value={review.exec_rating}
+                                            <select
+                                                value={review.exec_rating} // connects value to soc_rating for the review
                                                 // Changes review value when inputted by the user
-                                                onChange = {(e) => handleChange(index, 'exec_rating', e.target.value)}
-                                            />
+                                                onChange={(e) => handleChange(index, 'exec_rating', e.target.value)} // updates the review state with the selected value
+                                            >
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={4}>4</option>
+                                                <option value={5}>5</option>
+                                            </select>
                                         </label>
                                     </div>
 
                                     <div>
                                         <label>
                                             Commitment Level:
-                                            <input
-                                                min={1} // sets minimum value
-                                                max={5} // set maximum value
-                                                maxLength={1} // set maximum length
-                                                type={'number'}
-                                                value={review.comlev}
+                                            <select
+                                                value={review.comlev} // connects value to soc_rating for the review
                                                 // Changes review value when inputted by the user
-                                                onChange = {(e) => handleChange(index, 'comlev', e.target.value)}
-                                            />
+                                                onChange={(e) => handleChange(index, 'comlev', e.target.value)} // updates the review state with the selected value
+                                            >
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={4}>4</option>
+                                                <option value={5}>5</option>
+                                            </select>
                                         </label>
                                     </div>
 
@@ -261,7 +269,7 @@ const YourReviews = () => {
                                                 type={'text'}
                                                 value={review.review_text}
                                                 // Changes review value when inputted by the user
-                                                onChange = {(e) => handleChange(index, 'review_text', e.target.value)}
+                                                onChange={(e) => handleChange(index, 'review_text', e.target.value)}
                                             />
                                         </label>
                                     </div>

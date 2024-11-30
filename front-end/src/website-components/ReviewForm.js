@@ -192,16 +192,18 @@ const ReviewForm = () => {
             <div>
                 <label>
                     Social Atmosphere:
-                    <input
-                        type='number'
-                        min={1} // sets minimum value
-                        max={5} // set maximum value
-                        maxLength={1} // set maximum length
+                    <select
                         value={review.soc_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('soc_rating', e.target.value) // makes changes to adjusted value inputted by user
+                            createReview('soc_rating', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
 
@@ -209,16 +211,18 @@ const ReviewForm = () => {
             <div>
                 <label>
                     Academic Strength:
-                    <input
-                        type='number'
-                        min={1} // sets minimum value
-                        max={5} // set maximum value
-                        maxLength={1} // set maximum length
-                        value={review.acad_rating}
+                    <select
+                        value={review.acad_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('acad_rating', e.target.value)
+                            createReview('acad_rating', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
 
@@ -226,16 +230,18 @@ const ReviewForm = () => {
             <div>
                 <label>
                     Executive Leadership:
-                    <input
-                        type='number'
-                        min={1} // sets minimum value
-                        max={5} // set maximum value
-                        maxLength={1} // set maximum length
-                        value={review.exec_rating}
+                    <select
+                        value={review.exec_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('exec_rating', e.target.value)
+                            createReview('exec_rating', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
 
@@ -243,16 +249,18 @@ const ReviewForm = () => {
             <div>
                 <label>
                     Level of Commitment:
-                    <input
-                        type='number'
-                        min={1} // sets minimum value
-                        max={5} // set maximum value
-                        maxLength={1} // set maximum length
-                        value={review.comlev}
+                    <select
+                        value={review.comlev} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('comlev', e.target.value)
+                            createReview('comlev', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
 
@@ -260,16 +268,18 @@ const ReviewForm = () => {
             <div>
                 <label>
                     Overall Scoring:
-                    <input
-                        type='number'
-                        min={1} // sets minimum value
-                        max={5} // set maximum value
-                        maxLength={1} // set maximum length
-                        value={review.overall_rating}
+                    <select
+                        value={review.overall_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
             <br></br>
