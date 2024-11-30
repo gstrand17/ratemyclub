@@ -4,8 +4,11 @@ import {useNavigate, useParams} from 'react-router-dom';
 const YourReviews = () => {
 
     const navigate = useNavigate();
-    const [reviews, setReviews] = useState([]); // initialize as empty array
-    const [editIndex, setEditIndex] = useState(null); // track wich review is being edited
+    const [reviews, setReviews] = useState([]); // initialize as empty array, tracks reviews and where updated review changes are stored
+    const [currentReview, setCurrentReview] = useState([]); // initializes empty array, initial data that is not edited when putting in change form
+    const [editIndex, setEditIndex] = useState(null); // track which review is being edited
+
+    // Handles logout when logout button is pressed
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
         // Navigate back home
@@ -28,7 +31,7 @@ const YourReviews = () => {
     };
 
     const handleHome = () => {
-        navigate('/front-page');
+        navigate('/front-page'); // Navigates to front-page
     };
 
     useEffect(() => {
@@ -49,7 +52,8 @@ const YourReviews = () => {
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
                     if (data.reviews) {
-                        setReviews(data.reviews); // Ensure reviews is an array
+                        setCurrentReview(data.reviews); // keeps track of current reviews, non-edited array for cancel button
+                        setReviews(data.reviews); // Ensure reviews is an array, this array is changed when information is inputed
                     }
                 } else {
                     console.log('Error:', data.message);
@@ -84,7 +88,6 @@ const YourReviews = () => {
     };
 
     const handleSave = (index) => {
-        /// event.preventDefault();
         const updatedReview = reviews[index] // get review being edited
 
         fetch('http://localhost:5000/YourReviews', {
@@ -105,14 +108,20 @@ const YourReviews = () => {
             })
             .then(data => {
                 if (data.message === "Data has been fetched!") {
+                    setEditIndex(null); // exit edit mode
+                    setCurrentReview(data.reviews); // Updates array with new information.
                     setReviews(data.reviews); // Inputs the new reviews
                     console.log(data.reviews); // Log current input value
-                    setEditIndex(null); // edit edit mode
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
+    }
+
+    const handleCancel = () => {
+        setEditIndex(null); // Exits editing state
+        setReviews(currentReview); // Reverts information back to previous state before changes
     }
 
     const handleChange = (index, field, value) => {
@@ -191,6 +200,7 @@ const YourReviews = () => {
                                             <input
                                                 type={'number'}
                                                 value={review.soc_rating}
+                                                // Changes review value when inputted by the user
                                                 onChange = {(e) => handleChange(index, 'soc_rating', e.target.value)}
                                             />
                                         </label>
@@ -202,6 +212,7 @@ const YourReviews = () => {
                                             <input
                                                 type={'number'}
                                                 value={review.acad_rating}
+                                                // Changes review value when inputted by the user
                                                 onChange = {(e) => handleChange(index, 'acad_rating', e.target.value)}
                                             />
                                         </label>
@@ -213,6 +224,7 @@ const YourReviews = () => {
                                             <input
                                                 type={'number'}
                                                 value={review.exec_rating}
+                                                // Changes review value when inputted by the user
                                                 onChange = {(e) => handleChange(index, 'exec_rating', e.target.value)}
                                             />
                                         </label>
@@ -224,6 +236,7 @@ const YourReviews = () => {
                                             <input
                                                 type={'number'}
                                                 value={review.comlev}
+                                                // Changes review value when inputted by the user
                                                 onChange = {(e) => handleChange(index, 'comlev', e.target.value)}
                                             />
                                         </label>
@@ -235,12 +248,13 @@ const YourReviews = () => {
                                             <input
                                                 type={'text'}
                                                 value={review.review_text}
+                                                // Changes review value when inputted by the user
                                                 onChange = {(e) => handleChange(index, 'review_text', e.target.value)}
                                             />
                                         </label>
                                     </div>
                                     <button onClick={() => handleSave(index)}>Save</button>
-                                    <button onClick={() => setEditIndex(null)}>Cancel</button>
+                                    <button onClick={() => handleCancel()}>Cancel</button>
                                 </div>
                             ) : (
                                 <button onClick={() => setEditIndex(index)}>Edit</button>
