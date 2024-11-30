@@ -84,8 +84,8 @@ const YourReviews = () => {
     };
 
     const handleSave = (index) => {
+        /// event.preventDefault();
         const updatedReview = reviews[index] // get review being edited
-        // event.preventDefault();
 
         fetch('http://localhost:5000/YourReviews', {
             method: 'PUT',
@@ -106,6 +106,7 @@ const YourReviews = () => {
             .then(data => {
                 if (data.message === "Data has been fetched!") {
                     setReviews(data.reviews); // Inputs the new reviews
+                    console.log(data.reviews); // Log current input value
                     setEditIndex(null); // edit edit mode
                 }
             })
@@ -238,7 +239,7 @@ const YourReviews = () => {
                                             />
                                         </label>
                                     </div>
-                                    <button onClick={(e) => handleSave(index)}>Save</button>
+                                    <button onClick={() => handleSave(index)}>Save</button>
                                     <button onClick={() => setEditIndex(null)}>Cancel</button>
                                 </div>
                             ) : (

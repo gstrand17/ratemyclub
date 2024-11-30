@@ -39,9 +39,8 @@ class User(db.Model):
 # Define the ClubDirectory model
 class ClubDirectory(db.Model):
     __tablename__ = 'club_directory'
-    #ID = Column(Integer, primary_key=True)  # This needs to be the hash value
     club_name = Column(String, primary_key=True, unique=True)
-    tags = Column(String)  # Use a String or JSON type if needed
+    tags = Column(String)
     avg_overall_rating = Column(Float)
     avg_soc_rating = Column(Float)
     avg_acad_rating = Column(Float)
@@ -53,12 +52,14 @@ class ClubDirectory(db.Model):
     def calculate_avg_ratings(self):
         reviews = ClubReviews.query.filter_by(club_name=self.club_name).all()
         if reviews:
+            # If any reviews are written towards a club, function averages the values for each rating scale
             self.avg_overall_rating = sum(review.overall_rating for review in reviews) / len(reviews)
             self.avg_soc_rating = sum(review.soc_rating for review in reviews) / len(reviews)
             self.avg_acad_rating = sum(review.acad_rating for review in reviews) / len(reviews)
             self.avg_exec_rating = sum(review.exec_rating for review in reviews) / len(reviews)
             self.avg_comlev = sum(review.comlev for review in reviews) / len(reviews)
         else:
+            # No reviews? Set all the average ratings to the default 0.0
             self.avg_overall_rating = self.avg_soc_rating = self.avg_acad_rating = self.avg_exec_rating = self.avg_comlev = 0.0
 
 # Define the ClubReviews model
@@ -67,19 +68,17 @@ class ClubReviews(db.Model):
     review_num = Column(Integer, primary_key=True)
     user_email = Column(String)
     club_name = Column(String)
-    date = Column(String)  # Date format?
-    review_text = Column(String) #body of the review
+    date = Column(String)  # Date format established in front end
+    review_text = Column(String) # Body text of the review
     overall_rating = Column(Float)
     soc_rating = Column(Float)
     acad_rating = Column(Float)
     exec_rating = Column(Float)
     comlev = Column(Float)
     current_mem = Column(Boolean)
-    time_mem = Column(String)  # Date format?
+    time_mem = Column(String)
     paid = Column(Boolean)
-    thumbs = Column(Integer, default=0)  #set default val
+    thumbs = Column(Integer, default=0)  # Set default val
     flagged = Column(Boolean, default=False)
-    liked_by = Column(JSON, default=[])  #list of user emails to keep track of thumbs-up
-
-
+    liked_by = Column(JSON, default=[])  # List of user emails to keep track of thumbs-up
 

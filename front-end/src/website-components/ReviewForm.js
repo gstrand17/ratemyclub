@@ -61,7 +61,7 @@ const ReviewForm = () => {
         navigate('/profile');
     };
     const handleHome = () => {
-        navigate('/front-page');
+        navigate('/front-page'); // Navigate to the front-page
     };
 
     const handleSubmit = () =>{

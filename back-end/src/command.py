@@ -16,30 +16,30 @@ def db_drop():
 
 @app.cli.command('db_seed')  # Starter data
 def db_seed():
-    sample_review1 = ClubReviews(review_num=1, user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2022",
+    sample_review1 = ClubReviews(review_num=1, user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="10-2-2022",
                                  review_text="omg I love this club", overall_rating=4, soc_rating = 5, acad_rating = 2,
                                  exec_rating = 5, comlev = 4, current_mem = True, time_mem = "4 semesters", paid = False, thumbs=0, flagged=False, liked_by=[])
     sample_review2 = ClubReviews(user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
                                  review_text="this was the worst club I've ever gone to", overall_rating=0, soc_rating = 1,
                                  acad_rating = 2, exec_rating = 1, comlev = 5, current_mem = True, time_mem = "4 semesters", paid = False,
-                                 thumbs=0, flagged=False, liked_by=[])
-    sample_review2 = ClubReviews(review_num=2, user_email="jimin@ufl.edu", club_name="3D Printing Club", date="March 2024",
+                                 thumbs=0, flagged=False)
+    sample_review2 = ClubReviews(review_num=2, user_email="jimin@ufl.edu", club_name="3D Printing Club", date="3-4-2024",
                                  review_text="this was the worst club I've ever gone to", overall_rating=5, soc_rating = 5,
                                  acad_rating = 2, exec_rating = 5, comlev = 5, current_mem = True, time_mem = "1 semester",
-                                 paid = False, thumbs=0, flagged=False, liked_by=[])
-    sample_review3 = ClubReviews(review_num=3,user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="October 2024",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review3 = ClubReviews(review_num=3,user_email="gstrand@ufl.edu", club_name="3D Printing Club", date="4-6-2024",
                                  review_text="I never want to leave this club. I love everyone so much", overall_rating = 5,
                                  soc_rating = 5, acad_rating=3, exec_rating=5, comlev = 5, current_mem = True, time_mem = "8 semesters",
-                                 paid = False, thumbs=0, flagged=False, liked_by=[])
-    sample_review4 = ClubReviews(review_num=4,user_email="ehargrave@ufl.edu", club_name="3D Printing Club", date="October 2024",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review4 = ClubReviews(review_num=4,user_email="ehargrave@ufl.edu", club_name="3D Printing Club", date="10-10-2024",
                                  review_text="learned that 3d printing is about the friends u make along the way.", overall_rating = 5,
                                  soc_rating = 5, acad_rating=4, exec_rating=5, comlev = 1, current_mem = False, time_mem = "2 semesters",
-                                 paid = False, thumbs=0, flagged=False, liked_by=[])
-    sample_review5 = ClubReviews(review_num=5,user_email="ehargrave@ufl.edu", club_name="A Reason to Give", date="November 2024",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review5 = ClubReviews(review_num=5,user_email="ehargrave@ufl.edu", club_name="A Reason to Give", date="2-4-2024",
                                  review_text="absolutely so slay found so many reasons to give", overall_rating = 4.5,
                                  soc_rating = 4, acad_rating=3, exec_rating=4, comlev = 2, current_mem = True, time_mem = "2 semesters",
-                                 paid = False, thumbs=0, flagged=False, liked_by=[])
-    sample_review6 = ClubReviews(review_num=6,user_email="ehargrave@ufl.edu", club_name="A Reason to Give", date="October 2024",
+                                 paid = False, thumbs=0, flagged=False)
+    sample_review6 = ClubReviews(review_num=6,user_email="ehargrave@ufl.edu", club_name="A Reason to Give", date="11-11-2024",
                                  review_text="never found the reason for giving...", overall_rating = 1,
                                  soc_rating = 4, acad_rating=1, exec_rating=1, comlev = 4, current_mem = False, time_mem = "1 semester",
                                  paid = False, thumbs=0, flagged=False, liked_by=[])
@@ -605,6 +605,7 @@ def db_show_users():
             print(f"- Email: {user.email}, Username: {user.username}, First Name: {user.first_name}, Last Name: {user.last_name}")
     else:
         print("No users found in the User table.")
+
 
 @app.cli.command('db_show_directory')  # CLI command to show clubs
 def db_show_directory():

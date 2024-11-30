@@ -1,18 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 
-//import bannerImage from './uf_dupe.png';
-//import bannerImage from './banner.jpg';
-
 const FrontPage = () => {
-//ADD A SEARCH BAR TO SEARCH FOR CLUBS?
-    //search bar routes to club search page
-
-//diff options shown depending on type of user?
-    //get user role from login/create acct or backend?
-
-    // website structure goes here
-    //const location = useLocation();
+    // store initial states for website
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -20,6 +10,7 @@ const FrontPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
+        //fetch user data
         fetch('http://localhost:5000/front-page', {
             method: 'GET',
             credentials: 'include',
@@ -61,9 +52,8 @@ const FrontPage = () => {
             .catch(error => console.log('Error fetching club data:', error));
     }, []);
 
+    //helper method to log out
     const handleLogout = () => {
-        // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
-        // Navigate back home
         fetch('http://localhost:5000/logout', {
             method: 'POST',
             credentials: 'include'
@@ -85,15 +75,16 @@ const FrontPage = () => {
         navigate('/YourReviews')
     };
 
+    //helper method for search bar functionality
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
 
+    //user can search by club name or tags
     const filteredClubs = clubs.filter(club =>
         club.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         club.tags.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
 
     //help from chat.gpt: randomly generates a consistent color based on the tag
     const getTagColor = (tag) => {
@@ -116,7 +107,6 @@ const FrontPage = () => {
         return '#F44336'; //else red for low ratings
     };
 
-
     return (
         <div style={{position: 'relative'}}>
             {/* Banner Image */}
@@ -135,10 +125,11 @@ const FrontPage = () => {
 
             <div style={{
                 display: 'flex',
-                alignItems: 'center', // Align items vertically centered
-                justifyContent: 'space-between', // Center horizontally
-                textAlign: 'center', // center text for h1
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                textAlign: 'center',
             }}>
+                {/* Welcome user by first name */}
                 <h1 style={{
                     fontFamily: "'Alfa Slab One', serif",
                     fontSize: '3rem',
@@ -146,7 +137,6 @@ const FrontPage = () => {
                 }}>
                     WELCOME {firstName}
                 </h1>
-
 
                 <div className="button-container"
                      style={{
@@ -158,7 +148,7 @@ const FrontPage = () => {
                 </div>
             </div>
 
-            {/* Search bar */}
+            {/* Search bar: help from chat.gpt */}
             <div style={{maxWidth: '600px', margin: '20px auto', padding: '10px',}}>
                 <input
                     type="text"
@@ -194,8 +184,7 @@ const FrontPage = () => {
                             {club.name}
                         </h2>
 
-                        {/* Map over tags and display each as a colored button
-                        Back end will hopefully come up with an easier getter method to return substring*/}
+                        {/* Map over tags and display each as a colored button */}
                         <div style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap'}}>
                             {(Array.isArray(club.tags) ? club.tags : club.tags ? club.tags.split('|') : [])
                                 .filter(tag => tag.trim() !== '')  //filter out empty tags
@@ -215,6 +204,7 @@ const FrontPage = () => {
                                 ))}
                         </div>
 
+                        {/* Display the average overall rating */}
                         <div
                             style={{
                                 backgroundColor: getRatingColor(club.avg_overall_rating),
@@ -225,19 +215,14 @@ const FrontPage = () => {
                                 fontWeight: 'bold',
                                 textAlign: 'center',
                                 marginTop: '10px',
-                            }}
-                        >
+                            }}>
                             Average Overall Rating: {club.avg_overall_rating?.toFixed(1) ?? 'N/A'}
                         </div>
-
-
                     </div>
                 ))}
             </div>
         </div>
     );
 };
-//navigate(`/club/${club.id}`)
-//<p>Tags: {club.tags}</p>
-//style={{ maxWidth: '300px', margin: 'auto', padding: '20px', border: '3px solid #ccc' }}>
+
 export default FrontPage;

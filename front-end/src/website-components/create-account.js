@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Import useNavigate
+import { useNavigate, Link } from "react-router-dom";
 
 const CreateAccount = () => {
+    //store different states for user and club
     const [message, setMessage] = useState('');
-    const [email, setEmail] = useState(''); //SEND TO BACKEND SOMEHOW
-    const [password, setPassword] = useState(''); //SEND TO BACKEND
-    const [role, setRole] = useState('student'); // Default role
-    const [firstName, setFirstName] = useState(''); // State for first name
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('student');
+    const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
-    const [passkey, setPasskey] = useState(''); // State for admin passcode
+    const [passkey, setPasskey] = useState('');
     const navigate = useNavigate();
-
+    const [clubs, setClubs] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -24,7 +25,8 @@ const CreateAccount = () => {
             user_name: username,
             password: password,
             role: role,
-            passkey: role === 'admin' ? passkey : null
+            passkey: role === 'admin' ? passkey : null,
+            clubs: role === 'club_exec' ? clubs : null
         };
 
         // Use fetch-command to send a POST request to Flask local machine server for /login API route
@@ -59,11 +61,10 @@ const CreateAccount = () => {
 
     return (
         <div style={{maxWidth: '400px', margin: 'auto', padding: '20px', border: '3px solid #ccc'}}>
-
             <h1>Create Account</h1>
             <form onSubmit={handleSubmit}>
                 <div>
-
+                    {/* Input user's first name */}
                     <label>First Name:</label>
                     <input
                         type="text"
@@ -73,7 +74,7 @@ const CreateAccount = () => {
                     />
                 </div>
                 <div>
-
+                    {/* Input user's last name */}
                     <label>Last Name:</label>
                     <input
                         type="text"
@@ -83,7 +84,7 @@ const CreateAccount = () => {
                     />
                 </div>
                 <div>
-
+                    {/* Input user's email */}
                     <label>Email:</label>
                     <input
                         type="email"
@@ -93,6 +94,7 @@ const CreateAccount = () => {
                     />
                 </div>
                 <div>
+                    {/* Input user's username */}
                     <label>Username:</label>
                     <input
                         type="username"
@@ -102,6 +104,7 @@ const CreateAccount = () => {
                     />
                 </div>
                 <div>
+                    {/* Input user's password */}
                     <label>Password:</label>
                     <input
                         type="password"
@@ -111,6 +114,7 @@ const CreateAccount = () => {
                     />
                 </div>
                 <div>
+                    {/* Input user's role-student, club exec, or admin */}
                     <label>Role:</label>
                     <div>
                         <label>
@@ -126,22 +130,10 @@ const CreateAccount = () => {
                             Student
                         </label>
                         <label>
-                            <input //USER == CLUB MEMBER
-                                type="radio"
-                                value="clubMember"
-                                checked={role === 'clubMember'}
-                                onChange={(e) => {
-                                    setRole(e.target.value);
-                                    setPasskey(''); // Reset passcode when switching roles
-                                }}
-                            />
-                            Club Member
-                        </label>
-                        <label>
                             <input //USER == CLUB OWNER
                                 type="radio"
-                                value="clubOwner"
-                                checked={role === 'clubOwner'}
+                                value="club_exec"
+                                checked={role === 'club_exec'}
                                 onChange={(e) => {
                                     setRole(e.target.value);
                                     setPasskey(''); // Reset passcode when switching roles
@@ -149,9 +141,8 @@ const CreateAccount = () => {
                             />
                             Club Owner
                         </label>
-
                         <label>
-                            <input //ADMIN
+                            <input //USER == ADMIN
                                 type="radio"
                                 value="admin"
                                 checked={role === 'admin'}
@@ -177,10 +168,25 @@ const CreateAccount = () => {
                     </div>
                 )}
 
+                {/* if club pres, input assoc club */}
+                {role === 'club_exec' && (
+                    <div>
+                        <label>Club you lead:</label>
+                        <input
+                            type="text"
+                            value={clubs}
+                            onChange={(e) => setClubs(e.target.value)}
+                            required
+                        />
+                    </div>
+                )}
+
+                {/* button to create an acct */}
                 <button type="submit" style={{padding: '10px 20px', fontSize: '16px', marginTop: '10px'}}>
                     Create Account
                 </button>
 
+                {/* button to return home */}
                 <Link to="/">
                     <button style={{padding: '10px 20px', fontSize: '16px', marginTop: '10px'}}>
                         Home
@@ -191,7 +197,5 @@ const CreateAccount = () => {
         </div>
     );
 };
-
-//should we add options to add clubs they belong to if they click club owner/club member, or do that in the profile page??
 
 export default CreateAccount;
