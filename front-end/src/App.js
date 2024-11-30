@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './website-components/Home';
@@ -10,6 +9,7 @@ import ClubPage from './website-components/ClubPage';
 import YourReviews from './website-components/YourReviews';
 import ReviewForm from './website-components/ReviewForm';
 
+//define paths for all our web pages
 const App = () => {
     return (
         <Router>

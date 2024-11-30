@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    //store init states
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
-    const navigate = useNavigate(); // Hook to programmatically navigate
-    const [role, setRole] = useState('student'); // Default role is student
-    const [passkey, setPasskey] = useState(''); // State for admin passcode
+    const navigate = useNavigate();
+    const [role, setRole] = useState('student');
+    const [passkey, setPasskey] = useState('');
 
+    //helper function to handle submit form
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -57,6 +59,7 @@ const Login = () => {
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
+                    {/* Input username */}
                     <label>Username:</label>
                     <input
                         type="text"
@@ -66,6 +69,7 @@ const Login = () => {
                     />
                 </div>
                 <div>
+                    {/* Input password */}
                     <label>Password:</label>
                     <input
                         type="password"
@@ -101,6 +105,7 @@ const Login = () => {
                         </label>
                     </div>
                 </div>
+                {/* check user admin passkey */}
                 {role === 'admin' && (
                     <div>
                         <label>Admin Passkey:</label>
@@ -119,6 +124,7 @@ const Login = () => {
                 <button type="submit" style={{ padding: '5px 10px', fontSize: '18px', marginTop: '10px' }}>
                     Login
                 </button>
+
             </form>
             {message && <p>{message}</p>}
 

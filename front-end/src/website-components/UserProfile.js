@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {useNavigate} from "react-router-dom";
 
 const UserProfile = () => {
-    //diff options shown depending on type of user?
+    //store init states of user
     const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [user, setUser] = useState({
@@ -13,8 +13,9 @@ const UserProfile = () => {
         password: '',
         role: ''
     });
-    const [edit, confirmEdit] = useState(false);
+    const [edit, confirmEdit] = useState(false); //for edit mode
 
+    //fetch user data from backend
     useEffect(() => {
         fetch('http://localhost:5000/profile', {
             method: 'GET',
@@ -44,6 +45,7 @@ const UserProfile = () => {
             });
     }, []);
 
+    //on submit, save new user data
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -76,10 +78,12 @@ const UserProfile = () => {
             });
     };
 
+    //helper function to edit profile
     const updateProfile = (type, currValue) => {
         setUser(prevValue => ({ ...prevValue, [type]: currValue }));
     };
 
+    //navigate back to clubs
     const back = () => {
         navigate('/front-page');
     };
@@ -92,11 +96,8 @@ const UserProfile = () => {
             }}>
                 PROFILE
             </h1>
-            {/*
-                Get info from backend: Name, email, role, hide pass(?)
-                Have an edit button
-             */}
             <div>
+                {/* display first name */}
                 <label>
                     First Name:
                     <input
@@ -108,6 +109,7 @@ const UserProfile = () => {
                 </label>
             </div>
             <div>
+                {/* display last name */}
                 <label>
                     Last Name:
                     <input
@@ -119,6 +121,7 @@ const UserProfile = () => {
                 </label>
             </div>
             <div>
+                {/* display email */}
                 <label>
                     Email:
                     <input
@@ -130,6 +133,7 @@ const UserProfile = () => {
                 </label>
             </div>
             <div>
+                {/* display username */}
                 <label>
                     Username:
                     <input
@@ -141,6 +145,7 @@ const UserProfile = () => {
                 </label>
             </div>
             <div>
+                {/* display password */}
                 <label>
                     Password:
                     <input
@@ -151,16 +156,19 @@ const UserProfile = () => {
                     />
                 </label>
             </div>
+
+            {/* buttons for edit mode */}
             {edit ? (
                 <button onClick={handleSubmit}>Save</button>
             ) : (
                 <button onClick={() => confirmEdit(true)}>Edit</button>
             )}
-                <div className="button-container">
-                    <button style={{marginTop: '10px'}} onClick={back}>Back to Home</button>
-                </div>
-        </div>
 
+            {/* back to club */}
+            <div className="button-container">
+                <button style={{marginTop: '10px'}} onClick={back}>Back to Home</button>
+            </div>
+        </div>
     );
 };
 

@@ -5,14 +5,10 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title } from 'chart.js';
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title);
 
-//button if only club or admin edit details->blanks to change data?
-//button to edit your review in YourReviews.js?
-//admin can delete reviews
-
 const ClubPage = () => {
     const navigate = useNavigate();
     const { club_name } = useParams(); // using club_name to get club
-    const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState([]); //store student reviews
     const [club, setClub] = useState({
         name: '',
         description: '',
@@ -26,10 +22,11 @@ const ClubPage = () => {
         link: ''
     });
     const [isEditing, setIsEditing] = useState(false); //track editing mode for admin/club owners
-    const [updatedClub, setUpdatedClub] = useState({description: '', link: '' }); //store the edits,names/tags: ''
-    const [userRole, setUserRole] = useState(''); // Role of the user
-    const [isClubOwner, setIsClubOwner] = useState(false);
+    const [updatedClub, setUpdatedClub] = useState({description: '', link: '' }); //store the edits
+    const [userRole, setUserRole] = useState(''); //get role of the user
+    const [isClubOwner, setIsClubOwner] = useState(false); //track if club exec for assoc club
 
+    //helper functions for navigation
     const handleLogout = () => {
         fetch('http://localhost:5000/logout', {
             method: 'POST',
@@ -43,18 +40,16 @@ const ClubPage = () => {
                 }
             });
     };
+
     const handleProfile = () => {
         navigate('/profile');
     };
-
     const handleReviewForm = () => {
         navigate(`/ReviewForm/${club_name}`);
     }
-
     const handleReviews = () => {
         navigate('/YourReviews')
     }
-
     const handleHome = () => {
         navigate('/front-page');
     };
@@ -73,6 +68,7 @@ const ClubPage = () => {
         return color;
     };
 
+    //get club attributes
     useEffect(() => {
         fetch(`http://localhost:5000/api/club-page/${club_name}`)
             .then(response =>  {
@@ -106,7 +102,7 @@ const ClubPage = () => {
             .catch(error => console.log('Error fetching club data:', error));
     }, [club_name]);
 
-    //fetch the list of review IDs the user has liked
+    //fetch the list of reviews user has liked
     useEffect(() => {
         fetch('http://localhost:5000/api/liked-reviews', { credentials: 'include' })
             .then((response) => response.json())
@@ -117,7 +113,7 @@ const ClubPage = () => {
             });
     }, []);
 
-    // Fetch user role and club details
+    //fetch user role and club details
     useEffect(() => {
         fetch('http://localhost:5000/api/user-role', { credentials: 'include' })
             .then(response => response.json())
@@ -142,7 +138,7 @@ const ClubPage = () => {
             });
     }, [club_name]);
 
-    // Handle edits
+    //function to handle if club exec is in edit mode
     const handleEditToggle = () => setIsEditing(!isEditing);
 
     //store edited changes
@@ -150,6 +146,7 @@ const ClubPage = () => {
         setUpdatedClub(prev => ({ ...prev, [field]: value }));
     };
 
+    //helper function for club exec's to save edited club details
     const handleSave = () => {
         fetch(`http://localhost:5000/api/club-page/${club_name}`, {
             method: 'PUT',
@@ -171,6 +168,55 @@ const ClubPage = () => {
             .catch(error => console.log('Error saving club details:', error));
     };
 
+    //helper function for admin to delete reviews
+    const handleDelete = (reviewId) => {
+        if (userRole !== 'admin') {
+            console.log('Only admins can delete reviews');
+            return;
+        }
+
+        fetch(`http://localhost:5000/api/review/${reviewId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.message === 'Review deleted successfully') {
+                    console.log('Review has been successfully deleted!');
+                    setReviews((prevReviews) => prevReviews.filter((review) => review.review_num !== reviewId));
+                } else {
+                    console.log('Error:', data.message);
+                }
+            })
+            .catch((error) => console.log('Error deleting review:', error));
+    };
+
+    //helper function for admin to unflag student reviews
+    const handleUnflagReview = (reviewId) => {
+        if (userRole !== 'admin') return;
+
+        fetch(`http://localhost:5000/api/review/${reviewId}/unflag`, {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Review unflagged') {
+                    setReviews(prevReviews => prevReviews.map(review =>
+                        review.review_num === reviewId ? { ...review, flagged: false } : review
+                    ));
+                }
+            })
+            .catch(error => console.log('Error unflagging review:', error));
+    };
 
     //code for a bar chart of average club ratings
     const barChartData = {
@@ -287,6 +333,7 @@ const ClubPage = () => {
             .catch((error) => console.log("Error flagging review:", error));
     };
 
+    //body of web page:
     return (
         <div>
             <div style={{
@@ -298,12 +345,12 @@ const ClubPage = () => {
                 <h1 style={{
                     textAlign: 'center',
                     fontSize: '3rem',
-                }}>{club_name}</h1>
+                }}>
+                    {club_name}
+                </h1>
 
                 <div className="button-container"
-                     style={{
-                         textAlign: 'right',
-                     }}>
+                     style={{textAlign: 'right',}}>
                     <button onClick={handleProfile}>Profile</button>
                     <button onClick={handleReviews}>Your Reviews</button>
                     <button onClick={handleHome}>Home</button>
@@ -311,11 +358,12 @@ const ClubPage = () => {
                 </div>
             </div>
 
-            {/*edit view for club owner */}
+            {/* edit view for club owner */}
             {isEditing ? (
-                    <div>
+                <div>
                     <div style={{marginBottom: '1rem'}}>
                         <textarea
+                            //edit club description
                             value={updatedClub.description}
                             onChange={e => handleFieldChange('description', e.target.value)}
                             style={{
@@ -330,6 +378,7 @@ const ClubPage = () => {
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
                         <input
+                            //edit club link
                             type="text"
                             value={updatedClub.link}
                             onChange={e => handleFieldChange('link', e.target.value)}
@@ -342,42 +391,38 @@ const ClubPage = () => {
                             placeholder="Update club link"
                         />
                     </div>
-                        <button onClick={handleSave}>Save</button>
+                        <button onClick={handleSave}>Save</button> {/* save changes */}
                     </div>
                 ) :
                 (<div>
-
                         <div style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap',}}>
                             {(Array.isArray(club.tags) ? club.tags : club.tags ? club.tags.split('|') : [])
-                    .filter(tag => tag.trim() !== '') // Filter out empty tags
-                    .map((tag, tagIndex) => (
-                        <span
-                            key={tagIndex}
-                            style={{
-                                backgroundColor: getTagColor(tag),
-                                color: 'white',
-                                padding: '5px 10px',
-                                borderRadius: '15px',
-                                fontSize: '0.9rem',
-                                fontWeight: 'bold',
-                            }}>
-                            {tag.trim()}
-                        </span>
-                    ))}
-            </div>
+                            .filter(tag => tag.trim() !== '') // Filter out empty tags
+                            .map((tag, tagIndex) => (
+                                <span
+                                    key={tagIndex}
+                                    style={{
+                                        backgroundColor: getTagColor(tag),
+                                        color: 'white',
+                                        padding: '5px 10px',
+                                        borderRadius: '15px',
+                                        fontSize: '0.9rem',
+                                        fontWeight: 'bold',
+                                    }}>
+                                    {tag.trim()}
+                                </span>
+                            ))}
+                        </div>
+                        <p>{club.description}</p> {/* club description */}
+                        <p>Link: <a href={club.link}>{club.link}</a></p> {/* club external link */}
+                </div>)}
 
-            <p>{club.description}</p>
-            <p>Link: <a href={club.link}>{club.link}</a></p>
-                    </div>
-                )}
-
+            {/* button to edit club details-Only if club exec */}
             {userRole === 'club_exec' && isClubOwner && (
                 <button onClick={handleEditToggle}>
                     {isEditing ? 'Cancel' : 'Edit Club Details'}
                 </button>
             )}
-
-
 
             {/*emphasize overall average rating*/}
             <h2>
@@ -392,7 +437,6 @@ const ClubPage = () => {
             <div style={{maxWidth: '600px', margin: '2rem auto'}}>
                 <Bar data={barChartData} options={barChartOptions}/>
             </div>
-
 
             {/* Student Reviews */}
             <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>
@@ -424,7 +468,25 @@ const ClubPage = () => {
                         marginTop: '1rem',
                         position: 'relative'
                     }}>
+
+                        {/* Button for admin view to delete reviews */}
+                        {userRole === 'admin' &&
+                            (<div className="button-container"
+                                  style={{textAlign: 'left', marginTop: "0", marginBottom: "1rem"}}>
+                                <button onClick={() => {
+                                    if (window.confirm('Are you sure you want to delete this review?')) {
+                                        handleDelete(review.review_num);
+                                    }
+                                }} className="delete-button">
+                                    Delete
+                                </button>
+                            </div>
+                        )}
+
+                        {/* anonymous review-only display club_name instead */}
                         <h3 style={{fontSize: '1.5rem', marginTop: 0, marginBottom: '0.5rem'}}>{club_name}</h3>
+
+                        {/* display date in top right */}
                         <p style={{
                             fontStyle: 'italic',
                             color: '#666',
@@ -444,7 +506,8 @@ const ClubPage = () => {
                         </div>
 
                         {/* Actual written Review */}
-                        <p style={{border: '2px solid #ddd',
+                        <p style={{
+                            border: '2px solid #ddd',
                             borderRadius: '6px',
                             padding: '1rem',
                             backgroundColor: '#e8e6e6',
@@ -454,7 +517,8 @@ const ClubPage = () => {
                         <p>Current Member: <strong>{review.current_mem ? 'Yes' : 'No'}</strong></p>
                         <p>Paid Membership: <strong>{review.paid ? 'Yes' : 'No'}</strong></p>
 
-                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
+                        <div style={{display: "flex", justifyContent: "space-between", marginTop: "1rem"}}>
+                            {/* Button for liking reviews-Thumbs Up */}
                             <button
                                 onClick={() => handleThumbsUp(review.review_num)}
                                 style={{
@@ -471,6 +535,7 @@ const ClubPage = () => {
                                 👍 {review.thumbs}
                             </button>
 
+                            {/* Button for flagging reviews */}
                             <button
                                 onClick={() => handleFlag(review.review_num)}
                                 style={{
@@ -488,6 +553,14 @@ const ClubPage = () => {
                             </button>
                         </div>
 
+                        {/* ADMIN: only admin can unflag reviews */}
+                        <div style={{textAlign: 'right', marginTop: ".5rem", marginBottom: "0"}}>
+                            {review.flagged && userRole === 'admin' && (
+                                <button onClick={() => handleUnflagReview(review.review_num)}>
+                                    Unflag Review
+                                </button>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>
