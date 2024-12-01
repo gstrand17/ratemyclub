@@ -553,13 +553,6 @@ const ClubPage = () => {
                             >
                                 🚩 {review.flagged ? 'Flagged' : 'Flag'}
                             </button>
-
-                            {/*/!*Button for edit if user review*!/*/}
-                            {review.user_email === userEmail ? (
-                                <button>Edit</button> // Shows Edit button if user matches the review
-                                ):(
-                                    <span></span> // Shows nothing otherwise
-                                )}
                         </div>
 
                         {/* ADMIN: only admin can unflag reviews */}
@@ -568,6 +561,15 @@ const ClubPage = () => {
                                 <button onClick={() => handleUnflagReview(review.review_num)}>
                                     Unflag Review
                                 </button>
+                            )}
+                        </div>
+
+                        {/*/!*Button for edit if user review*!/*/}
+                        <div style ={{textAlign: 'right', marginTop: ".5rem", marginBottom: "0"}}>
+                            {review.user_email === userEmail ? (
+                                <button>Edit</button> // Shows Edit button if user matches the review
+                            ):(
+                                <span></span> // Shows nothing otherwise
                             )}
                         </div>
                     </div>
