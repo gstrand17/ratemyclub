@@ -492,15 +492,15 @@ const ClubPage = () => {
                         {userRole === 'admin' &&
                             (<div className="button-container"
                                   style={{textAlign: 'left', marginTop: "0", marginBottom: "1rem"}}>
-                                <button onClick={() => {
-                                    if (window.confirm('Are you sure you want to delete this review?')) {
-                                        handleDelete(review.review_num);
-                                    }
-                                }} className="delete-button">
-                                    Delete
-                                </button>
-                            </div>
-                        )}
+                                    <button onClick={() => {
+                                        if (window.confirm('Are you sure you want to delete this review?')) {
+                                            handleDelete(review.review_num);
+                                        }
+                                    }} className="delete-button">
+                                        Delete
+                                    </button>
+                                </div>
+                            )}
 
                         {/* anonymous review-only display club_name instead */}
                         <h3 style={{fontSize: '1.5rem', marginTop: 0, marginBottom: '0.5rem'}}>{club_name}</h3>
