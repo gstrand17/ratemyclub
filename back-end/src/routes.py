@@ -458,7 +458,8 @@ def get_user_role():
 
     return jsonify({
         'role': role,
-        'clubs': user.clubs
+        'clubs': user.clubs,
+        'user_email': user_email
     }), 200
 
 #handle put request for when club owners edit club page

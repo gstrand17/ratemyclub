@@ -8,6 +8,7 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title)
 const ClubPage = () => {
     const navigate = useNavigate();
     const { club_name } = useParams(); // using club_name to get club
+    const [userEmail, setUserEmail] = useState(''); // using user_email to get user_email
     const [reviews, setReviews] = useState([]); //store student reviews
     const [club, setClub] = useState({
         name: '',
@@ -120,6 +121,7 @@ const ClubPage = () => {
             .then(data => {
                 if (data.role) {
                     setUserRole(data.role); // Set role
+                    setUserEmail(data.user_email); // Set user_email
                 }
                 if (data.clubs === club_name) {
                     setIsClubOwner(true);
@@ -551,6 +553,13 @@ const ClubPage = () => {
                             >
                                 🚩 {review.flagged ? 'Flagged' : 'Flag'}
                             </button>
+
+                            {/*/!*Button for edit if user review*!/*/}
+                            {review.user_email === userEmail ? (
+                                <button>Edit</button> // Shows Edit button if user matches the review
+                                ):(
+                                    <span></span> // Shows nothing otherwise
+                                )}
                         </div>
 
                         {/* ADMIN: only admin can unflag reviews */}
