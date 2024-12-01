@@ -7,6 +7,7 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title)
 
 const ClubPage = () => {
     const navigate = useNavigate();
+    const [reviewButton, setReviewButton] = useState('');
     const { club_name } = useParams(); // using club_name to get club
     const [userEmail, setUserEmail] = useState(''); // using user_email to get user_email
     const [reviews, setReviews] = useState([]); //store student reviews
@@ -46,7 +47,11 @@ const ClubPage = () => {
         navigate('/profile');
     };
     const handleReviewForm = () => {
-        navigate(`/ReviewForm/${club_name}`);
+
+        // Only navigates to Review Form if user does not have a review
+        if (reviewButton === 'Submit a Review') {
+            navigate(`/ReviewForm/${club_name}`); // Navigate to ReviewForm page
+        }
     }
     const handleReviews = () => {
         navigate('/YourReviews')
@@ -138,7 +143,19 @@ const ClubPage = () => {
                     });
                 }
             });
-    }, [club_name]);
+
+        // Check for existing reviews after fetching user role
+        const matchingReviews = reviews.filter(review =>
+            review.user_email.includes(userEmail) // checks if userEmail is in review.user_email
+        );
+        if (matchingReviews.length === 0) { // Changes Review button message only if there are no matching reviews
+            setReviewButton("Submit a Review")
+        }
+        else {
+            setReviewButton("Already has a Review") // Changes review button message if there is already a review
+        }
+
+    }, [club_name, reviews, userEmail]); // Adds reviews and userEmail to the dependency array
 
     //function to handle if club exec is in edit mode
     const handleEditToggle = () => setIsEditing(!isEditing);
@@ -456,7 +473,7 @@ const ClubPage = () => {
                         borderRadius: '5px',
                         cursor: 'pointer',
                         marginTop: '10px'
-                    }}>Submit a Review</button>
+                    }}>{reviewButton}</button>
 
             {/* Display all student reviews/ratings */}
             <div>
