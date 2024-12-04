@@ -5,7 +5,16 @@ const YourReviews = () => {
 
     const navigate = useNavigate();
     const [reviews, setReviews] = useState([]); // initialize as empty array, tracks reviews and where updated review changes are stored
-    const [currentReview, setCurrentReview] = useState([]); // initializes empty array, initial data that is not edited when putting in change form
+    const [currentReview, setCurrentReview] = useState({
+        review_text: '',
+        soc_rating: 1,
+        acad_rating: 1,
+        exec_rating: 1,
+        comlev: 1,
+        current_mem: null,
+        time_mem: 'Example: 3 semesters',
+        paid: null
+    }); // initializes empty array, initial data that is not edited when putting in change form
     const [editIndex, setEditIndex] = useState(null); // track which review is being edited
 
     // Handles logout when logout button is pressed
@@ -88,36 +97,42 @@ const YourReviews = () => {
     };
 
     const handleSave = (index) => {
-        const updatedReview = reviews[index] // get review being edited
+        const updatedReview = { ...reviews[index], review_num: reviews[index].review_num }; // Include review_num in the request body
 
         fetch('http://localhost:5000/YourReviews', {
             method: 'PUT',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(updatedReview),
         })
-            .then(response => {
-                if (response.status === 401) {
-                    return response.json();
-                } else if (!response.ok) {
+            .then((response) => {
+                if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
-            .then(data => {
-                if (data.message === "Data has been fetched!") {
-                    setEditIndex(null); // exit edit mode
-                    setCurrentReview(data.reviews); // Updates array with new information.
-                    setReviews(data.reviews); // Inputs the new reviews
-                    console.log(data.reviews); // Log current input value
+            .then((data) => {
+                if (data.message === 'Review updated successfully!') {
+                    // Exit edit mode and update current reviews
+                    setEditIndex(null);
+                    setReviews((prevReviews) => {
+                        const newReviews = [...prevReviews];
+                        newReviews[index] = updatedReview; // Update the specific edited review in the array
+                        return newReviews;
+                    });
+                    console.log('Review successfully updated!');
+                } else {
+                    console.log('Error:', data.message);
                 }
             })
             .catch((error) => {
-                console.error('Error:', error);
+                console.error('Error updating review:', error);
             });
-    }
+    };
+
+
 
     const handleCancel = () => {
         setEditIndex(null); // Exits editing state
