@@ -273,7 +273,7 @@ def get_club(name: str):
         return jsonify(message='Club not found'), 401
 
 
-@app.route('/YourReviews', methods=['GET', 'DELETE']) # Route to YourReviews page
+@app.route('/YourReviews', methods=['GET', 'DELETE', 'PUT']) # Route to YourReviews page
 def your_reviews():
     if 'logged_in' in session:
 
@@ -336,6 +336,27 @@ def your_reviews():
             db.session.commit()
 
             return jsonify(message='Review has been deleted!'), 200
+        elif request.method == 'PUT':  # Method for changing reviews on review page
+            data = request.get_json()
+            review_id = data.get('review_num')  # Ensure this matches the front-end field name
+
+            if not review_id:
+                return jsonify(message='Review ID is required!'), 400
+
+            # Desired review in ClubReviews table located by review ID and user email
+            edit_review = ClubReviews.query.filter_by(review_num=review_id, user_email=existing_user.email).first()
+
+            if not edit_review:
+                return jsonify(message='Review not found!'), 400
+
+            # Update each field only if the new value is provided in the request
+            for field in ['soc_rating', 'acad_rating', 'exec_rating', 'review_text', 'comlev', 'current_mem', 'time_mem', 'paid']:
+                if field in data:
+                    setattr(edit_review, field, data[field])
+
+            db.session.commit()  # Save changes to the database
+            return jsonify(message='Review updated successfully!'), 200
+
     else:
         return jsonify(message='You are not logged in!'), 401
 
@@ -458,7 +479,8 @@ def get_user_role():
 
     return jsonify({
         'role': role,
-        'clubs': user.clubs
+        'clubs': user.clubs,
+        'user_email': user_email
     }), 200
 
 #handle put request for when club owners edit club page

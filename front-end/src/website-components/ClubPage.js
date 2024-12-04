@@ -7,7 +7,9 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title)
 
 const ClubPage = () => {
     const navigate = useNavigate();
+    const [reviewButton, setReviewButton] = useState('');
     const { club_name } = useParams(); // using club_name to get club
+    const [userEmail, setUserEmail] = useState(''); // using user_email to get user_email
     const [reviews, setReviews] = useState([]); //store student reviews
     const [club, setClub] = useState({
         name: '',
@@ -45,7 +47,11 @@ const ClubPage = () => {
         navigate('/profile');
     };
     const handleReviewForm = () => {
-        navigate(`/ReviewForm/${club_name}`);
+
+        // Only navigates to Review Form if user does not have a review
+        if (reviewButton === 'Submit a Review') {
+            navigate(`/ReviewForm/${club_name}`); // Navigate to ReviewForm page
+        }
     }
     const handleReviews = () => {
         navigate('/YourReviews')
@@ -120,6 +126,7 @@ const ClubPage = () => {
             .then(data => {
                 if (data.role) {
                     setUserRole(data.role); // Set role
+                    setUserEmail(data.user_email); // Set user_email
                 }
                 if (data.clubs === club_name) {
                     setIsClubOwner(true);
@@ -136,7 +143,19 @@ const ClubPage = () => {
                     });
                 }
             });
-    }, [club_name]);
+
+        // Check for existing reviews after fetching user role
+        const matchingReviews = reviews.filter(review =>
+            review.user_email.includes(userEmail) // checks if userEmail is in review.user_email
+        );
+        if (matchingReviews.length === 0) { // Changes Review button message only if there are no matching reviews
+            setReviewButton("Submit a Review")
+        }
+        else {
+            setReviewButton("Already has a Review") // Changes review button message if there is already a review
+        }
+
+    }, [club_name, reviews, userEmail]); // Adds reviews and userEmail to the dependency array
 
     //function to handle if club exec is in edit mode
     const handleEditToggle = () => setIsEditing(!isEditing);
@@ -454,7 +473,7 @@ const ClubPage = () => {
                         borderRadius: '5px',
                         cursor: 'pointer',
                         marginTop: '10px'
-                    }}>Submit a Review</button>
+                    }}>{reviewButton}</button>
 
             {/* Display all student reviews/ratings */}
             <div>
@@ -473,15 +492,15 @@ const ClubPage = () => {
                         {userRole === 'admin' &&
                             (<div className="button-container"
                                   style={{textAlign: 'left', marginTop: "0", marginBottom: "1rem"}}>
-                                <button onClick={() => {
-                                    if (window.confirm('Are you sure you want to delete this review?')) {
-                                        handleDelete(review.review_num);
-                                    }
-                                }} className="delete-button">
-                                    Delete
-                                </button>
-                            </div>
-                        )}
+                                    <button onClick={() => {
+                                        if (window.confirm('Are you sure you want to delete this review?')) {
+                                            handleDelete(review.review_num);
+                                        }
+                                    }} className="delete-button">
+                                        Delete
+                                    </button>
+                                </div>
+                            )}
 
                         {/* anonymous review-only display club_name instead */}
                         <h3 style={{fontSize: '1.5rem', marginTop: 0, marginBottom: '0.5rem'}}>{club_name}</h3>
@@ -559,6 +578,15 @@ const ClubPage = () => {
                                 <button onClick={() => handleUnflagReview(review.review_num)}>
                                     Unflag Review
                                 </button>
+                            )}
+                        </div>
+
+                        {/*/!*Button for edit if user review*!/*/}
+                        <div style ={{textAlign: 'right', marginTop: ".5rem", marginBottom: "0"}}>
+                            {review.user_email === userEmail ? (
+                                <button>Edit</button> // Shows Edit button if user matches the review
+                            ):(
+                                <span></span> // Shows nothing otherwise
                             )}
                         </div>
                     </div>

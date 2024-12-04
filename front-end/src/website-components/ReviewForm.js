@@ -21,24 +21,24 @@ const ReviewForm = () => {
         current_mem: null,
         time_mem: 'Example: 3 semesters',
         paid: null
-    });
+    }); // sets up the review array
 
     function getCurrentDate() {
-        const date = new Date();
+        const date = new Date(); // gets current date
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        const day = String(date.getDate()).padStart(2, '0');
-        const year = date.getFullYear();
+        const day = String(date.getDate()).padStart(2, '0'); // pulls day from date format
+        const year = date.getFullYear(); // pulls year from date format
         return `${month}-${day}-${year}`;
     }
 
     const [writtenReview, confirmReview] = useState(false);
 
     const createReview = (type, currValue) =>{
-      setReview({...review, [type]: currValue});
+        setReview({...review, [type]: currValue}); // changes the review component when information is entered
     };
 
     const backToClubs = () => {
-        navigate(`/club-page/${club_name}`);
+        navigate(`/club-page/${club_name}`); // navigates back to the club page
     }
 
     const handleLogout = () => {
@@ -61,7 +61,7 @@ const ReviewForm = () => {
         navigate('/profile');
     };
     const handleHome = () => {
-        navigate('/front-page');
+        navigate('/front-page'); // Navigate to the front-page
     };
 
     const handleSubmit = () =>{
@@ -84,8 +84,8 @@ const ReviewForm = () => {
             })
             .then(data => {
                 if (data.message === 'Review created!') {
-                    console.log(data.message);
-                    backToClubs();
+                    console.log(data.message); // logs the review data in the console
+                    backToClubs(); // once submitted it returns to the club page
                 }
                 setMessage(data.message);
             })
@@ -108,16 +108,16 @@ const ReviewForm = () => {
                 if (response.status === 401 || 404) {
                     return response.json();
                 } else if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok' + response.statusText);
                 }
                 return response.json();
             })
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
                     setReview({
-                        user_email: data.user_email,
-                        club_name: club_name,
-                        date: getCurrentDate()
+                        user_email: data.user_email, // auto-populates user email, cannot be changed
+                        club_name: club_name, // auto-populates club, cannot be changed
+                        date: getCurrentDate(), // auto-populates current date, cannot be changed
                     });
                 } else {
                     console.log('Error:', data.message);
@@ -141,129 +141,150 @@ const ReviewForm = () => {
                  style={{
                      textAlign: 'right',
                  }}>
-                <button onClick={handleProfile}>Profile</button>
-                <button onClick={handleHome}>Home</button>
-                <button onClick={backToClubs}>Club</button>
-                <button onClick={handleLogout}>Logout</button>
+                <button onClick={handleProfile}>Profile</button> {/* Goes to profile when pressed */}
+                <button onClick={handleHome}>Home</button> {/* Goes to homepage when pressed */}
+                <button onClick={handleLogout}>Logout</button> {/* Logout when pressed */}
             </div>
         </div>
 
         {/* Container for the review form */}
         <div style={{position: 'relative'}}>
-            {/*<h1 style={{*/}
-            {/*    fontFamily: "'Alfa Slab One', serif",*/}
-            {/*    fontSize: '3rem',*/}
-            {/*}}>*/}
-            {/*    Review Form*/}
-            {/*</h1>*/}
+
+            {/* User Email container */}
             <div>
                 <label>
                     User Email:
                     <input
                         type="text"
-                        value={review.user_email}
-                        disabled={!writtenReview}
+                        value={review.user_email} // populates user-email
+                        disabled={!writtenReview} // Makes user email non-changeable
                     />
                 </label>
             </div>
+
+            {/* Club name container*/}
             <div>
                 <label>
                     Club Name:
                     <input
                         type="text"
-                        value={review.club_name}
-                        disabled={!writtenReview}
+                        value={review.club_name} // populates club name
+                        disabled={!writtenReview} // Makes club name non-changeable
                     />
                 </label>
             </div>
+
+            {/* Date container */}
             <div>
                 <label>
                     Date:
                     <input
                         type="text"
-                        value={review.date}
-                        disabled={!writtenReview}
+                        value={review.date} // populates the date
+                        disabled={!writtenReview} // makes date non-changeable
                     />
                 </label>
             </div>
             <br></br>
             <label><u>Rate the following aspects from 1-5 </u></label>
+
+            {/* Social Atmosphere container */}
             <div>
                 <label>
                     Social Atmosphere:
-                    <input
-                        type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
-                        value={review.soc_rating}
+                    <select
+                        value={review.soc_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('soc_rating', e.target.value)
+                            createReview('soc_rating', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
+
+            {/* Academic Strength container*/}
             <div>
                 <label>
                     Academic Strength:
-                    <input
-                        type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
-                        value={review.acad_rating}
+                    <select
+                        value={review.acad_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('acad_rating', e.target.value)
+                            createReview('acad_rating', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
+
+            {/* Executive leadership container*/}
             <div>
                 <label>
                     Executive Leadership:
-                    <input
-                        type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
-                        value={review.exec_rating}
+                    <select
+                        value={review.exec_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('exec_rating', e.target.value)
+                            createReview('exec_rating', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
+
+            {/* Level of Commitment container*/}
             <div>
                 <label>
                     Level of Commitment:
-                    <input
-                        type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
-                        value={review.comlev}
+                    <select
+                        value={review.comlev} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('comlev', e.target.value)
+                            createReview('comlev', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
+
+            {/* Overall scoring container */}
             <div>
                 <label>
                     Overall Scoring:
-                    <input
-                        type='number'
-                        min={1}
-                        max={5}
-                        maxLength={1}
-                        value={review.overall_rating}
+                    <select
+                        value={review.overall_rating} // connects value to soc_rating for the review
                         onChange={(e) => {
-                            createReview('overall_rating', e.target.value)
+                            createReview('overall_rating', e.target.value); // updates the review state with the selected value
                         }}
-                    />
+                    >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
                 </label>
             </div>
             <br></br>
+
+            {/* Tell us about your experience container */}
             <div>
                 <label>Tell us about your experience: </label><br></br>
                 <input
@@ -275,6 +296,7 @@ const ReviewForm = () => {
                 />
             </div>
 
+            {/* Member duration container */}
             <div>
                 <label>
                     Membership Duration:
@@ -310,6 +332,7 @@ const ReviewForm = () => {
         </div>
         <br></br>
         <button onClick={handleSubmit}>Save</button>
+        <button onClick={backToClubs}>Back to Club</button>
         </body>
     )
 };

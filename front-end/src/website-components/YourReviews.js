@@ -4,7 +4,20 @@ import {useNavigate, useParams} from 'react-router-dom';
 const YourReviews = () => {
 
     const navigate = useNavigate();
-    const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState([]); // initialize as empty array, tracks reviews and where updated review changes are stored
+    const [currentReview, setCurrentReview] = useState({
+        review_text: '',
+        soc_rating: 1,
+        acad_rating: 1,
+        exec_rating: 1,
+        comlev: 1,
+        current_mem: null,
+        time_mem: 'Example: 3 semesters',
+        paid: null
+    }); // initializes empty array, initial data that is not edited when putting in change form
+    const [editIndex, setEditIndex] = useState(null); // track which review is being edited
+
+    // Handles logout when logout button is pressed
     const handleLogout = () => {
         // Clear user authentication data here (localStorage, sessionStorage, etc.) BACKEND
         // Navigate back home
@@ -27,7 +40,7 @@ const YourReviews = () => {
     };
 
     const handleHome = () => {
-        navigate('/front-page');
+        navigate('/front-page'); // Navigates to front-page
     };
 
     useEffect(() => {
@@ -48,7 +61,8 @@ const YourReviews = () => {
             .then(data =>  {
                 if (data.message === "Data has been fetched!") {
                     if (data.reviews) {
-                        setReviews(data.reviews); // Ensure reviews is an array
+                        setCurrentReview(data.reviews); // keeps track of current reviews, non-edited array for cancel button
+                        setReviews(data.reviews); // Ensure reviews is an array, this array is changed when information is inputed
                     }
                 } else {
                     console.log('Error:', data.message);
@@ -82,6 +96,56 @@ const YourReviews = () => {
             .catch((error) => console.log('Error deleting review!', error));
     };
 
+    const handleSave = (index) => {
+        const updatedReview = { ...reviews[index], review_num: reviews[index].review_num }; // Include review_num in the request body
+
+        fetch('http://localhost:5000/YourReviews', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedReview),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.message === 'Review updated successfully!') {
+                    // Exit edit mode and update current reviews
+                    setEditIndex(null);
+                    setReviews((prevReviews) => {
+                        const newReviews = [...prevReviews];
+                        newReviews[index] = updatedReview; // Update the specific edited review in the array
+                        return newReviews;
+                    });
+                    console.log('Review successfully updated!');
+                } else {
+                    console.log('Error:', data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error updating review:', error);
+            });
+    };
+
+
+
+    const handleCancel = () => {
+        setEditIndex(null); // Exits editing state
+        setReviews(currentReview); // Reverts information back to previous state before changes
+    }
+
+    const handleChange = (index, field, value) => {
+        const updatedReviews = [...reviews]; // Copy the reviews array
+        updatedReviews[index] = {
+            ...updatedReviews[index], // Spread existing review object
+            [field]: value}; // update specific field with new value
+        setReviews(updatedReviews); // Update the state with the new reviews array
+    };
 
     return (
         <div>
@@ -143,12 +207,99 @@ const YourReviews = () => {
                              style={{
                                  textAlign: 'right',
                              }}>
+                            {editIndex === index ? ( // Checks if current index it the one being edited
+                                <div>
+                                    <div>
+                                        <label>
+                                            Social:
+                                            <select
+                                                value={review.soc_rating} // connects value to soc_rating for the review
+                                                // Changes review value when inputted by the user
+                                                onChange={(e) => handleChange(index, 'soc_rating', e.target.value)} // updates the review state with the selected value
+                                            >
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={4}>4</option>
+                                                <option value={5}>5</option>
+                                            </select>
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Academic:
+                                            <select
+                                                value={review.acad_rating} // connects value to soc_rating for the review
+                                                // Changes review value when inputted by the user
+                                                onChange={(e) => handleChange(index, 'acad_rating', e.target.value)} // updates the review state with the selected value
+                                            >
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={4}>4</option>
+                                                <option value={5}>5</option>
+                                            </select>
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Executive:
+                                            <select
+                                                value={review.exec_rating} // connects value to soc_rating for the review
+                                                // Changes review value when inputted by the user
+                                                onChange={(e) => handleChange(index, 'exec_rating', e.target.value)} // updates the review state with the selected value
+                                            >
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={4}>4</option>
+                                                <option value={5}>5</option>
+                                            </select>
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Commitment Level:
+                                            <select
+                                                value={review.comlev} // connects value to soc_rating for the review
+                                                // Changes review value when inputted by the user
+                                                onChange={(e) => handleChange(index, 'comlev', e.target.value)} // updates the review state with the selected value
+                                            >
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={4}>4</option>
+                                                <option value={5}>5</option>
+                                            </select>
+                                        </label>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Review:
+                                            <input
+                                                type={'text'}
+                                                value={review.review_text}
+                                                // Changes review value when inputted by the user
+                                                onChange={(e) => handleChange(index, 'review_text', e.target.value)}
+                                            />
+                                        </label>
+                                    </div>
+                                    <button onClick={() => handleSave(index)}>Save</button>
+                                    <button onClick={() => handleCancel()}>Cancel</button>
+                                </div>
+                            ) : (
+                                <button onClick={() => setEditIndex(index)}>Edit</button>
+                            )}
                             <button onClick={() => handleDelete(review.review_num)}>Delete</button>
                         </div>
                     </div>
                 ))}
             </div>
-        </div>);
+        </div>)
 };
 
 export default YourReviews;
