@@ -569,7 +569,7 @@ def db_seed():
     entities = [
         sample_review1, sample_review2, sample_review3, sample_review4, sample_review5, sample_review6, student_guest, student_test, student_jungkook, student_jhope,
         student_v, student_jimin, student_suga, student_jin, student_rm, student_lisa,
-        student_jennie, student_rose, student_jisoo, clubExec_guestExec,
+        student_jennie, student_rose, student_jisoo, clubExec_guestExec, admin,
         admin_julio, admin_erin, admin_graciela, admin_natalie, club1, club2,
         club3, club4, club5, club6, club7, club8, club9, club10, club11, club12,
         club13, club14, club15, club16, club17, club18, club19, club20, club21,
