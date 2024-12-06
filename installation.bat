@@ -5,7 +5,8 @@ REM Installation for Flask backend and React frontend
 echo Starting Flask backend installation
 cd back-end
 python -m venv .venv
-.venv\Scripts\activate
+.venv/Scripts/activate
+python -m pip install --upgrade pip
 pip install Flask Flask-Cors Flask-Script Flask-Session Flask-SQLAlchemy SQLAlchemy
 cd src
 Flask db_create
@@ -20,6 +21,5 @@ npm install
 cd ..
 
 REM Installation Script finished
-echo Installation completed. Press any key to exit the console.
-pause >nul
+echo Installation completed.
 exit
