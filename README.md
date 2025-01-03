@@ -1,4 +1,4 @@
-# Julio & Gracie
+# Julio & Graci
 # Project Title: ratemyclub
 
 ## Table of Contents
