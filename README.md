@@ -1,4 +1,4 @@
-# JENGa Stack
+# Julio & Gracie
 # Project Title: ratemyclub
 
 ## Table of Contents
