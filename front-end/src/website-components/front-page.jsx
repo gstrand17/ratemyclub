@@ -111,7 +111,7 @@ const FrontPage = () => {
         <div style={{position: 'relative'}}>
             {/* Banner Image */}
             <img
-                src={`${process.env.PUBLIC_URL}/banner.jpg`} //Replaced it with img src to avoid using import
+                src={`/banner.jpg`} //Replaced it with img src to avoid using import
                 alt="Banner"
                 style={{
                     width: '100%',

@@ -24,7 +24,7 @@ const Login = () => {
 
         // Use fetch-command to send a POST request to Flask local machine server for /login API route
         fetch('http://localhost:5000/login', {
-            method: 'POST',
+        method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
